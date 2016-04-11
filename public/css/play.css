@@ -1,0 +1,27 @@
+.shape {
+	width:200px;
+	height:200px;
+	background:red;
+	position:relative;
+}
+
+transform: skew(xxdeg,xxdeg);
+transform: origin 0 0;
+transform: translate(%%px, %%px);
+transform: rotate(%%deg);
+
+.shape::after {
+	display:block;
+	width:50px;
+	height:50px;
+	border:8px solid white;
+  border-radius: 80%;
+	border-top:3;
+  border-left: 0;
+  border-right: 0;
+   transform: rotate(90deg);
+	position:absolute;
+  left: 20px;
+	content:'';
+	bottom:90px;
+}

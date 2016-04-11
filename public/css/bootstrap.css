@@ -1097,7 +1097,7 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #337ab7;
+  color: #ffffff;
   text-decoration: none;
 }
 a:hover,
@@ -4278,7 +4278,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   float: left;
   height: 20px;
   padding: 15px 15px;
-  font-size: 18px;
+  /*font-size: 18px;*/
   line-height: 20px;
 }
 .navbar-brand:hover,
@@ -4596,12 +4596,16 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   border-color: #080808;
 }
 .navbar-inverse .navbar-brand {
-  color: #9d9d9d;
+  /*color: #9d9d9d;*/
 }
-.navbar-inverse .navbar-brand:hover,
+
 .navbar-inverse .navbar-brand:focus {
   color: #fff;
-  background-color: transparent;
+  /*background-color: transparent;*/
+}
+.navbar-inverse .navbar-brand:hover {
+  color: red;
+  /*background-color: transparent;*/
 }
 .navbar-inverse .navbar-text {
   color: #9d9d9d;

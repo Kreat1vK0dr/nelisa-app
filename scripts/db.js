@@ -72,46 +72,21 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
 
           sales.forEach(function(sale) {
             var profit, profitMargin, revenue, totalcost, quantity, inventory;
-            // console.log("This is sales quantity", sale.quantity);
-            // if (sale.product_id===1) {
-              // console.log("");
-              // console.log("PROCESSING SALEID", sale.id, "FOR PRODUCTID", sale.product_id);
-              // console.log("SALE QUANTITY", sale.quantity);
-              // console.log("THIS IS SQLPURCHASES BEFORE LOG", SQLpurchases.get(sale.product_id));
             var purchases = SQLpurchases.get(sale.product_id);
-            // var invBEFORE = get.SQLInventoryRemainingAt(sale.date, sale.product_id, SQLpurchases);
-            // console.log("This is purchases", purchases);
-            // console.log("Boolean test", purchases[0].date <= sale.date);
             var getinfo = get.SQLCostAndLogSaleAt(sale.date, sale.quantity, purchases, updatePurchases);
-            // console.log("THIS IS SQLPURCHASES AFTER LOG", SQLpurchases.get(sale.product_id));
 
             totalcost = getinfo.cost;
             quantity = getinfo.quantity;
-
-            // console.log("SALE REVENUE", sale.revenue);
-            // console.log("TOTAL COST", totalcost);
-            // console.log("QUANTITY", quantity);
-            // console.log("UPDATED PURCHASES MAP", purchases);
-            // console.log("PURCHASES TO UPDATE", updatePurchases);
-
-
-
-
-            // console.log("This is SQLpurchases", SQLpurchases);
             inventory = get.SQLInventoryRemainingAt(sale.date, sale.product_id, SQLpurchases);
 
-            // var invAFTER = get.SQLInventoryRemainingAt(sale.date, sale.product_id, SQLpurchases);
-            // console.log("INVENTORY BEFORE", invBEFORE);
-            // console.log("SALE QUANTITY", sale.quantity);
-            // console.log("QUANTITY REMAINING", quantity);
-            // console.log("INVENTORY AFTER", invAFTER);
-            // console.log("");
             if (quantity===0) {
                 revenue = sale.quantity * sale.price;
               } else {
                 revenue = (sale.quantity-quantity) * sale.price;
               }
+
             profit = revenue - totalcost;
+
             if (revenue>0) {
               profitMargin = profit/revenue;
             } else {
@@ -119,11 +94,6 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
             }
 
             updateSales.push([sale.id,revenue, totalcost, profit, profitMargin, inventory, quantity]);
-
-            // console.log("PUSHED CALCULATIONS");
-            // console.log("CALCULATIONS", updateSales);
-            // console.log("PURCHASES TO UPDATE", updatePurchases);
-          // }
 
           });
 

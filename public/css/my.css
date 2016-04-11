@@ -2,6 +2,22 @@
   font-family: 'peach';
   src: url('/fonts/peach-sundress.ttf');
 }
+@font-face {
+  font-family: 'raleway';
+  src: url('/fonts/Raleway Thin.otf');
+}
+@font-face {
+  font-family: 'abel';
+  src: url('/fonts/Abel-Regular.ttf');
+}
+@font-face {
+  font-family: 'langdon';
+  src: url('/fonts/Langdon.otf');
+}
+@font-face {
+  font-family: 'adam';
+  src: url('/fonts/adam.otf');
+}
 
 .dropdown {
   display: none;
@@ -12,14 +28,17 @@
 }
 
 .navbar {
-  height: 30px;
+  height: 40px;
 }
 
 .navbar-brand {
-  padding-top: 5px;
+  padding-top: 7px;
+  font-size: 30px;
 }
+
 .navbar-nav > li > a {
-    padding-top: 5px;
+  font-family: adam;
+    padding-top: 11px;
     padding-bottom: 5px;
 }
 
@@ -30,15 +49,81 @@ img {
       height: 30em;
 }
 
-.pc1 {
+.divider1 {
     height: 3em;
+}
+.divider2 {
+    height: 5em;
 }
 
 #welcome {
         position: relative;
         /*top: 2em;*/
         text-align: center;
-        font-weight: bolder;
-        font-family: peach;
-        font-size: 2em;
+
+}
+
+#welcome-nelisa {
+  font-weight: bolder;
+  font-family: peach;
+  font-size: 3em;
+}
+
+#welcome-other {
+  font-size: 3em;
+  font-family: abel;
+  /*font-family: langdon;*/
+}
+
+.message {
+  text-align: center;
+  font-family: raleway;
+  font-size: 2em;
+}
+
+.homebuttons {
+  position: relative;
+  height: 10em;
+  width: 100%;
+  text-align: center;
+}
+
+
+.nelisa-font {
+  font-family: peach;
+}
+
+.navbar-header {
+  font-size: 30px;
+  color: white;
+}
+.navbar-header:hover {
+  color: white;
+}
+
+.button {
+  display: inline-block;
+  /*background-color: #FA7380;*/
+  /*color: black;*/
+  color: white;
+  background-color: red;
+  border-radius: 4px;
+  height: 5em;
+  width: 15em;
+  line-height: 5em;
+  font-size: 1.5em;
+
+  font-family: adam;
+}
+.button:hover {
+  /*background-color: red;*/
+  /*color: white;*/
+  /*background-color: #FA7380;*/
+  border-radius: 80%;
+  width: 5em;
+  margin: 0 5em;
+  background-color: #6208FC;
+  color: black;
+  transform: scale(2);
+  /*font-size: 2em;*/
 }
