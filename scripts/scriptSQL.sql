@@ -3,6 +3,31 @@ CREATE USER user@localhost IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON nelisa.* TO user@localhost;
 FLUSH PRIVILEGES;
 
+CREATE DATABASE nelisa;
+CREATE USER daniel@localhost IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON nelisa.* TO daniel@localhost;
+FLUSH PRIVILEGES;
+
+LOAD DATA LOCAL INFILE '/sales/week2.csv' INTO TABLE nelisa.sales_raw FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+--
+-- set @date = "2016-01-01";
+-- set @week = floor(dayofmonth(@date)/7);
+-- select WEEK(@date,1);
+-- select dayofmonth(@date);
+-- select if(dayofmonth(@date)%7!=0, "is not evenly divisible by 7", floor(dayofmonth(@date)/7) );
+-- select if(dayofmonth(@date)%7!=0, @week+1, @week);
+-- select week(@date,1);
+
+create table sales_raw(
+    day varchar(9) not null,
+    date DATE,
+    item varchar(30),
+    quantity numeric(10,0),
+    price numeric(10,2)
+
+);
+
 create table sales(
     id int primary key auto_increment not null,
     day varchar(9),
