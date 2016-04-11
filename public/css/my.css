@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'peach';
+  src: url('/fonts/peach-sundress.ttf');
+}
+
+.dropdown {
+  display: none;
+}
+
+.dropdown:hover li:hover {
+  display: block;
+}
+
+.navbar {
+  height: 30px;
+}
+
+.navbar-brand {
+  padding-top: 5px;
+}
+.navbar-nav > li > a {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img {
+      position: relative;
+      /*top: 5em;*/
+      width: 100%;
+      height: 30em;
+}
+
+.pc1 {
+    height: 3em;
+}
+
+#welcome {
+        position: relative;
+        /*top: 2em;*/
+        text-align: center;
+        font-weight: bolder;
+        font-family: peach;
+        font-size: 2em;
+}

@@ -1,0 +1,10 @@
+-- 
+-- set @date = "2016-01-01";
+-- set @week = floor(dayofmonth(@date)/7);
+-- select WEEK(@date,1);
+-- select dayofmonth(@date);
+-- select if(dayofmonth(@date)%7!=0, "is not evenly divisible by 7", floor(dayofmonth(@date)/7) );
+-- select if(dayofmonth(@date)%7!=0, @week+1, @week);
+-- select week(@date,1);
+
+LOAD DATA LOCAL INFILE '/sales/week2.csv' INTO TABLE nelisa.sales_raw FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
