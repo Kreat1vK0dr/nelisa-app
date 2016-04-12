@@ -19,6 +19,11 @@
   src: url('/fonts/adam.otf');
 }
 
+h1 {
+  font-family: adam;
+  text-align: center;
+}
+
 .dropdown {
   display: none;
 }
@@ -143,4 +148,23 @@ img {
   color: black;
   transform: scale(2);
   /*font-size: 2em;*/
+}
+
+.left-indent {
+  text-align: right;
+  text-indent: 20px;
+}
+
+.center-table {
+  margin: 0 auto;
+}
+
+.thead-inverse {
+  background-color: #36454F;
+  color: white;
+}
+
+.inverse {
+  background-color: #36454F !important;
+  color: white;
 }

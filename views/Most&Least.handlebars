@@ -7,14 +7,17 @@
 <body>
   <div id="title">
       <h1>{{title}}</h1>
-</div>
-  <table class="table table-striped">
+      </div>
+      <div class="divider1"></div>
+  <table class="table table-bordered table-hover center-table">
     <!-- <tr> <th colspan="6"> My First HandleBars Table </th> </tr> -->
-    <tbody>
-    <tr > <td></td> <td>Product/Category</td> <td>Quantity Sold</td> <td>Inventory</td> <td>Profit</td> <td>Profit Margin</td> </tr>
+      <thead class="thead-inverse">
+    <tr> <th>Trend</th> <th>Product/Category</th> <th>Quantity Sold</th> <th>Remaining Inventory</th> <th>Profit</th> <th>Profit Margin</th> </tr>
+  </thead>
+<tbody>
       {{#each data}}
-        <tr class="active">
-          <td>{{what}}</td> <td >{{item}}</td> <td >{{quantity}}</td> <td >{{inventory}}</td> <td >{{profit}}</td> <td >{{profitMargin}}</td>
+        <tr>
+          <td class="inverse">{{what}}</td> <td class="active">{{item}}</td> <td class="left-indent active">{{quantity}}</td> <td class="left-indent active">{{inventory}}</td> <td class="left-indent active">{{profit}}</td> <td class="left-indent active">{{profitMargin}}%</td>
         </tr>
         {{/each}}
           </tbody>
