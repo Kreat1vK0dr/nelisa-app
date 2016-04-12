@@ -8,13 +8,11 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
   <!-- Bootstrap -->
-  <link href="/css/bootstrap.css" rel="stylesheet">
-
+  <!-- <link href="/css/bootstrap.css" rel="stylesheet"> -->
+<link href="/oldbootstrap/css/bootstrap.css" rel="stylesheet">
   <link href="/css/my.css" rel="stylesheet">
-  <title>Nelisa - {{title}}</title>
-  <!-- <link href="/css/my.css" rel="stylesheet" type="text/css"/> -->
+  <title>Nelisa's - Stats</title>
 </head>
-
 <body>
   <nav class="navbar navbar-inverse">
 
@@ -25,18 +23,11 @@
 
       <ul class="nav navbar-nav">
 
-        <li class="navbutton">
-          <a href="/stats/m&l/1">Week 1</a>
-        </li>
-        <li class="navbutton">
-          <a href="/stats/m&l/2">Week 2</a>
-        </li>
-        <li class="navbutton">
-          <a href="/stats/m&l/3">Week 3</a>
-        </li>
-        <li class="navbutton">
-          <a href="/stats/m&l/4">Week 4</a>
-        </li>
+        <li class="navbutton"><a href="/">about</a></li>
+        <li class="navbutton"><a href="/stats">stats</a></li>
+        <li class="navbutton"><a href="/summary">summary</a></li>
+        <li class="navbutton"><a href="/">compare</a></li>
+        <li class="navbutton"><a href="/">visuals</a></li>
 
       </ul>
 
@@ -45,14 +36,26 @@
     </div>
   </nav>
 
+  <div class=divider1><div>
+  <div class="text-center">
+    <div class="btn-group" role="group" aria-label="...">
+      <button type="button" class="btn btn-default">February</button>
+    </div>
+    <div class="btn-group" role="group" aria-label="...">
+      <a href="/stats/m&l/1" type="button" class="btn btn-default">1</a>
+      <a href="/stats/m&l/2" type="button" class="btn btn-default">2</a>
+      <a href="/stats/m&l/3" type="button" class="btn btn-default">3</a>
+      <a href="/stats/m&l/4" type="button" class="btn btn-default">4</a>
+    </div>
+  </div>
+  <div class="divider1"></div>
 
 
   {{{body}}}
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="/js/bootstrap.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="/oldbootstrap/js/bootstrap.js"></script>
+  <!-- <script src="/js/bootstrap.js"></script> -->
   <script src="/js/bootstrap-hover-dropdown.js"></script>
 </body>
-
 </html>

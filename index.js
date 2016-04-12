@@ -36,11 +36,11 @@ app.get('/home', function(req,res) {
   res.render("home.handlebars");
 });
 app.get('/stats', function(req,res) {
-  app.engine('handlebars', exphbs({defaultLayout: 'stats'}));
+    // app.engine('handlebars', exphbs({defaultLayout: 'stats'}));
   res.render("stats_home.handlebars");
 });
 app.get('/summary', function(req,res) {
-  app.engine('handlebars', exphbs({defaultLayout: 'summary'}));
+    // app.engine('handlebars', exphbs({defaultLayout: 'summary'}));
   res.render("summary_home.handlebars");
 });
 

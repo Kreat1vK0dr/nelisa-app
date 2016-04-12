@@ -70,7 +70,7 @@ exports.getData = function(type, week) {
 exports.getTmplName = function(type) {
   switch (type) {
     case "m&l" : return "Most&Least.handlebars";
-    case "product" : return "summary_products.handlebars";
-    case "category" : return "summary_categories.handlebars";
+    case "product" : return "products.handlebars";
+    case "category" : return "categories.handlebars";
   }
 };

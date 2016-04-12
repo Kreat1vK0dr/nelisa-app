@@ -8,14 +8,15 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
   <!-- Bootstrap -->
-  <link href="/css/bootstrap.css" rel="stylesheet">
-
+  <!-- <link href="/css/bootstrap.css" rel="stylesheet"> -->
+  <link href="/oldbootstrap/css/bootstrap.css" rel="stylesheet">
   <link href="/css/my.css" rel="stylesheet">
-  <title>Nelisa - {{title}}</title>
-  <!-- <link href="/css/my.css" rel="stylesheet" type="text/css"/> -->
+
+  <title>Nelisa's - Summary</title>
 </head>
 
 <body>
+
   <nav class="navbar navbar-inverse">
 
     <div class="container-fluid">
@@ -26,63 +27,28 @@
       <ul class="nav navbar-nav">
 
         <li class="navbutton"><a href="/">about</a></li>
-
-        <li class="dropdown navbutton">
-          <a class="dropdown-toggle toggle" data-hover="dropdown" href="#">Week 1</a>
-          <ul class="dropdown-menu">
-            <li class="dropdown">
-              <li><a href="/summary/product/1" role="button">Products</a></li>
-              <li><a href="/summary/category/1" role="button">Categories</a></li>
-
-            </li>
-          </ul>
-        </li>
-
-        <li class="dropdown navbutton">
-          <a class="dropdown-toggle toggle" data-hover="dropdown" href="#">Week 2</a>
-          <ul class="dropdown-menu">
-            <li class="dropdown">
-              <li><a href="/summary/product/2" role="button">Products</a></li>
-              <li><a href="/summary/category/2" role="button">Categories</a></li>
-            </li>
-          </ul>
-        </li>
-
-        <li class="dropdown navbutton">
-          <a class="dropdown-toggle toggle" data-hover="dropdown" href="#">Week 3</a>
-          <ul class="dropdown-menu">
-            <li class="dropdown">
-              <li><a href="/summary/product/3" role="button">Products</a></li>
-              <li><a href="/summary/category/3" role="button">Categories</a></li>
-            </li>
-          </ul>
-        </li>
-
-        <li class="dropdown navbutton">
-          <a class="dropdown-toggle toggle" data-hover="dropdown" href="#">Week 4</a>
-          <ul class="dropdown-menu">
-            <li class="dropdown">
-              <li><a href="/summary/product/4" role="button">Products</a></li>
-              <li><a href="/summary/category/4" role="button">Categories</a></li>
-            </li>
-          </ul>
-        </li>
-
+        <li class="navbutton"><a href="/stats">stats</a></li>
+        <li class="navbutton"><a href="/summary">summary</a></li>
+        <li class="navbutton"><a href="/">compare</a></li>
+        <li class="navbutton"><a href="/">visuals</a></li>
 
       </ul>
+
       <a href="/"><div id="loginbutton">Admin Login</div></a>
 
     </div>
   </nav>
+  <div class=divider1></div>
+  
+  <div class="divider1"></div>
 
+{{{body}}}
 
+  <!-- <img src="/images/nelisa.jpg"></img> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-  {{{body}}}
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="/js/bootstrap.js"></script>
+  <!-- <script src="/js/bootstrap.js"></script> -->
+  <script src="/oldbootstrap/js/bootstrap.js"></script>
   <script src="/js/bootstrap-hover-dropdown.js"></script>
 </body>
-
 </html>
