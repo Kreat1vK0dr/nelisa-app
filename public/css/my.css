@@ -171,8 +171,8 @@ max-width: 90%;
   font-size: 30px;
   color: white;
 }
-.navbar-header:hover {
-  color: white;
+.navbar-brand:hover {
+  color: #FA87F8;
 }
 
 .button {
@@ -195,12 +195,12 @@ max-width: 90%;
   /*background-color: #FA7380;*/
   border-radius: 80%;
   width: 5em;
-  margin: 0 2em;
+  margin: 0 2.5em;
   background-color: #6208FC;
   color: black;
-  transform: scale(1.3);
-  -moz-transform: scale(1.3);
-  -webkit-transform: scale(1.3);
+  transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -webkit-transform: scale(1.5);
   /*font-size: 2em;*/
 }
 

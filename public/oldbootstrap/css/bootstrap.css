@@ -4604,7 +4604,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   /*background-color: transparent;*/
 }
 .navbar-inverse .navbar-brand:hover {
-  color: red;
+  /*color: red;*/
   /*background-color: transparent;*/
 }
 .navbar-inverse .navbar-text {
