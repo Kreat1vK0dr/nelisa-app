@@ -66,13 +66,30 @@ img {
 #welcome-nelisa {
   font-weight: bolder;
   font-family: peach;
-  font-size: 3em;
+  font-size: 3.8em;
 }
 
 #welcome-other {
   font-size: 3em;
   font-family: abel;
   /*font-family: langdon;*/
+}
+
+#loginbutton {
+  position: absolute;
+  display: inline-block;
+  right: 0px;
+  padding-top: 8px;
+  padding-right: 8px;
+  color: grey;
+}
+
+.container-fluid {
+  position: relative;
+}
+
+#loginbutton:hover {
+  color: white;
 }
 
 .message {
