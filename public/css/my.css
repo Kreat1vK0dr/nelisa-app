@@ -39,6 +39,19 @@
   src: url('/fonts/Aleo-Regular.otf');
 }
 
+#body-home {
+  margin: 0 auto;
+  background-color: #FACF89;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding-bottom: 20px;
+  width: 80%;
+}
+
+.body-tpage {
+  background-color: white;
+}
+
 h1 {
   font-family: adam;
   text-align: center;
@@ -149,13 +162,17 @@ max-width: 90%;
   text-align: center;
   font-family: raleway;
   font-size: 2em;
-  /*background-color: rgba(255, 0, 0, 0.2);*/
+  color: black;
+  /*background-color: rgba(98,8,252, 0.5);*/
+  background-color: rgba(255,255,255, 0.3);
+  border-radius: 6px;
   max-width: 90%;
   margin: 0 auto;
   padding: 15px 45px;
 }
 
 .homebuttons {
+  padding-top: 30px;
   position: relative;
   height: 10em;
   width: 100%;
@@ -193,14 +210,14 @@ max-width: 90%;
   /*background-color: red;*/
   /*color: white;*/
   /*background-color: #FA7380;*/
-  border-radius: 80%;
-  width: 5em;
-  margin: 0 2.5em;
-  background-color: #6208FC;
+  /*border-radius: 80%;*/
+  width: 6em;
+  margin: 0 2em;
+  background-color: rgba(21,44,173,0.5);
   color: black;
-  transform: scale(1.5);
+  /*transform: scale(1.5);
   -moz-transform: scale(1.5);
-  -webkit-transform: scale(1.5);
+  -webkit-transform: scale(1.5);*/
   /*font-size: 2em;*/
 }
 
