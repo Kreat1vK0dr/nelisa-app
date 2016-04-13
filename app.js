@@ -1,6 +1,6 @@
 var express = require('express'),
     exphbs  = require('express-handlebars'),
-    display = require('./js/displayHTML.js'),
+    display = require('./lib/process-handlebars'),
     path = require('path'),
     mysql = require('mysql');
     // myConnection = require('express-myconnection'),
