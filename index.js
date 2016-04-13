@@ -1,21 +1,23 @@
+// 'use strict';
+
 var express = require('express'),
     exphbs  = require('express-handlebars'),
-    get = require('./lib/process-handlebars'),
+    display = require('./js/displayHTML.js'),
+    path = require('path'),
     mysql = require('mysql');
+    myConnection = require('express-myconnection'),
+    bodyParser = require('body-parser'),
+    categories = require('./routes/categories'),
+    products = require('./routes/products');
 
-//NOTE: DO NOT DELETE COMMENTS - WILL USE WHEN INCORPORATING DATABASE.
-// myConnection = require('express-myconnection'),
-// bodyParser = require('body-parser'),
-// categories = require('./routes/categories'),
-// products = require('./routes/products');
-// 'use strict';
-// var dbOptions = {
-//       host: 'localhost',
-//       user: 'daniel',
-//       password: 'password',
-//       port: 3306,
-//       database: 'my_products'
-// };
+
+var dbOptions = {
+      host: 'localhost',
+      user: 'daniel',
+      password: 'password',
+      port: 3306,
+      database: 'my_products'
+};
 
 var app = express();
 
@@ -37,12 +39,10 @@ app.get('/home', function(req,res) {
 });
 
 app.get('/stats', function(req,res) {
-    // app.engine('handlebars', exphbs({defaultLayout: 'stats'}));
   res.render("stats_home.handlebars");
 });
 
 app.get('/summary', function(req,res) {
-    // app.engine('handlebars', exphbs({defaultLayout: 'summary'}));
   res.render("summary_home.handlebars");
 });
 

@@ -1,6 +1,7 @@
 {
   "name": "spaza-kata",
   "version": "1.0.0",
+  "description": "",
   "main": "app.js",
   "directories": {
     "test": "test"
@@ -24,6 +25,8 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.5",
     "lodash": "^4.9.0",
-    "mysql": "^2.10.2"
+    "mysql": "^2.10.2",
+    "body-parser": "~1.15.0",
+    "express-myconnection": "~1.0.4"
   }
 }
