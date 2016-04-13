@@ -13,10 +13,10 @@ var express = require('express'),
 
 var dbOptions = {
       host: 'localhost',
-      user: 'daniel',
-      password: 'password',
+      user: 'root',
+      password: '1amdan13l',
       port: 3306,
-      database: 'my_products'
+      database: 'nelisa_copy'
 };
 
 var app = express();
