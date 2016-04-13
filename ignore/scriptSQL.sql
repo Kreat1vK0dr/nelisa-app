@@ -8,6 +8,7 @@ CREATE USER daniel@localhost IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON nelisa.* TO daniel@localhost;
 FLUSH PRIVILEGES;
 
+# BEFORE YOU CAN RUN THIS YOU NEED TO
 LOAD DATA LOCAL INFILE '/sales/week2.csv' INTO TABLE nelisa.sales_raw FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 --
@@ -197,9 +198,37 @@ DELIMITER ;
 UPDATE inventory
 SET available = SUM(purchases.quantity) - SUM(sales.quantity) WHERE product_id
 
-# WHEN YOU NEED TO RETURN A MAX VALUE FOR EACH GROUP. 
-SELECT o.*
+SELECT s.*
 FROM `Persons` o                    # 'o' from 'oldest person in group'
   LEFT JOIN `Persons` b             # 'b' from 'bigger age'
       ON o.Group = b.Group AND o.Age < b.Age
-WHERE b.Age is NULL                 # bigger age not found
+WHERE b.Age is NULL
+
+
+#OPTIONS ON HOW TO FIND MAXIMUM
+SELECT article, dealer, price
+FROM   shop
+WHERE  price=(SELECT MAX(price) FROM shop);
+#RELATED EXAMPLE (BELOW) DOESN'T WORK IN THIS CONTEXT BECAUSE NO TABLE 's' EXISTS.
+SELECT * FROM (SELECT week, product_id, SUM(quantity) as quantity
+FROM sales
+WHERE monthname(date) = 'February' AND week=1
+GROUP BY product_id) s
+WHERE s.quantity=(SELECT MAX(s.quantity) FROM s);
+#RATHER USE ONE OF THE BELOW EXAMPLES.
+SELECT s1.article, s1.dealer, s1.price
+FROM shop s1
+LEFT JOIN shop s2 ON s1.price < s2.price
+WHERE s2.article IS NULL;
+
+SELECT article, dealer, price
+FROM shop
+ORDER BY price DESC
+LIMIT 1;
+#RELATED EXAMPLE:
+SELECT s.week, s.product_id as id, p.description, SUM(s.quantity) quantity FROM sales s, products p
+WHERE
+month(s.date)=2 AND week=1 AND s.product_id=p.id
+GROUP BY s.product_id
+ORDER BY quantity DESC
+LIMIT 1

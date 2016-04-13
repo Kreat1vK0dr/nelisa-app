@@ -26,6 +26,9 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/public'));
 
+//setup middleware
+app.use(myConnection(mysql, dbOptions, 'single'));
+
 app.get('/', function(req,res){
   app.engine('handlebars', exphbs({defaultLayout: 'main'}));
   res.redirect("/home");
