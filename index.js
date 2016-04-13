@@ -2,14 +2,11 @@
 
 var express = require('express'),
     exphbs  = require('express-handlebars'),
-    display = require('./js/displayHTML.js'),
+    get = require('./lib/process-handlebars'),
     path = require('path'),
-    mysql = require('mysql');
+    mysql = require('mysql'),
     myConnection = require('express-myconnection'),
-    bodyParser = require('body-parser'),
-    categories = require('./routes/categories'),
-    products = require('./routes/products');
-
+    bodyParser = require('body-parser');
 
 var dbOptions = {
       host: 'localhost',

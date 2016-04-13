@@ -196,3 +196,10 @@ DELIMITER ;
 
 UPDATE inventory
 SET available = SUM(purchases.quantity) - SUM(sales.quantity) WHERE product_id
+
+# WHEN YOU NEED TO RETURN A MAX VALUE FOR EACH GROUP. 
+SELECT o.*
+FROM `Persons` o                    # 'o' from 'oldest person in group'
+  LEFT JOIN `Persons` b             # 'b' from 'bigger age'
+      ON o.Group = b.Group AND o.Age < b.Age
+WHERE b.Age is NULL                 # bigger age not found
