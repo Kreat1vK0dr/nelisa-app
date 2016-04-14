@@ -87,17 +87,11 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
 
             profit = revenue - totalcost;
 
-            if (revenue>0) {
-              profitMargin = profit/revenue;
-            } else {
-              profitMargin = 0;
-            }
-
-            updateSales.push([sale.id,revenue, totalcost, profit, profitMargin, inventory, quantity]);
+            updateSales.push([sale.id,revenue, totalcost, profit, inventory, quantity]);
 
           });
 
-          connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, revenue decimal(10,2) not null, cost decimal(10,2) not null, profit decimal(10,2) not null, profit_margin decimal(10,2) not null, inv_rem int not null, q_rem int not null)", function(err, rows) {
+          connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, revenue decimal(10,2) not null, cost decimal(10,2) not null, profit decimal(10,2) not null, inv_rem int not null, q_rem int not null)", function(err, rows) {
             if (err) throw err;
             console.log("CREATED TEMP SALES TABLE");
 
@@ -105,7 +99,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
               if (err) throw err;
               console.log("CREATED TEMP PURCHASES TABLE");
 
-              connection.query("INSERT INTO sales_temp (id, revenue, cost, profit, profit_margin, inv_rem, q_rem) VALUES ?", [updateSales], function(err, rows){
+              connection.query("INSERT INTO sales_temp (id, revenue, cost, profit, inv_rem, q_rem) VALUES ?", [updateSales], function(err, rows){
                 // console.log("THIS IS SALES UPDATES", updateSales);
                 // console.log("THIS IS PURCHASES UPDATES", updatePurchases);
                 if (err) throw err;
@@ -120,7 +114,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                   console.log("UPDATED "+rows.affectedRows+" rows IN PURCHASES_TEMP.");
                   console.log("CHANGED "+rows.changedRows+" rows IN PURCHASES_TEMP.");
 
-                  var salesQuery = "UPDATE sales AS dest, sales_temp AS src SET dest.revenue = src.revenue, dest.cost = src.cost, dest.profit = src.profit, dest.profit_margin = src.profit_margin, dest.inv_rem = src.inv_rem, dest.q_cant_sell = src.q_rem WHERE dest.id = src.id";
+                  var salesQuery = "UPDATE sales AS dest, sales_temp AS src SET dest.revenue = src.revenue, dest.cost = src.cost, dest.profit = src.profit, dest.inv_rem = src.inv_rem, dest.q_cant_sell = src.q_rem WHERE dest.id = src.id";
 
                   connection.query(salesQuery, function(err, rows){
                     if (err) throw err;
@@ -136,7 +130,12 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                       console.log("UPDATED "+rows.affectedRows+" rows IN PURCHASES.");
                       console.log("CHANGED "+rows.changedRows+" rows IN PURCHASES.");
 
-                      connection.end();
+                      connection.query("UPDATE sales SET profit_margin = revenue/profit", function(err, rows){
+                        if (err) throw err;
+                        console.log("SET PROFIT MARGIN = REVENUE/PROFIT IN SALES");
+                        connection.end();
+
+                  });    
                 });
               });
             });

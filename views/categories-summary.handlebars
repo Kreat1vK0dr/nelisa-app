@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Spaza - {{title}}</title>
+</head>
+<body class = "body-tpage">
+  <div id="title">
+      <h1>{{title}}</h1>
+</div>
+<div class="text-center periodbuttons">
+
+  <div class="text-center periodbuttons">
+
+    <form action="/stats/table" method="POST">
+
+      <select class="" name="type">
+        <option value='product'>Product</option>
+        <option value='category'>Category</option>
+        </select>
+
+      <select class="" name="month">
+        {{#months}}
+        <option value={{month}}>{{month}}</option>
+        {{/months}}
+      </select>
+
+      <select class="" name="week">
+        {{#weeks}}
+        <option value={{week}}>{{week}}</option>
+        {{/weeks}}
+      </select>
+
+      <button type="submit" class="btn btn-default">GO</button>
+    </form>
+
+  </div>
+
+</div>
+
+</div>
+<div class = "divider1"></div>
+  <table class="table table-bordered table-hover table-sm center-table">
+    <thead class="thead-inverse">
+    <!-- <tr> <th colspan="6"> My First HandleBars Table </th> </tr> -->
+    <tr> <th>Category</th> <th>Quantity Sold</th> <th>Inventory</th> <th>Profit</th> <th>Profit Margin</th> <th>Quantity <br>Couldn't Sell</th></tr>
+  </thead>
+    <tbody>
+      {{#each data}}
+        <tr>
+          <td class="inverse">{{category}}</td> <td class="left-indent">{{quantity}}</td> <td class="left-indent">{{inventory}}</td> <td class="left-indent">R{{profit}}</td> <td class="left-indent">{{profitMargin}}%</td><td class="left-indent">{{nosell}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+
+  </table>
+</body>
+</html>

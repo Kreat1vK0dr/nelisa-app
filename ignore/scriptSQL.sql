@@ -167,7 +167,7 @@ from sales s, products p, categories c
 where s.product_id = p.id and s.category_id = c.id
 ORDER BY s.date ASC;
 
-UPDATE sales SET revenue = price*quantity;
+UPDATE sales SET profit_margin = profit/revenue;
 
 ALTER TABLE sales
 ADD inv_rem_bef int not null,

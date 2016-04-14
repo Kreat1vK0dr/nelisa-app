@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Spaza - {{title}}</title>
+</head>
+<body class = "body-tpage">
+  <div id="title">
+      <h1>{{title}}</h1>
+      </div>
+
+<div class="text-center periodbuttons">
+
+<form action="/stats" method="POST">
+
+  <select class="" name="month">
+    {{#month}}
+    <option value={{month}}>1</option>
+    {{/month}}
+  </select>
+
+  <select class="" name="week">
+    {{#week}}
+    <option value={{week}}>
+    {{/week}}
+  </select>
+
+  <button type="submit" class="btn btn-default">GO</button>
+</form>
+
+<div class="divider1"></div>
+  <table class="table table-bordered table-hover center-table">
+    <!-- <tr> <th colspan="6"> My First HandleBars Table </th> </tr> -->
+      <thead class="thead-inverse">
+    <tr> <th>Sales Stat</th> <th>Product/Category</th> <th>Quantity Sold</th> <th>Inventory</th> <th>Profit</th> <th>Profit Margin</th> </tr>
+  </thead>
+<tbody>
+      {{#data}}
+        <tr>
+          <td class="inverse">{{stat}}</td> <td class="active">{{name}}</td> <td class="left-indent active">{{quantity}}</td> <td class="left-indent active">{{inventory}}</td> <td class="left-indent active">R{{profit}}</td> <td class="left-indent active">{{profitMargin}}%</td>
+        </tr>
+      {{/data}}
+          </tbody>
+
+  </table>
+</body>
+</html>

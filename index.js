@@ -7,8 +7,9 @@ var express = require('express'),
     myConnection = require('express-myconnection'),
     bodyParser = require('body-parser');
 
-var configTmpl = require('./lib/configure-handlebars'),
-    stats = require('./configure-stats');
+var tmplName = require('./lib/template-name'),
+    stats = require('./lib/stats'),
+    summary = require('./lib/summary');
 
 var dbOptions = {
       host: 'localhost',
@@ -41,38 +42,16 @@ app.get('/', function(req,res){
 });
 
 app.get('/home', function(req,res) {
-  res.render("home.handlebars");
+  res.render("home");
 });
 
-app.get('/stats', stats.show);
+app.get('/stats', stats.home);
+app.post('/stats/:type', stats.show);
+// app.get('/stats/:type', stats.show);
 
-app.get('/summary', function(req,res) {
-  res.render("summary_home.handlebars");
-});
-
-app.get('/stats/:item_type/:week', function (req, res) {
-
-  var type = req.params.item_type,
-      week = req.params.week;
-
-  var context = configTmpl.getContext(type, week),
-      template = configTmpl.getTmplName(type);
-
-    res.render(template, context);
-
-});
-
-app.get('/summary/:item_type/:week', function(req,res){
-
-  var type = req.params.item_type,
-      week = req.params.week;
-
-  var data = configTmpl.getContext(type, week),
-      template = configTmpl.getTmplName(type);
-//res.render compiles the template. Same as compileTmpl.compile.
-    res.render(template, data);
-
-});
+app.get('/summary', summary.home);
+app.post('/summary/table', summary.show);
+// app.get('/summary/table', summary.show);
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
