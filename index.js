@@ -28,6 +28,10 @@ app.use(express.static(__dirname + '/public'));
 
 //setup middleware
 app.use(myConnection(mysql, dbOptions, 'single'));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
 app.get('/', function(req,res){
   app.engine('handlebars', exphbs({defaultLayout: 'main'}));
