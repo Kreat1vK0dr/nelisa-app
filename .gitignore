@@ -3,4 +3,3 @@ node_modules/
 checkfiles/
 scripts/
 *.*~
-lib/configure-sms.js
