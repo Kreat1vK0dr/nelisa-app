@@ -2,11 +2,13 @@
 
 var express = require('express'),
     exphbs  = require('express-handlebars'),
-    configTmpl = require('./lib/configure-handlebars'),
     path = require('path'),
     mysql = require('mysql'),
     myConnection = require('express-myconnection'),
     bodyParser = require('body-parser');
+
+var configTmpl = require('./lib/configure-handlebars'),
+    stats = require('./configure-stats');
 
 var dbOptions = {
       host: 'localhost',
@@ -42,9 +44,7 @@ app.get('/home', function(req,res) {
   res.render("home.handlebars");
 });
 
-app.get('/stats', function(req,res) {
-  res.render("stats_home.handlebars");
-});
+app.get('/stats', stats.show);
 
 app.get('/summary', function(req,res) {
   res.render("summary_home.handlebars");
