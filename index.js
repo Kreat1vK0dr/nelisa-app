@@ -2,7 +2,7 @@
 
 var express = require('express'),
     exphbs  = require('express-handlebars'),
-    compileTmpl = require('./lib/process-handlebars'),
+    configTmpl = require('./lib/configure-handlebars'),
     path = require('path'),
     mysql = require('mysql'),
     myConnection = require('express-myconnection'),
@@ -51,8 +51,8 @@ app.get('/stats/:item_type/:week', function (req, res) {
   var type = req.params.item_type,
       week = req.params.week;
 
-  var context = compileTmpl.getContext(type, week),
-      template = compileTmpl.getTmplName(type);
+  var context = configTmpl.getContext(type, week),
+      template = configTmpl.getTmplName(type);
 
     res.render(template, context);
 
@@ -63,8 +63,8 @@ app.get('/summary/:item_type/:week', function(req,res){
   var type = req.params.item_type,
       week = req.params.week;
 
-  var data = compileTmpl.getContext(type, week),
-      template = compileTmpl.getTmplName(type);
+  var data = configTmpl.getContext(type, week),
+      template = configTmpl.getTmplName(type);
 //res.render compiles the template. Same as compileTmpl.compile.
     res.render(template, data);
 
