@@ -1,6 +1,9 @@
-var mysql      = require('mysql');
-var get = require('../js/get&map_data.js');
-var fs = require('fs');
+var mysql = require('mysql'),
+    fs = require('fs');
+
+var costOfSales = require('../js/COS.js'),
+
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -62,34 +65,16 @@ connection.query("UPDATE purchases SET remaining = quantity", function(err, rows
 
 connection.query('SELECT id, product_id, date, quantity, remaining, eacost from purchases ORDER BY date', function(err, purchases, fields) {
   if (err) throw err;
-  var SQLpurchases = get.mapSQLPurchases(purchases);
+  var purchases = costOfSales.mapSQLPurchases(purchases);
 
 
         connection.query('SELECT id, date, product_id, quantity, price, revenue from sales WHERE quantity > 0 ORDER BY id', function(err, sales, fields) {
           if (err) throw err;
-          var updateSales = [];
-          var updatePurchases = [];
+          var salesToUpdate = [];
+          var purchasesToUpdate = [];
 
-          sales.forEach(function(sale) {
-            var profit, profitMargin, revenue, totalcost, quantity, inventory;
-            var purchases = SQLpurchases.get(sale.product_id);
-            var getinfo = get.SQLCostAndLogSaleAt(sale.date, sale.quantity, purchases, updatePurchases);
+          costOfSales.getCOS(sales,purchases,salesToUpdate,purchasesToUpdate);
 
-            totalcost = getinfo.cost;
-            quantity = getinfo.quantity;
-            inventory = get.SQLInventoryRemainingAt(sale.date, sale.product_id, SQLpurchases);
-
-            if (quantity===0) {
-                revenue = sale.quantity * sale.price;
-              } else {
-                revenue = (sale.quantity-quantity) * sale.price;
-              }
-
-            profit = revenue - totalcost;
-
-            updateSales.push([sale.id,revenue, totalcost, profit, inventory, quantity]);
-
-          });
 
           connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, revenue decimal(10,2) not null, cost decimal(10,2) not null, profit decimal(10,2) not null, inv_rem int not null, q_rem int not null)", function(err, rows) {
             if (err) throw err;
@@ -99,7 +84,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
               if (err) throw err;
               console.log("CREATED TEMP PURCHASES TABLE");
 
-              connection.query("INSERT INTO sales_temp (id, revenue, cost, profit, inv_rem, q_rem) VALUES ?", [updateSales], function(err, rows){
+              connection.query("INSERT INTO sales_temp (id, revenue, cost, profit, inv_rem, q_rem) VALUES ?", [salesToUpdate], function(err, rows){
                 // console.log("THIS IS SALES UPDATES", updateSales);
                 // console.log("THIS IS PURCHASES UPDATES", updatePurchases);
                 if (err) throw err;
@@ -107,7 +92,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                 console.log("UPDATED "+rows.affectedRows+" rows IN SALES_TEMP.");
                 console.log("CHANGED "+rows.changedRows+" rows IN SALES_TEMP.");
 
-                connection.query("INSERT INTO purchases_temp (id, remaining) VALUES ?", [updatePurchases], function(err, rows){
+                connection.query("INSERT INTO purchases_temp (id, remaining) VALUES ?", [purchasesToUpdate], function(err, rows){
                   // console.log("THIS IS PURCHASES UPDATES", updatePurchases);
                   if (err) throw err;
                   console.log("INSERTED NEW REMAINING VALUES INTO PURCHASES_TEMP");
@@ -135,7 +120,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                         console.log("SET PROFIT MARGIN = REVENUE/PROFIT IN SALES");
                         connection.end();
 
-                  });    
+                  });
                 });
               });
             });

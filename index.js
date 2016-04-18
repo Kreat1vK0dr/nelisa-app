@@ -10,6 +10,7 @@ var express = require('express'),
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
     summary = require('./lib/summary');
+    Products = require('./products_CRUD');
 
 var dbOptions = {
       host: 'localhost',
@@ -52,6 +53,12 @@ app.post('/stats/:type', stats.show);
 app.get('/summary', summary.home);
 app.post('/summary/table', summary.show);
 // app.get('/summary/table', summary.show);
+
+var products = new Product();
+app.get('/products',products.show);
+app.get('/products/edit/:id',products.get);
+app.post('/products/update/:id',products.edit);
+app.post('/products/',products.delete);
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
