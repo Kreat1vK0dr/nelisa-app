@@ -73,7 +73,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
           var salesToUpdate = [];
           var purchasesToUpdate = [];
 
-          costOfSales.getCOS(sales,purchases,salesToUpdate,purchasesToUpdate);
+          costOfSales.getAllCOS(sales,purchases,salesToUpdate,purchasesToUpdate);
 
 
           connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, revenue decimal(10,2) not null, cost decimal(10,2) not null, profit decimal(10,2) not null, inv_rem int not null, q_rem int not null)", function(err, rows) {

@@ -22,10 +22,10 @@ select s1.date,
 
 
 # FOR SALES
-select date,  ((SELECT SUM(quantity) FROM sales s2 WHERE s1.date>=s2.date AND product_id=1)) sumSales FROM sales s1 WHERE product_id=1 AND day(date)=28;
+SELECT (SELECT SUM(quantity) FROM sales s2 WHERE s1.date>=s2.date AND product_id=1) sumSales FROM sales s1 WHERE product_id=1 AND day(date)=28;
 
 # FOR PURCHASES
-SELECT SUM(quantity) FROM purchases WHERE day(date)<=28 AND product_id=1 ORDER BY date desc;
+SELECT SUM(quantity) sumPurchases FROM purchases WHERE day(date)<=28 AND product_id=1 ORDER BY date desc;
 
 # COMBINED DOESN'T WORK
 (((SELECT SUM(quantity) FROM sales s2 WHERE s1.date>=s2.date AND product_id=1) FROM sales s1 WHERE product_id=1 AND day(date)=28)-(SELECT SUM(quantity) FROM purchases WHERE day(date)<=28 AND product_id=1 ORDER BY date desc));

@@ -1,0 +1,15 @@
+<h1>Products</h1>
+
+<a href="/products/add">Add</a>
+
+  {{#products}}
+    <div class="product">
+      <div>{{product}}</div>
+      <a href="/products/edit/{{id}}"><div>Edit</div></a>
+      <a href="/products/delete/{{id}}"><div class="links">Delete</div></a>
+    </div>
+  {{/products}}
+
+  {{#no_products}}
+    <p>You have no products. Please add one above.</p>
+  {{/no_products}}

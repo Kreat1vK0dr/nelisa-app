@@ -16,21 +16,23 @@
     <form action="/summary/table" method="POST">
 
       <select class="" name="type">
-        <option value='product'>Product</option>
-        <option value='category'>Category</option>
+        {{#types}}
+        <option value='{{type}}' {{selected}}>{{capFL type}}</option>
+        {{/types}}
         </select>
 
       <select class="" name="month">
         {{#months}}
-        <option value={{month}}>{{month}}</option>
+        <option value={{month}} {{selected}}>{{month}}</option>
         {{/months}}
       </select>
 
       <select class="" name="week">
         {{#weeks}}
-        <option value={{week}}>{{week}}</option>
+        <option value={{week}} {{selected}}>{{week}}</option>
         {{/weeks}}
       </select>
+
 
       <button type="submit" class="btn btn-default">GO</button>
     </form>
@@ -42,12 +44,12 @@
   <table class="table table-bordered table-hover table-sm center-table">
   <thead class="thead-inverse">
     <!-- <tr> <th colspan="6"> My First HandleBars Table </th> </tr> -->
-    <tr> <th>Product</th> <th>Category</th> <th>Quantity Sold</th> <th>Inventory</th> <th>Profit</th> <th>Profit Margin</th> <th>Couldn't Sell</th> </tr>
+    <tr> <th>Product</th> <th>Category</th> <th>Quantity Sold</th> <!--<th>Inventory</th>--> <th>Profit</th> <th>Profit Margin</th> <th>Couldn't Sell</th> </tr>
   </thead>
   <tbody>
       {{#each data}}
         <tr>
-          <td class="inverse">{{product}}</td> <td>{{category}}</td> <td class="left-indent">{{quantity}}</td> <td class="left-indent">{{inventory}}</td> <td class="left-indent">R{{profit}}</td> <td class="left-indent">{{profitMargin}}%</td><td class="left-indent">{{nosell}}</td>
+          <td class="inverse">{{product}}</td> <td>{{category}}</td> <td class="left-indent">{{quantity}}</td> <!--<td class="left-indent">{{inventory}}</td>--> <td class="left-indent">R{{profit}}</td> <td class="left-indent">{{profitMargin}}</td><td class="left-indent">{{cantsell}}</td>
         </tr>
         {{/each}}
       </tbody>
