@@ -80,28 +80,6 @@ LINES TERMINATED BY '\n'
 (name);
 
 
-CREATE TABLE purchases(
-  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  date DATE,
-  supplier VARCHAR(30),
-  product VARCHAR(30),
-  product_id INT,
-  quantity INT,
-  costea DECIMAL(9,2),
-  CONSTRAINT purchases_product_id FOREIGN KEY (product_id) REFERENCES products(id)
-  ON UPDATE CASCADE
-  ON DELETE SET NULL,
-  CONSTRAINT purchases_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id)
-  ON UPDATE CASCADE
-  ON DELETE SET NULL
-);
-
-LOAD DATA LOCAL INFILE './data/purchases/purchases.csv' INTO TABLE sales
-FIELDS TERMINATED BY ';'
-LINES TERMINATED BY '\n'
-IGNORE 1 LINES
-(supplier,date,product,quantity,costea);
-
 CREATE TABLE inventory(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   product_id INT,
@@ -117,6 +95,56 @@ CREATE TABLE inventory(
 
 INSERT INTO inventory (product_id)
 SELECT id FROM products;
+
+CREATE TABLE purchases(
+  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  date DATE,
+  supplier VARCHAR(30),
+  product VARCHAR(30),
+  product_id INT,
+  quantity INT,
+  remaining INT,
+  costea DECIMAL(9,2),
+  CONSTRAINT purchases_product_id FOREIGN KEY (product_id) REFERENCES products(id)
+  ON UPDATE CASCADE
+  ON DELETE SET NULL,
+  CONSTRAINT purchases_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id)
+  ON UPDATE CASCADE
+  ON DELETE SET NULL
+);
+
+DELIMITER $$
+CREATE TRIGGER after_purchases_insert
+AFTER INSERT ON purchases
+BEGIN
+    SET new.remaining = new.quantity;
+    SET @product_id = new.product_id;
+    UPDATE inventory i
+    SET i.remaining = (SELECT SUM(p.remaining) FROM purchases p WHERE p.product_id = @product_id)
+    WHERE i.product_id = @product_id;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE TRIGGER after_purchases_update
+AFTER UPDATE ON purchases
+BEGIN
+    SET new.remaining = new.quantity;
+    SET @product_id = new.product_id;
+    UPDATE inventory i
+    SET i.remaining = (SELECT SUM(p.remaining) FROM purchases p WHERE p.product_id = @product_id)
+    WHERE i.product_id = @product_id;
+END$$
+DELIMITER;
+
+LOAD DATA LOCAL INFILE './data/purchases/purchases.csv' INTO TABLE sales
+FIELDS TERMINATED BY ';'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(supplier,date,product,quantity,costea);
+
+UPDATE purchases
+SET remaining = quantity;
 
 CREATE TABLE inventory_log(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,

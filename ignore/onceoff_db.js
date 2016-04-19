@@ -25,10 +25,11 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
 
         connection.query('SELECT id, date, product_id, quantity, price, revenue from sales WHERE quantity > 0 ORDER BY id', function(err, sales, fields) {
           if (err) throw err;
-          var salesToUpdate = [];
-          var purchasesToUpdate = [];
+          var salesToUpdate = [],
+              purchasesToUpdate = [],
+              inventoryLog = [];
 
-          costOfSales.getAllCOS(salesFromDatabase,purchasesFromDatabase,salesToUpdate,purchasesToUpdate);
+          costOfSales.getCOSandLogInventory(salesFromDatabase,purchasesFromDatabase,salesToUpdate,purchasesToUpdate, inventoryLog);
 
           connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, revenue decimal(10,2) not null, cost decimal(10,2) not null, profit decimal(10,2) not null, inv_rem int not null, q_rem int not null)", function(err, rows) {
             if (err) throw err;
@@ -72,6 +73,13 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                       connection.query("UPDATE sales SET profit_margin = revenue/profit", function(err, rows){
                         if (err) throw err;
                         console.log("SET PROFIT MARGIN = REVENUE/PROFIT IN SALES");
+
+                        connection.query(inventoryQuery, [inventoryLog], function(err, rows){
+                          if (err) throw err;
+                          console.log("SUCCESSFULLY UPDATED INVENTORY_LOG TABLE");
+                          console.log("UPDATED "+rows.affectedRows+" rows IN INVENTORY_LOG.");
+                          console.log("CHANGED "+rows.changedRows+" rows IN INVENTORY_LOG.");
+                        })
                         connection.end();
 
                   });
