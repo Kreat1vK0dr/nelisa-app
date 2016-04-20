@@ -1,51 +1,51 @@
 @font-face {
   font-family: 'peach';
-  src: url("/assets/fonts/peach-sundress.ttf");
+  src: url("/fonts/peach-sundress.ttf");
 }
 
 @font-face {
   font-family: 'raleway';
-  src: url("/assets/fonts/Raleway Thin.otf");
+  src: url("/fonts/Raleway Thin.otf");
 }
 
 @font-face {
   font-family: 'abel';
-  src: url("/assets/fonts/Abel-Regular.ttf");
+  src: url("/fonts/Abel-Regular.ttf");
 }
 
 @font-face {
   font-family: 'langdon';
-  src: url("/assets/fonts/Langdon.otf");
+  src: url("/fonts/Langdon.otf");
 }
 
 @font-face {
   font-family: 'adam';
-  src: url("/assets/fonts/adam.otf");
+  src: url("/fonts/adam.otf");
 }
 
 @font-face {
   font-family: 'aleo-italic';
-  src: url("/assets/fonts/Aleo-Italic.otf");
+  src: url("/fonts/Aleo-Italic.otf");
 }
 
 @font-face {
   font-family: 'aleo-light';
-  src: url("/assets/fonts/Aleo-Light.otf");
+  src: url("/fonts/Aleo-Light.otf");
 }
 
 @font-face {
   font-family: 'lora-italic';
-  src: url("/assets/fonts/Lora-Italic.ttf");
+  src: url("/fonts/Lora-Italic.ttf");
 }
 
 @font-face {
   font-family: 'calendas';
-  src: url("/assets/fonts/Calendas_Plus.otf");
+  src: url("/fonts/Calendas_Plus.otf");
 }
 
 @font-face {
   font-family: 'aleo-regular';
-  src: url("/assets/fonts/Aleo-Regular.otf");
+  src: url("/fonts/Aleo-Regular.otf");
 }
 
 #loginbutton {
@@ -72,35 +72,20 @@
 .button {
   border: 2px solid #113461;
   display: inline-block;
-  /*color: black;*/
   color: white;
-  /*background-color: rgba(21,44,173,1);*/
   background-color: #164078;
-  /*background-color: red;*/
   border-radius: 80%;
-  /*border-radius: 4px;*/
   height: 6em;
   width: 6em;
   margin: 0 2em;
-  /*width: 10em;*/
   line-height: 6em;
   font-size: 1.5em;
   font-family: adam;
 }
 
 .button:hover {
-  /*border-radius: 20px;*/
-  /*width: 6em;*/
-  /*margin: 0;
-    width: 10em;*/
-  /*background-color: rgba(21,44,173,0.4);*/
   background-color: rgba(22, 64, 120, 0.5);
-  /*background-color: red;*/
   color: black;
-  /*color: white;*/
-  /*transform: scale(1.5);
-  -moz-transform: scale(1.5);
-  -webkit-transform: scale(1.5);*/
 }
 
 .periodbuttons {
@@ -131,6 +116,8 @@
 }
 
 .add-link {
+  position: relative;
+  left: 60%;
   color: black;
 }
 

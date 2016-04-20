@@ -31,9 +31,9 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 
 app.set('view engine', 'handlebars');
 
-app.use('/styles', sassMiddleware({
-    src: path.join(__dirname, 'sass'),
-    dest: path.join(__dirname, 'public','styles'),
+app.use('/css', sassMiddleware({
+    src: path.join(__dirname, 'public','sass'),
+    dest: path.join(__dirname, 'public','css'),
     debug: true,
     outputStyle: 'expanded',
     // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
