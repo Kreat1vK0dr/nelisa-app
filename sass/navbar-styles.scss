@@ -1,0 +1,28 @@
+.navbar {
+  height: 40px;
+}
+
+.navbar-brand {
+  padding-top: 7px;
+  font-size: 30px;
+}
+
+.navbar-nav > li > a {
+  font-family: adam;
+    padding-top: 11px;
+    padding-bottom: 5px;
+}
+
+
+.container-fluid {
+  position: relative;
+}
+
+
+.navbar-header {
+  font-size: 30px;
+  color: white;
+}
+.navbar-brand:hover {
+  color: #FA87F8;
+}

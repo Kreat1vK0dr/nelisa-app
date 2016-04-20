@@ -31,24 +31,22 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 
 app.set('view engine', 'handlebars');
 
-app.use(sassMiddleware({
-    /* Options */
-    src: path.join(__dirname, 'public', 'styles', 'sass')
-    dest: path.join(__dirname, 'public','styles', 'css'),
+app.use('/styles', sassMiddleware({
+    src: path.join(__dirname, 'sass'),
+    dest: path.join(__dirname, 'public','styles'),
     debug: true,
-    response: false,
-    outputStyle: 'compressed',
-    prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+    outputStyle: 'expanded',
+    // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
 }));
 
 app.use(postcssMiddleware({
   src: function(req) {
-    return path.join("public","css","sass", req.path);
+    return path.join(req.path);
   },
   plugins: [autoprefixer({browsers: ['> 1%', 'IE 7','last 2 versions'], cascade: false })]
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 //setup middleware
 app.use(myConnection(mysql, dbOptions, 'single'));

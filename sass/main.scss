@@ -1,4 +1,8 @@
 
+@import "fonts";
+@import "button-styles";
+@import "table-styles";
+@import "navbar-styles"; 
 
 /*#allbody-home {
   background-color: rgba(22,64,120,0.5);;
@@ -19,9 +23,6 @@
   color: white;
 }
 
-.body-tpage {
-  background-color: white;
-}
 
 h1, h2 {
   font-family: adam;
@@ -35,21 +36,6 @@ h1, h2 {
 
 .dropdown:hover li:hover {
   display: block;
-}
-
-.navbar {
-  height: 40px;
-}
-
-.navbar-brand {
-  padding-top: 7px;
-  font-size: 30px;
-}
-
-.navbar-nav > li > a {
-  font-family: adam;
-    padding-top: 11px;
-    padding-bottom: 5px;
 }
 
 img {
@@ -87,22 +73,8 @@ img {
   /*font-family: langdon;*/
 }
 
-#loginbutton {
-  position: absolute;
-  display: inline-block;
-  right: 0px;
-  padding-top: 8px;
-  padding-right: 8px;
-  color: grey;
-}
 
-.container-fluid {
-  position: relative;
-}
 
-#loginbutton:hover {
-  color: white;
-}
 
 .copyright {
   text-align: center;
@@ -145,92 +117,9 @@ max-width: 90%;
   padding: 15px 45px;
 }
 
-.homebuttons {
-  padding-top: 4.2em;
-  position: relative;
-  height: 10em;
-  width: 100%;
-  text-align: center;
-}
+
 
 
 .nelisa-font {
   font-family: peach;
-}
-
-.navbar-header {
-  font-size: 30px;
-  color: white;
-}
-.navbar-brand:hover {
-  color: #FA87F8;
-}
-
-.button {
-  border: 2px solid #113461;
-  display: inline-block;
-  /*color: black;*/
-  color: white;
-  /*background-color: rgba(21,44,173,1);*/
-    background-color: rgba(22,64,120,1);;
-  /*background-color: red;*/
-  border-radius: 80%;
-  /*border-radius: 4px;*/
-  height: 6em;
-  width: 6em;
-  margin: 0 2em;
-  /*width: 10em;*/
-  line-height: 6em;
-  font-size: 1.5em;
-  font-family: adam;
-}
-.button:hover {
-  /*border-radius: 20px;*/
-  /*width: 6em;*/
-  /*margin: 0;
-    width: 10em;*/
-  /*background-color: rgba(21,44,173,0.4);*/
-  background-color: rgba(22,64,120,0.5);;
-  /*background-color: red;*/
-  color: black;
-  /*color: white;*/
-  /*transform: scale(1.5);
-  -moz-transform: scale(1.5);
-  -webkit-transform: scale(1.5);*/
-}
-
-.periodbuttons {
-  padding-top: 10px;
-}
-
-.left-indent {
-  text-align: right;
-  text-indent: 20px;
-}
-
-.center-table {
-  margin: 0 auto;
-}
-
-.thead-inverse {
-  background-color: #36454F;
-  color: white;
-}
-
-.inverse {
-  background-color: #36454F !important;
-  color: white;
-}
-
-.add-link {
-  color: black;
-}
-
-.links {
-  color: black;
-}
-
-.crud-table {
-  border: solid 1px black;
-  background-color: rgba(277,277,277,1);
 }
