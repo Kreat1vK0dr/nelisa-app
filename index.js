@@ -5,12 +5,15 @@ var express = require('express'),
     path = require('path'),
     mysql = require('mysql'),
     myConnection = require('express-myconnection'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    sassMiddleware = require('node-sass-middleware'),
+    postcssMiddleware = require('postcss-middleware');
+    autoprefixer = require('autoprefixer');
 
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
     summary = require('./lib/summary');
-    // Products = require('./products_CRUD');
+    ProductMethods = require('./lib/products_CRUD');
 
 var dbOptions = {
       host: 'localhost',
@@ -28,7 +31,25 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 
 app.set('view engine', 'handlebars');
 
-app.use(express.static(__dirname + '/public'));
+app.use(sassMiddleware({
+    /* Options */
+    src: path.join(__dirname, 'public', 'css')
+    dest: path.join(__dirname, 'public','css','sass'),
+    debug: true,
+    response: false,
+    outputStyle: 'compressed',
+    prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+}));
+
+app.use(postcssMiddleware({
+  src: function(req) {
+    return path.join("public","css","sass", req.path);
+  },
+  plugins: [autoprefixer]
+
+}));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 //setup middleware
 app.use(myConnection(mysql, dbOptions, 'single'));
@@ -56,11 +77,11 @@ app.post('/summary/table', summary.redirect);
 app.get('/summary/table/:type/:month/:week', summary.show);
 // app.get('/summary/table', summary.show);
 
-// var products = new Product();
-// app.get('/products',products.show);
-// app.get('/products/edit/:id',products.get);
-// app.post('/products/update/:id',products.edit);
-// app.post('/products/',products.delete);
+var products = new ProductMethods();
+app.get('/products',products.show);
+app.get('/products/edit/:id',products.get);
+app.post('/products/update/:id',products.update);
+app.post('/products/delete/:id',products.delete);
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));

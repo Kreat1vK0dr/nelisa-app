@@ -27,6 +27,10 @@
     "lodash": "^4.9.0",
     "mysql": "^2.10.2",
     "body-parser": "~1.15.0",
-    "express-myconnection": "~1.0.4"
+    "express-myconnection": "~1.0.4",
+    "node-sass": "^3.4.2",
+    "node-sass-middleware": "^0.9.8",
+    "postcss-middleware": "^1.0.0",
+    "autoprefixer": "^6.3.6"
   }
 }
