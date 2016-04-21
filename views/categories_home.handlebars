@@ -1,0 +1,28 @@
+<h1>Categories</h1>
+
+<table class="center-table">
+  <thead>
+    <tr>
+      <th>Category ID</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {{#no_categories}}
+    <tr>
+      <td class="crud-table" colspan="4">There are no categories. Please add a category above.</td>
+    </tr>
+    {{/no_categories}}
+
+    {{#categories}}
+    <tr>
+      <td class="crud-table">{{id}}</td>
+      <td class="crud-table">{{description}}</td>
+      <td class="crud-table"><a href="/categories/edit/{{id}}"><div>Edit</div></a></td>
+      <td class="crud-table"><a href="/categories/delete/{{id}}"><div>Delete</div></a></td>
+    </tr>
+    {{/categories}}
+
+  </tbody>
+</table>

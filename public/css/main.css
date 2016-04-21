@@ -132,6 +132,7 @@
 .navbar-brand {
   padding-top: 7px;
   font-size: 30px;
+  color: white;
 }
 
 .navbar-nav > li > a {

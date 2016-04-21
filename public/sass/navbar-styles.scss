@@ -1,27 +1,27 @@
 .navbar {
-  height: 40px;
+    height: 40px;
 }
 
 .navbar-brand {
-  padding-top: 7px;
-  font-size: 30px;
+    padding-top: 7px;
+    font-size  : 30px;
+    color      : white;
 }
 
 .navbar-nav > li > a {
-  font-family: adam;
-    padding-top: 11px;
+    font-family   : adam;
+    padding-top   : 11px;
     padding-bottom: 5px;
 }
 
 .container-fluid {
-  position: relative;
+    position: relative;
 }
-
 
 .navbar-header {
-  font-size: 30px;
-  color: white;
+    font-size: 30px;
+    color    : white;
 }
 .navbar-brand:hover {
-  color: #FA87F8;
+    color: #FA87F8;
 }
