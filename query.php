@@ -17,7 +17,7 @@ The resource link identifier (file handle) goes after the name of the database y
 
 $db_handle = mysql_connect($server, $user_name, $password);
 
-$db_found = mysql_select_db($database);
+$db_found = mysql_select_db($database, $db_handle);
 
 $sql = "SELECT * FROM `products` LIMIT 0, 30 ";
 
