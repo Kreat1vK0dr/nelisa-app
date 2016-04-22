@@ -21,7 +21,7 @@ CREATE TABLE products(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   description VARCHAR(30) NOT NULL,
   category_id INT,
-  inventory_remaining INT,
+  inventory INT,
   CONSTRAINT products_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
@@ -41,8 +41,8 @@ CREATE TABLE sales(
     category_id INT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL(9,2) NOT NULL,
-    cost_of_sale DECIMAL(9,2),
-    cant_sell INT,
+    cos DECIMAL(9,2) COMMENT "Cost of Sales",
+    cant_sell INT COMMENT ">0 if quantity of attempted sale greater than inventory remaining",
     CONSTRAINT sales_product_id FOREIGN KEY (product_id) REFERENCES products(id),
     CONSTRAINT sales_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
     );
@@ -57,6 +57,8 @@ SET date = @date,
     week = CASE WHEN dayofmonth(@date)%7!=0 THEN floor(dayofmonth(@date)/7)+1 ELSE floor(dayofmonth(@date)/7) END,
     category_id = (SELECT category_id FROM products WHERE description = @product),
     product_id = (SELECT id FROM products WHERE description = @product);
+
+DELETE FROM sales WHERE quantity = 0;
 
 CREATE TABLE suppliers(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -104,7 +106,7 @@ CREATE TABLE inventory_log(
   inv_aft_action INT NOT NULL,
   cant_sell INT
 );
--- 
+--
 -- DELIMITER $$
 -- CREATE TRIGGER invlog_add_sale
 -- BEFORE INSERT ON sales FOR EACH ROW
