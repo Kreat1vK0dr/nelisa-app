@@ -12,9 +12,10 @@ var express = require('express'),
 
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
-    summary = require('./lib/summary');
-ProductMethods = require('./lib/products_CRUD');
-CategoryMethods = require('./lib/categories_CRUD');
+    summary = require('./lib/summary'),
+    ProductMethods = require('./lib/products_CRUD'),
+    CategoryMethods = require('./lib/categories_CRUD'),
+    sales = require('./lib/sales');
 
 var dbOptions = {
     host: 'localhost',
@@ -64,10 +65,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
-    app.engine('handlebars', exphbs({
-        defaultLayout: 'main'
-    }));
-    res.redirect("/home");
+  res.redirect("/home");
 });
 
 app.get('/home', function (req, res) {
@@ -100,6 +98,8 @@ app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);
 
+app.get('/sales', sales.home);
+app.post('/sales/add', sales.add);
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));

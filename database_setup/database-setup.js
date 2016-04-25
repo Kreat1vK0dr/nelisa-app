@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     database: 'nelisa_another_copy'
 });
 connection.connect();
-connection.query('SELECT id, product_id, date, quantity, remaining, eacost from purchases ORDER BY date', function (err, purchasesFromDB, fields) {
+connection.query('SELECT id, product_id, date, quantity, remaining, unitcost from purchases ORDER BY date', function (err, purchasesFromDB, fields) {
     if (err) throw err;
     var purchases = purchasesFromDB,
         salesToUpdate = [],
@@ -23,7 +23,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
 
         costOfSales.initialCOSandInventoryLog(sales, purchases, salesToUpdate, purchasesToUpdate, inventoryLog);
 
-        connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, cos decimal(10,2) not null, cant_sell int not null)", function (err, rows) {
+        connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, costdecimal(10,2) not null, cant_sell int not null)", function (err, rows) {
             if (err) throw err;
             console.log("CREATED TEMP SALES TABLE");
 
@@ -31,7 +31,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                 if (err) throw err;
                 console.log("CREATED TEMP PURCHASES TABLE");
 
-                connection.query("INSERT INTO sales_temp (id, cos, cant_sell) VALUES ?", [salesToUpdate], function (err, rows) {
+                connection.query("INSERT INTO sales_temp (id, cost, cant_sell) VALUES ?", [salesToUpdate], function (err, rows) {
                     if (err) throw err;
                     console.log("INSERTED CALCULATIONS INTO SALES_TEMP");
                     console.log("UPDATED " + rows.affectedRows + " rows IN SALES_TEMP.");
@@ -43,7 +43,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, eacost from 
                         console.log("UPDATED " + rows.affectedRows + " rows IN PURCHASES_TEMP.");
                         console.log("CHANGED " + rows.changedRows + " rows IN PURCHASES_TEMP.");
 
-                        connection.query("UPDATE sales AS dest, sales_temp AS src SET dest.cos = src.cos, dest.cant_sell = src.cant_sell WHERE dest.id = src.id", function (err, rows) {
+                        connection.query("UPDATE sales AS dest, sales_temp AS src SET dest.cost= src.cost, dest.cant_sell = src.cant_sell WHERE dest.id = src.id", function (err, rows) {
                             if (err) throw err;
                             console.log("SUCCESSFULLY UPDATED SALES TABLE");
                             console.log("UPDATED " + rows.affectedRows + " rows IN SALES.");
