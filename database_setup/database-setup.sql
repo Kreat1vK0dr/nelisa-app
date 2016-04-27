@@ -12,7 +12,7 @@ CREATE TABLE categories(
   description VARCHAR(30) NOT NULL
 );
 
-LOAD DATA LOCAL INFILE './data/products/categories.csv' INTO TABLE categories
+LOAD DATA LOCAL INFILE '../data/products/categories.csv' INTO TABLE categories
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 (description);
@@ -21,15 +21,16 @@ CREATE TABLE products(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   description VARCHAR(30) NOT NULL,
   category_id INT,
+  price DECIMAL(9,2) NOT NULL,
   inventory INT,
   CONSTRAINT products_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
-LOAD DATA LOCAL INFILE './data/products/products.csv' INTO TABLE products
+LOAD DATA LOCAL INFILE '../data/products/products.csv' INTO TABLE products
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(description,@category)
+(description,@category, price)
 SET category_id = (SELECT id FROM categories WHERE description = @category);
 
 CREATE TABLE sales(
@@ -47,7 +48,7 @@ CREATE TABLE sales(
     CONSTRAINT sales_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
     );
 
-LOAD DATA LOCAL INFILE './data/sales/all_initial_sales.csv' INTO TABLE sales
+LOAD DATA LOCAL INFILE '../data/sales/all_initial_sales.csv' INTO TABLE sales
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
@@ -65,7 +66,7 @@ CREATE TABLE suppliers(
   name VARCHAR(30)
 );
 
-LOAD DATA LOCAL INFILE './data/suppliers/suppliers.csv' INTO TABLE suppliers
+LOAD DATA LOCAL INFILE '../data/suppliers/suppliers.csv' INTO TABLE suppliers
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 (name);
@@ -84,11 +85,11 @@ CREATE TABLE purchases(
   CONSTRAINT purchases_supplier_id FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
 );
 
-LOAD DATA LOCAL INFILE './data/purchases/purchases.csv' INTO TABLE purchases
+LOAD DATA LOCAL INFILE '../data/purchases/purchases.csv' INTO TABLE purchases
 FIELDS TERMINATED BY ';'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(@supplier,date,@product,@quantity,eacost)
+(@supplier,date,@product,@quantity,unitcost)
 SET supplier_id = (SELECT id FROM suppliers WHERE name = @supplier),
     product_id = (SELECT id FROM products WHERE description = @product),
     category_id = (SELECT category_id FROM products WHERE description = @product),

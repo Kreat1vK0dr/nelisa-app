@@ -1,11 +1,26 @@
 <h1>execute sale</h1>
-
+<button class="add-item">add item</button>
+<form action="/admin/sales/add" method="post">
 <fieldset>
-  <label for="product">Product</label>
-  <select class="" name="">
+  <label for="categories">Category</label>
+  <select id="categories" name="category">
+    <option value="" disabled selected>Please select a category</option>
+    {{#categories}}
+    <option value="{{id}}">{{description}}</option>
+    {{/categories}}
+  </select>
+  <label for="products">Product</label>
+  <select id="products" name="product">
+    <option value="" disabled selected id="choose">Please select a product</option>
     {{#products}}
-    <option value="{{product_id}}">{{description}}</option>
+    <option value="{{id}}" data-price="{{price}}" data-category="{{category_ids}}">{{description}}</option>
     {{/products}}
   </select>
-  
+<label for="price">Price</label>
+<input type="number" name='price' value='' disabled id="price">
+
+<label for="quantity">Quantity</label>
+<input type="number" name="quantity" id="quantity">
 </fieldset>
+<input type="submit" id="execute-sale" value="execute sale">
+</form>

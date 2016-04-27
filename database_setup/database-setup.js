@@ -1,7 +1,7 @@
 var mysql = require('mysql'),
     fs = require('fs');
 
-var costOfSales = require('./cost-of-sales.js');
+var costOfSales = require('../lib/cost-of-sales.js');
 
 
 var connection = mysql.createConnection({
@@ -23,7 +23,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, unitcost fro
 
         costOfSales.initialCOSandInventoryLog(sales, purchases, salesToUpdate, purchasesToUpdate, inventoryLog);
 
-        connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, costdecimal(10,2) not null, cant_sell int not null)", function (err, rows) {
+        connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, cost decimal(10,2) not null, cant_sell int not null)", function (err, rows) {
             if (err) throw err;
             console.log("CREATED TEMP SALES TABLE");
 

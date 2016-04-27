@@ -98,8 +98,8 @@ app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);
 
-app.get('/sales', sales.home);
-app.post('/sales/add', sales.add);
+app.get('/admin/sales', sales.home);
+app.post('/admin/sales/add', sales.execute);
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));

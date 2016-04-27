@@ -1,19 +1,19 @@
-Products Sold,Categories
-Milk 1l,Milk
-Imasi,Milk
-Bread,Bread
-Chakalaka Can,Canned Food
-Gold Dish Vegetable Curry Can,Canned Food
-Fanta 500ml,Soda
-Coke 500ml,Soda
-Cream Soda 500ml,Soda
-Iwisa Pap 5kg,Staples
-Top Class Soy Mince,Meat
-Shampoo 1 litre,Toiletries
-Soap Bar,Toiletries
-Bananas - loose,Fruit
-Apples - loose,Fruit
-Mixed Sweets 5s,Sweets
-Heart Chocolates,Sweets
-Rose (plastic),Miscellaneous
-Valentine Cards,Miscellaneous
+Products Sold,Categories,Price
+Milk 1l,Milk,10
+Imasi,Milk,25
+Bread,Bread,12
+Chakalaka Can,Canned Food,10
+Gold Dish Vegetable Curry Can,Canned Food,9
+Fanta 500ml,Soda,6.5
+Coke 500ml,Soda,6.5
+Cream Soda 500ml,Soda,7.5
+Iwisa Pap 5kg,Staples,30
+Top Class Soy Mince,Meat,12
+Shampoo 1 litre,Toiletries,30
+Soap Bar,Toiletries,6
+Bananas - loose,Fruit,2
+Apples - loose,Fruit,2
+Mixed Sweets 5s,Sweets,3
+Heart Chocolates,Sweets,35
+Rose (plastic),Miscellaneous,15
+Valentine Cards,Miscellaneous,4
