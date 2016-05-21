@@ -51,7 +51,7 @@
 #loginbutton {
   position: absolute;
   display: inline-block;
-  right: 0px;
+  right: 0;
   padding-top: 8px;
   padding-right: 8px;
   color: grey;
@@ -90,6 +90,10 @@
 
 .periodbuttons {
   padding-top: 10px;
+}
+
+#add-item, #execute-sale {
+  margin-left: 80%;
 }
 
 .body-tpage {

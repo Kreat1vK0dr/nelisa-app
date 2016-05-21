@@ -1,26 +1,52 @@
 <h1>execute sale</h1>
-<button class="add-item">add item</button>
+<button id="add-item">add item</button>
+
 <form action="/admin/sales/add" method="post">
+
+<center>
 <fieldset>
-  <label for="categories">Category</label>
-  <select id="categories" name="category">
-    <option value="" disabled selected>Please select a category</option>
-    {{#categories}}
-    <option value="{{id}}">{{description}}</option>
-    {{/categories}}
-  </select>
+
   <label for="products">Product</label>
   <select id="products" name="product">
-    <option value="" disabled selected id="choose">Please select a product</option>
+    <option value="" selected>Please select a product</option>
     {{#products}}
-    <option value="{{id}}" data-price="{{price}}" data-category="{{category_ids}}">{{description}}</option>
+    <option value="{{id}}" data-price="{{price}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
     {{/products}}
   </select>
+
+  <label for="categories">Category</label>
+  <select id="categories" name="category">
+    <option value="" selected>Please choose a product</option>
+    {{#categories}}
+    <option value="{{id}}" data-description="{{description}}">{{description}}</option>
+    {{/categories}}
+  </select>
+
 <label for="price">Price</label>
-<input type="number" name='price' value='' disabled id="price">
+<input type="number" step="any" name='price' id="price">
 
 <label for="quantity">Quantity</label>
 <input type="number" name="quantity" id="quantity">
+
 </fieldset>
+</center>
+<center>
+<table id="added-items">
+  <thead style="display:none">
+    <tr>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Sub-Total</th>
+    </tr>
+  </thead>
+  <tbody style="display:none">
+  </tbody>
+  <p id="no-items-text">Please add some items before attempting to execute a sale.</p>
+</table>
+</center>
+
 <input type="submit" id="execute-sale" value="execute sale">
+
 </form>
