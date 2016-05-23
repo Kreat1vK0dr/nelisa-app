@@ -129,6 +129,14 @@
   color: black;
 }
 
+.myTables {
+  border-collapse: collapse;
+}
+
+.myTables th, .myTables td {
+  padding: 0.5em 1em;
+}
+
 .navbar {
   height: 40px;
 }
@@ -156,6 +164,34 @@
 
 .navbar-brand:hover {
   color: #FA87F8;
+}
+
+#overlay {
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+  opacity: .8;
+  background-color: white;
+  display: none;
+}
+
+.alert-box {
+  background-color: white;
+  position: fixed;
+  width: 42.30769%;
+  z-index: 10;
+  border: 10px solid black;
+  left: 50%;
+  margin-left: -21.15385%;
+  padding-bottom: 1%;
+}
+
+#execute-alert {
+  display: none;
+}
+
+#execute-success {
+  display: none;
 }
 
 /*#allbody-home {

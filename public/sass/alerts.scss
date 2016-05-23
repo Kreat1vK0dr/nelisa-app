@@ -1,0 +1,27 @@
+$alert-width: 550px/1300px * 100%;
+#overlay {
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+  opacity: .8;
+  background-color: white;
+  display: none;
+}
+.alert-box {
+  background-color: white;
+  position: fixed;
+  width: $alert-width;
+  z-index: 10;
+  border: 10px solid black;
+  left: 50%;
+  margin-left: -$alert-width/2;
+  padding-bottom: 1%;
+}
+
+#execute-alert {
+  display: none;
+}
+
+#execute-success {
+  display:none;
+}

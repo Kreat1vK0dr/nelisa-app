@@ -33,7 +33,7 @@ IGNORE 1 LINES
 (description,@category, price)
 SET category_id = (SELECT id FROM categories WHERE description = @category);
 
-CREATE TABLE sales(
+CREATE TABLE sales (
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     day INT,
     week INT,
@@ -108,58 +108,7 @@ CREATE TABLE inventory_log(
   cant_sell INT
 );
 
-DELIMITER $$
-CREATE TRIGGER invlog_add_sale
-BEFORE INSERT ON sales FOR EACH ROW
-BEGIN
-  DECLARE date DATE;
-  DECLARE sale_id INT;
-  DECLARE product_id INT;
-  DECLARE quantity INT;
-  DECLARE inv_bef_sale INT;
-  DECLARE inv_aft_sale INT;
-  DECLARE cant_sell INT;
 
-  IF (new.date = CURDATE())
-  THEN
-  SET @date := new.date;
-  SET @sale_id := new.id;
-  SET @quantity := new.quantity;
-  SET @product_id := new.product_id;
-  SET @inv_bef_sale := (SELECT remaining FROM products WHERE product_id = @product_id);
-  SET @inv_aft_sale := @inv_bef_sale - @quantity;
-  SET @cant_sell := CASE WHEN (@inv_aft_sale < 0) THEN (@quantity - @inv_before_sale) ELSE 0 END;
-  INSERT INTO inventory_log (date, action, action_id, product_id, quantity, inv_bef_action, inv_aft_action)
-  VALUES (@date, 'SALE', @sale_id , @product_id, @inv_bef_sale, @inv_aft_sale);
-  END IF;
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER invlog_add_purchase
-BEFORE INSERT ON purchases FOR EACH ROW
-BEGIN
-  DECLARE date DATE;
-  DECLARE purchase_id INT;
-  DECLARE product_id INT;
-  DECLARE quantity INT;
-  DECLARE inv_bef_purchase INT;
-  DECLARE inv_aft_purchase INT;
-
-  IF (new.date = CURDATE())
-  THEN
-  SET @date := new.date;
-  SET @purchase_id := new.id;
-  SET @quantity := new.quantity;
-  SET @product_id := new.product_id;
-  SET @inv_bef_purchase := (SELECT remaining FROM inventory WHERE product_id = @product_id);
-  SET @inv_aft_purchase := @inv_bef_purchase+@quantity;
-
-  INSERT INTO inventory_log (date, action, action_id, product_id, quantity, inv_bef_action, inv_aft_action)
-  VALUES (@date, 'PURCHASE', @purchase_id , @quantity, @product_id, @inv_bef_purchase, @inv_aft_purchase);
-  END IF;
-END$$
-DELIMITER ;
 #NOW RUN THE 'onceoff_db.js' FILE.
 
 #==================================================================================================

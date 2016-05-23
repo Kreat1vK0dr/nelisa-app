@@ -1,7 +1,35 @@
+
+<div id="overlay"></div>
+<center>
+<div id="execute-alert" class="alert-box">
+  <h3>ALERT</h3>
+    <p>You're attempting to sell some items for which there is no stock.</p>
+    <table id="alert-table" class="myTables">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Stock Available</th>
+          <th>Sale Quantity</th>
+          <th>Can't Sell</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+<button id="execute-alert-ok">OK</button>
+</div>
+
+<div id="execute-success" class="alert-box">
+<h3>SUCCESS</h3>
+<p>Sale successfully executed</p>
+<button id="execute-success-ok">OK</button>
+</div>
+</center>
+
 <h1>execute sale</h1>
 <button id="add-item">add item</button>
 
-<form action="/admin/sales/add" method="post">
+<form action="/" method="post">
 
 <center>
 <fieldset>
@@ -10,7 +38,7 @@
   <select id="products" name="product">
     <option value="" selected>Please select a product</option>
     {{#products}}
-    <option value="{{id}}" data-price="{{price}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
+    <option value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
     {{/products}}
   </select>
 
@@ -31,7 +59,7 @@
 </fieldset>
 </center>
 <center>
-<table id="added-items">
+<table id="added-items" class="myTables">
   <thead style="display:none">
     <tr>
       <th>Product</th>

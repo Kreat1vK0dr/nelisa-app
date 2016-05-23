@@ -1,3 +1,4 @@
 #!/bin/bash
 mysql --local-infile -u root -p1amdan13l < database-setup.sql
 node ./database-setup.js
+mysql --local-infile -u root -p1amdan13l < database-setup-2.sql

@@ -101,6 +101,12 @@ app.get('/categories/delete/:id', categories.delete);
 app.get('/admin/sales', sales.home);
 app.post('/admin/sales/add', sales.execute);
 
+
+// app.get('/data',function(req, res){
+// 	console.log('body: ' + JSON.stringify(req.body));
+//   // res.send(req.body);
+// });
+
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });

@@ -3,7 +3,6 @@ var mysql = require('mysql'),
 
 var costOfSales = require('../lib/cost-of-sales.js');
 
-
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -15,14 +14,18 @@ connection.query('SELECT id, product_id, date, quantity, remaining, unitcost fro
     if (err) throw err;
     var purchases = purchasesFromDB,
         salesToUpdate = [],
-        purchasesToUpdate = [],
+        purchasesToUpdateMap = new Map(),
+        purchasesToUpdateArray = [],
         inventoryLog = [];
 
     connection.query('SELECT * from sales WHERE quantity > 0 ORDER BY date', function (err, sales, fields) {
         if (err) throw err;
 
-        costOfSales.initialCOSandInventoryLog(sales, purchases, salesToUpdate, purchasesToUpdate, inventoryLog);
-
+        costOfSales.initialCOSandInventoryLog(sales, purchases, salesToUpdate, purchasesToUpdateMap, inventoryLog);
+        // costOfSales.initialCOSandInventoryLog(sales, purchases, salesToUpdate, purchasesToUpdate, inventoryLog);
+        purchasesToUpdateMap.forEach(function (value, key) {
+            purchasesToUpdateArray.push([key, value]);
+        });
         connection.query("CREATE TEMPORARY TABLE if not exists sales_temp(id int not null, cost decimal(10,2) not null, cant_sell int not null)", function (err, rows) {
             if (err) throw err;
             console.log("CREATED TEMP SALES TABLE");
@@ -36,10 +39,12 @@ connection.query('SELECT id, product_id, date, quantity, remaining, unitcost fro
                     console.log("INSERTED CALCULATIONS INTO SALES_TEMP");
                     console.log("UPDATED " + rows.affectedRows + " rows IN SALES_TEMP.");
                     console.log("CHANGED " + rows.changedRows + " rows IN SALES_TEMP.");
-
-                    connection.query("INSERT INTO purchases_temp (id, remaining) VALUES ?", [purchasesToUpdate], function (err, rows) {
+console.log("");
+// console.log("PURCHASES TO UPDATE: ",purchasesToUpdate);
+console.log("");
+                    connection.query("INSERT INTO purchases_temp (id, remaining) VALUES ?", [purchasesToUpdateArray], function (err, rows) {
                         if (err) throw err;
-                        console.log("INSERTED NEW REMAINING VALUES INTO PURCHASES_TEMP", purchasesToUpdate);
+                        console.log("INSERTED NEW REMAINING VALUES INTO PURCHASES_TEMP");
                         console.log("UPDATED " + rows.affectedRows + " rows IN PURCHASES_TEMP.");
                         console.log("CHANGED " + rows.changedRows + " rows IN PURCHASES_TEMP.");
 
@@ -61,15 +66,9 @@ connection.query('SELECT id, product_id, date, quantity, remaining, unitcost fro
                                     console.log("UPDATED " + rows.affectedRows + " rows IN INVENTORY_LOG.");
                                     console.log("CHANGED " + rows.changedRows + " rows IN INVENTORY_LOG.");
 
-                                    connection.query("UPDATE products p INNER JOIN  (SELECT product_id, SUM(remaining) remaining FROM purchases GROUP BY product_id) i ON p.id = i.product_id SET p.inventory = i.remaining", function (err, inventory) {
-                                        if (err) throw err;
 
-                                        console.log("SUCCESSFULLY UPDATED PRODUCTS TO REFLECT INITIAL INVENTORY STATUS");
-                                        console.log("UPDATED " + rows.affectedRows + " rows IN PRODUCTS.");
-                                        console.log("CHANGED " + rows.changedRows + " rows IN PRODUCTS.");
 
                                         connection.end();
-                                    });
 
                                 });
 

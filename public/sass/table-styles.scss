@@ -32,6 +32,13 @@
   color: black;
 }
 
+.myTables {
+  border-collapse:collapse;
+  th,td{
+    padding: 0.5em 1em;
+}
+}
+
 // .crud-table {
 //   border: solid 1px black;
 //   background-color: rgba(277,277,277,1);
