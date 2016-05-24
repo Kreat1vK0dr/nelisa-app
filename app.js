@@ -128,7 +128,6 @@ app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);
 
-app.get('/admin',loginMethod.login);
 app.get('/admin/login',loginMethod.adminDialogue);
 app.post('/admin/login/check',loginMethod.checkBeforeLoggingIn);
 app.get('/admin/sales', sales.home);
