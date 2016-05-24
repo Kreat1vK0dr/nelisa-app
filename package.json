@@ -25,12 +25,8 @@
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "express-myconnection": "^1.0.4",
-    "handlebars": "^4.0.5",
-    "lodash": "^4.11.1",
     "mysql": "^2.10.2",
-    "node-sass": "^3.6.0",
     "node-sass-middleware": "^0.9.8",
-    "nodemon": "^1.9.1",
     "postcss-middleware": "^1.0.0"
   },
   "devDependencies": {

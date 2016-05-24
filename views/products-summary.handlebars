@@ -44,12 +44,12 @@
   <table class="table table-bordered table-hover table-sm center-table">
   <thead class="thead-inverse">
     <!-- <tr> <th colspan="6"> My First HandleBars Table </th> </tr> -->
-    <tr> <th>Product</th> <th>Category</th> <th>Quantity Sold</th> <!--<th>Inventory</th>--> <th>Profit</th> <th>Profit Margin</th> <th>Couldn't Sell</th> </tr>
+    <tr> <th>Product</th> <th>Category</th> <th>Quantity Sold</th> <th>Revenue</th> <th>Cost</th> <th>Profit</th> <th>Profit Margin</th>  </tr>
   </thead>
   <tbody>
       {{#each data}}
         <tr>
-          <td class="inverse">{{product}}</td> <td>{{category}}</td> <td class="left-indent">{{quantity}}</td> <!--<td class="left-indent">{{inventory}}</td>--> <td class="left-indent">R{{profit}}</td> <td class="left-indent">{{profitMargin}}</td><td class="left-indent">{{cantsell}}</td>
+          <td class="inverse">{{product}}</td> <td>{{category}}</td> <td class="left-indent">{{quantity}}</td> <td class="left-indent">{{revenue}}</td> <td class="left-indent">{{cost}}</td> <td class="left-indent">{{profit}}</td> <td class="left-indent">{{profitMargin}}</td>
         </tr>
         {{/each}}
       </tbody>

@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 var express = require('express'),
     exphbs = require('express-handlebars'),
@@ -15,7 +15,9 @@ var tmplName = require('./lib/template-name'),
     summary = require('./lib/summary'),
     ProductMethods = require('./lib/products_CRUD'),
     CategoryMethods = require('./lib/categories_CRUD'),
-    sales = require('./lib/sales');
+    sales = require('./lib/sales'),
+    helpers = require('./lib/helpers');
+
 
 var dbOptions = {
     host: 'localhost',
@@ -29,9 +31,16 @@ var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
-app.engine('handlebars', exphbs({
-    defaultLayout: 'main'
-}));
+var hbs = exphbs.create({
+  defaultLayout: 'main',
+  helpers: {
+              capFL: function(string) {
+                return string.slice(0,1).toUpperCase()+string.slice(1);
+              }
+  }
+});
+
+app.engine('handlebars', hbs.engine);
 
 app.set('view engine', 'handlebars');
 
@@ -43,15 +52,15 @@ app.use('/css', sassMiddleware({
     // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
 }));
 
-app.use(postcssMiddleware({
-    src: function (req) {
-        return path.join(req.path);
-    },
-    plugins: [autoprefixer({
-        browsers: ['> 1%', 'IE 7', 'last 2 versions'],
-        cascade: false
-    })]
-}));
+// app.use(postcssMiddleware({
+//     src: function (req) {
+//         return path.join(req.path);
+//     },
+//     plugins: [autoprefixer({
+//         browsers: ['> 1%', 'IE 7', 'last 2 versions'],
+//         cascade: false
+//     })]
+// }));
 
 app.use(express.static('public'));
 

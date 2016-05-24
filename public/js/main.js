@@ -66,7 +66,8 @@ $(document).ready(function () {
                 category = $('#categories option:selected').attr('data-description'),
                 storage = JSON.parse(window.localStorage.getItem('sale')),
                 previousState = JSON.parse(window.localStorage.getItem('table'));
-
+            var allFieldsFilledIn = price!=0 && quantity!=0 && p_id!=null && c_id!=null;
+            if (allFieldsFilledIn){
             var sub_total = price * quantity;
 
             var id = storage === null ? 1 : storage.length + 1;
@@ -118,6 +119,9 @@ $(document).ready(function () {
             $('#categories').val('');
             $('#price').val('');
             $('#quantity').val('');
+          } else {
+            alert("Please make sure you have filled in all fields before adding an item.");
+          }
         });
         //NOTE: better to use .on('click',<selector>, function..) when having to assign a handler to many buttons or similar etc.
         $('#added-items').on('click', ':button', function () {
@@ -159,55 +163,60 @@ $(document).ready(function () {
             event.preventDefault();
             console.log("executing sale button clicked");
             var dataToPost = window.localStorage.getItem('sale');
+            var dataHasBeenAdded = window.localStorage.getItem('table');
+            console.log(dataHasBeenAdded);
             // console.log("Data to post: ", JSON.parse(dataToPost));
+          if (dataHasBeenAdded){
+          var canExecuteSale = checkIfCanExecuteSale(dataToPost);
+          console.log(canExecuteSale);
 
-            var canExecuteSale = checkIfCanExecuteSale(dataToPost);
-            console.log(canExecuteSale);
+          if (canExecuteSale.length === 0 && JSON.parse(dataToPost).length!=0) {
+              $.post('http://localhost:5000/admin/sales/add', {
+                  data: dataToPost
+              });
+              window.localStorage.clear();
+              $('#execute-success').css('display','block');
+              $('#execute-success-ok').click(function () {
+                $('#overlay').css('display','none');
+                $('#execute-success').css('display','none');
+                window.location.replace("/admin/sales");
+              });
+          } else {
+            var overlay = document.getElementById('overlay'),
+                alertBox = document.getElementById('execute-alert'),
+                tableBody = createAlertTableHTML(canExecuteSale);
 
-            if (canExecuteSale.length === 0) {
-                $.post('http://localhost:5000/admin/sales/add', {
-                    data: dataToPost
-                });
-                window.localStorage.clear();
-                $('#execute-success').css('display','block');
-                $('#execute-success-ok').click(function () {
-                  $('#overlay').css('display','none');
-                  $('#execute-success').css('display','none');
-                  window.location.replace("/admin/sales");
-                });
-            } else {
-              var overlay = document.getElementById('overlay'),
-                  alert = document.getElementById('execute-alert'),
-                  tableBody = createAlertTableHTML(canExecuteSale);
+              var winH = window.innerHeight,
+                  winW = window.innerWidth;
 
-                var winH = window.innerHeight,
-                    winW = window.innerWidth;
+              overlay.style.width = winW + "px";
+              overlay.style.height = winH + "px";
 
-                overlay.style.width = winW + "px";
-                overlay.style.height = winH + "px";
+              overlay.style.display = 'block';
+              alertBox.style.display = 'block';
 
-                overlay.style.display = 'block';
-                alert.style.display = 'block';
+              $('#alert-table tbody').empty();
+              $('#alert-table tbody').append(tableBody);
 
-                $('#alert-table tbody').empty();
-                $('#alert-table tbody').append(tableBody);
-
-                $('#execute-alert-ok').click(function () {
-                    overlay.style.display = 'none';
-                    alert.style.display = 'none';
-                });
-            }
-            // THIS IS THE SAME THING AS ABOVE...
-            // $.ajax({
-            //   url: 'http://localhost:5000/admin/sales/add',
-            //   type: "POST",
-            //   dataType: 'application/json',
-            //   data: {data: dataToPost},
-            //   success: function(data) {
-            //     console.log('success');
-            //     console.log(data);
-            //   }
-            // });
+              $('#execute-alert-ok').click(function () {
+                  overlay.style.display = 'none';
+                  alertBox.style.display = 'none';
+              });
+          }
+          // THIS IS THE SAME THING AS ABOVE...
+          // $.ajax({
+          //   url: 'http://localhost:5000/admin/sales/add',
+          //   type: "POST",
+          //   dataType: 'application/json',
+          //   data: {data: dataToPost},
+          //   success: function(data) {
+          //     console.log('success');
+          //     console.log(data);
+          //   }
+          // });
+        } else {
+          alert("No items available to execute sale.");
+        }
         });
     }
 });
