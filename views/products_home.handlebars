@@ -1,8 +1,4 @@
-{{#if admin}}
-<div id="loggedInAs">Logged in as {{user}}</div>
-</div>
-</nav>
-{{/if}}
+
 <h1>Products</h1>
 {{#if admin}}
 <a href="/products/add"><div class="add-link">Add</div></a>
@@ -26,7 +22,7 @@
     <td class="crud-table highlight">{{category}}</td>
     <td class="crud-table highlight">{{price}}</td>
     <td class="crud-table highlight">{{inventory}}</td>
-    {{#if admin}}
+    {{#if ../admin}}
     <td class="crud-table highlight"><a href="/products/edit/{{p_id}}"><div class="links edit">Edit</div></a></td>
     <td class="crud-table highlight"><a href="/products/delete/{{p_id}}"><div class="links delete">Delete</div></a></td>
     {{/if}}
