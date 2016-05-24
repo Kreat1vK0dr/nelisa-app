@@ -1,0 +1,9 @@
+<tr> <th>Product</th> <th>Category</th> <th>Quantity Sold</th> <th>Revenue (ZAR)</th> <th>Cost (ZAR)</th> <th>Profit (ZAR)</th> <th>Profit Margin (%)</th>  </tr>
+</thead>
+<tbody>
+  {{#each data}}
+    <tr>
+      <td class="inverse">{{product}}</td> <td>{{category}}</td> <td class="left-indent">{{quantity}}</td> <td class="left-indent">{{bracketNegative revenue}}</td> <td class="left-indent">{{cost}}</td> <td class="left-indent">{{bracketNegative profit}}</td> <td class="left-indent">{{bracketNegative profitMargin}}</td>
+    </tr>
+    {{/each}}
+  </tbody>

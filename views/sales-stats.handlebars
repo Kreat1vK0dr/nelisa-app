@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Spaza - {{title}}</title>
-</head>
-<body class = "body-tpage">
+
   <div id="title">
       <h1>sales stats</h1>
       <h2>{{period}}</h2>
@@ -30,19 +24,16 @@
 </form>
 
 <div class="divider1"></div>
-  <table class="table table-bordered table-hover center-table">
-    <!-- <tr> <th colspan="6"> My First HandleBars Table </th> </tr> -->
-      <thead class="thead-inverse">
-    <tr> <th>Sales Stat</th> <th>Product/Category</th> <th>Quantity Sold</th> <th>Not Sold</th> <th>Inventory</th> <th>Revenue</th> <th>Cost</th> <th>Profit</th> <th>Profit Margin</th> </tr>
+  <table class="table table-bordered table-sm table-hover center-table">
+  <thead class="thead-inverse">
+    <tr> <th>Sales Stat</th> <th>Product/Category</th> <th>Quantity Sold</th> <th>Stock Available</th> <th>Revenue (ZAR)</th> <th>Cost (ZAR)</th> <th>Profit (ZAR)</th> <th>Profit Margin (%)</th> </tr>
   </thead>
 <tbody>
       {{#data}}
         <tr>
-          <td class="inverse">{{stat}}</td> <td class="active">{{name}}</td> <td class="left-indent active">{{quantity}}</td> <td class="left-indent active">{{cantsell}}</td><td class="left-indent active">{{inventory}}</td> <td class="left-indent active">R{{revenue}}</td><td class="left-indent active">R{{cost}}</td><td class="left-indent active">R{{profit}}</td> <td class="left-indent active">{{profitMargin}}%</td>
+          <td class="inverse">{{description}}</td> <td class="active">{{name}}</td> <td class="left-indent active">{{quantity}}</td> <td class="left-indent active">{{stockAvailable}}</td> <td class="left-indent active">{{bracketNegative revenue}}</td><td class="left-indent active">{{cost}}</td><td class="left-indent active">{{bracketNegative profit}}</td> <td class="left-indent active">{{bracketNegative profitMargin}}</td>
         </tr>
       {{/data}}
-          </tbody>
+  </tbody>
 
   </table>
-</body>
-</html>

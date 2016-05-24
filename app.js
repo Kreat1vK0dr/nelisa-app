@@ -33,9 +33,14 @@ app.set('port', (process.env.PORT || 5000));
 
 var hbs = exphbs.create({
   defaultLayout: 'main',
+  layoutsDir: path.join(__dirname, "views/layouts"),
+  partialsDir: path.join(__dirname, "views/partials"),
   helpers: {
               capFL: function(string) {
                 return string.slice(0,1).toUpperCase()+string.slice(1);
+              },
+              bracketNegative: function(string) {
+                return string.match(/-/) ? '('+string.replace('-','')+')' : string;
               }
   }
 });
@@ -43,6 +48,7 @@ var hbs = exphbs.create({
 app.engine('handlebars', hbs.engine);
 
 app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, "views"));
 
 app.use('/css', sassMiddleware({
     src: path.join(__dirname, 'public', 'sass'),
@@ -110,6 +116,12 @@ app.get('/categories/delete/:id', categories.delete);
 app.get('/admin/sales', sales.home);
 app.post('/admin/sales/add', sales.execute);
 
+app.get('/testing', function(req,res){
+  var context = {category: true, product: false};
+  console.log(context);
+
+  res.render('summary.handlebars', context);
+});
 
 // app.get('/data',function(req, res){
 // 	console.log('body: ' + JSON.stringify(req.body));
