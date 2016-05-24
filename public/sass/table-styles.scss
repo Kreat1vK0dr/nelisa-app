@@ -38,7 +38,11 @@
     padding: 0.5em 1em;
 }
 }
-
+#products-table {
+  th,td{
+    padding: 0.2em 1em;
+  }
+}
 .summary-table {
 margin-bottom: 5em;
 }
