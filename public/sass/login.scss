@@ -1,0 +1,20 @@
+$login-width: 700px/1300px * 100%;
+
+#admin-login {
+  background-color: black;
+  position: fixed;
+  width: $login-width;
+  left: 50%;
+  margin-left: -$login-width/2;
+  z-index: 10;
+  color: white;
+  border: 5px solid #FFF;
+}
+
+#adminPass {
+  color: black;
+}
+
+#adminLoginButton {
+  color: black;
+}

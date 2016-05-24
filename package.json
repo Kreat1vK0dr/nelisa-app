@@ -21,10 +21,12 @@
   "homepage": "https://github.com/Kreat1vK0dr/Spaza-Kata#readme",
   "dependencies": {
     "autoprefixer": "^6.3.6",
+    "bcrypt": "^0.8.6",
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "express-myconnection": "^1.0.4",
+    "express-session": "^1.13.0",
     "mysql": "^2.10.2",
     "node-sass-middleware": "^0.9.8",
     "postcss-middleware": "^1.0.0"

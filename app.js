@@ -8,7 +8,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     sassMiddleware = require('node-sass-middleware'),
     postcssMiddleware = require('postcss-middleware'),
-    autoprefixer = require('autoprefixer');
+    autoprefixer = require('autoprefixer'),
+    session = require('express-session');
 
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
@@ -16,8 +17,11 @@ var tmplName = require('./lib/template-name'),
     ProductMethods = require('./lib/products_CRUD'),
     CategoryMethods = require('./lib/categories_CRUD'),
     sales = require('./lib/sales'),
-    helpers = require('./lib/helpers');
+    helpers = require('./lib/helpers'),
+    Login = require('./lib/loginDataService'),
+    ConnectionProvider = require('./routes/connectionProvider');
 
+var app = express();
 
 var dbOptions = {
     host: 'localhost',
@@ -27,7 +31,16 @@ var dbOptions = {
     database: 'nelisa_another_copy'
 };
 
-var app = express();
+var dataServiceSetup = function(connection){
+	return {
+		loginService: new 
+	}
+};
+
+var myConnectionProvider = new ConnectionProvider(dbOptions, dataServiceSetup);
+app.use(myConnectionProvider.setupProvider);
+
+app.use(myConnection(mysql, dbOptions, 'pool'));
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -78,6 +91,7 @@ app.use(bodyParser.urlencoded({
     }))
     // parse application/json
 app.use(bodyParser.json())
+app.use(session({secret: "pizzadough", cookie: {maxAge: 600000}, resave:true, saveUninitialized: false}));
 
 app.get('/', function (req, res) {
   res.redirect("/home");
@@ -116,12 +130,7 @@ app.get('/categories/delete/:id', categories.delete);
 app.get('/admin/sales', sales.home);
 app.post('/admin/sales/add', sales.execute);
 
-app.get('/testing', function(req,res){
-  var context = {category: true, product: false};
-  console.log(context);
-
-  res.render('summary.handlebars', context);
-});
+app.get('/admin/login',login.dialogue);
 
 // app.get('/data',function(req, res){
 // 	console.log('body: ' + JSON.stringify(req.body));

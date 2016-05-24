@@ -7,6 +7,16 @@ CREATE DATABASE nelisa_another_copy;
 
 USE nelisa_another_copy;
 
+CREATE TABLE users(
+  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  username VARCHAR(30) NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  role VARCHAR(10) NOT NULL
+);
+CREATE TABLE adminPass(
+  password VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE categories(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   description VARCHAR(30) NOT NULL

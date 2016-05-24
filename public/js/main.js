@@ -177,12 +177,12 @@ $(document).ready(function () {
               window.localStorage.clear();
               $('#execute-success').css('display','block');
               $('#execute-success-ok').click(function () {
-                $('#overlay').css('display','none');
+                $('.overlay').css('display','none');
                 $('#execute-success').css('display','none');
                 window.location.replace("/admin/sales");
               });
           } else {
-            var overlay = document.getElementById('overlay'),
+            var overlay = document.getElementsByClassName('overlay')[0],
                 alertBox = document.getElementById('execute-alert'),
                 tableBody = createAlertTableHTML(canExecuteSale);
 

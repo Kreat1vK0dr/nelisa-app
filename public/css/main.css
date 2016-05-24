@@ -170,7 +170,7 @@
   color: #FA87F8;
 }
 
-#overlay {
+.overlay {
   position: fixed;
   width: 100%;
   z-index: 9;
@@ -196,6 +196,25 @@
 
 #execute-success {
   display: none;
+}
+
+#admin-login {
+  background-color: black;
+  position: fixed;
+  width: 53.84615%;
+  left: 50%;
+  margin-left: -26.92308%;
+  z-index: 10;
+  color: white;
+  border: 5px solid #FFF;
+}
+
+#adminPass {
+  color: black;
+}
+
+#adminLoginButton {
+  color: black;
 }
 
 /*#allbody-home {
