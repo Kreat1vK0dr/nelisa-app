@@ -20,23 +20,22 @@
 
     <div class="container-fluid">
       <div class="navbar-header nelisa-font">
-        <a class="navbar-brand" href="/">Nelisa's Spaza</a>
+        <a class="navbar-brand" href="/">Nelisa's Dashboard</a>
       </div>
 
       <ul class="nav navbar-nav">
 
         <!-- <li class="navbutton"><a href="/">about</a></li> -->
-        <li class="navbutton"><a href="/stats">stats</a></li>
-        <li class="navbutton"><a href="/summary">summary</a></li>
-        <li class="navbutton"><a href="/products">products</a></li>
-        <li class="navbutton"><a href="/categories">categories</a></li>
-        <li class="navbutton"><a href="/admin/sales">admin dashboard</a></li>
+        <li class="navbutton"><a href="/admin/data">explore data</a></li>
+        <li class="navbutton"><a href="/admin/suppliers">suppliers</a></li>
+        <li class="navbutton"><a href="/admin/products">products</a></li>
+        <li class="navbutton"><a href="/admin/categories">categories</a></li>
+        <li class="navbutton"><a href="/admin/sales">POS</a></li>
         <!-- <li class="navbutton"><a href="/">categories</a></li> -->
 
       </ul>
 
-      <a href="/admin/login"><div class="loginbutton" id="admin-login-button">Admin Login</div></a>
-      <a href="/user/login"><div class="loginbutton" id="user-login-button">User Login</div></a>
+      <div id="loggedInAs">Logged in as {{user}}</div>
 
     </div>
   </nav>

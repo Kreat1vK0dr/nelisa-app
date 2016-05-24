@@ -48,19 +48,6 @@
   src: url("/fonts/Aleo-Regular.otf");
 }
 
-#loginbutton {
-  position: absolute;
-  display: inline-block;
-  right: 0;
-  padding-top: 8px;
-  padding-right: 8px;
-  color: grey;
-}
-
-#loginbutton:hover {
-  color: white;
-}
-
 .homebuttons {
   padding-top: 4.2em;
   position: relative;
@@ -73,7 +60,7 @@
   border: 2px solid #113461;
   display: inline-block;
   color: white;
-  background-color: #164078;
+  background-color: #113461;
   border-radius: 80%;
   height: 6em;
   width: 6em;
@@ -198,6 +185,18 @@
   display: none;
 }
 
+.loginbutton {
+  position: absolute;
+  display: inline-block;
+  padding-top: 8px;
+  padding-right: 8px;
+  color: grey;
+}
+
+.loginbutton:hover {
+  color: white;
+}
+
 #admin-login {
   background-color: black;
   position: fixed;
@@ -209,12 +208,33 @@
   border: 5px solid #FFF;
 }
 
-#adminPass {
+#admin-login-button {
+  right: 0;
+}
+
+#user-login-button {
+  right: 7em;
+}
+
+#adminPass, #adminUsername {
   color: black;
 }
 
 #adminLoginButton {
   color: black;
+}
+
+.login-input {
+  margin: 1em 0;
+}
+
+#loggedInAs {
+  position: absolute;
+  display: inline-block;
+  right: 0;
+  padding-top: 8px;
+  padding-right: 8px;
+  color: white;
 }
 
 /*#allbody-home {

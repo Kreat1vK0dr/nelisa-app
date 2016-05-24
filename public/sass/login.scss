@@ -1,5 +1,16 @@
 $login-width: 700px/1300px * 100%;
 
+.loginbutton {
+    position     : absolute;
+    display      : inline-block;
+    padding-top  : 8px;
+    padding-right: 8px;
+    color        : grey;
+}
+.loginbutton:hover {
+    color: white;
+}
+
 #admin-login {
   background-color: black;
   position: fixed;
@@ -10,11 +21,34 @@ $login-width: 700px/1300px * 100%;
   color: white;
   border: 5px solid #FFF;
 }
+#admin-login-button{
+  right: 0;
+
+}
+#user-login-button{
+  right: 7em;
+}
 
 #adminPass {
   color: black;
 }
-
+#adminUsername{
+  @extend #adminPass;
+}
 #adminLoginButton {
   color: black;
+
+}
+
+.login-input {
+  margin: 1em 0;
+}
+
+#loggedInAs {
+  position     : absolute;
+  display      : inline-block;
+  right        : 0;
+  padding-top  : 8px;
+  padding-right: 8px;
+  color        : white;
 }

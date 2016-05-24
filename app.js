@@ -18,7 +18,8 @@ var tmplName = require('./lib/template-name'),
     CategoryMethods = require('./lib/categories_CRUD'),
     sales = require('./lib/sales'),
     helpers = require('./lib/helpers'),
-    Login = require('./lib/loginDataService'),
+    Login = require('./data-services/loginDataService'),
+    loginMethod = require('./lib/loginMethods'),
     ConnectionProvider = require('./routes/connectionProvider');
 
 var app = express();
@@ -33,7 +34,7 @@ var dbOptions = {
 
 var dataServiceSetup = function(connection){
 	return {
-		loginService: new 
+		loginService: new Login(connection)
 	}
 };
 
@@ -127,11 +128,16 @@ app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);
 
+app.get('/admin',loginMethod.login);
+app.get('/admin/login',loginMethod.adminDialogue);
+app.post('/admin/login/check',loginMethod.checkBeforeLoggingIn);
 app.get('/admin/sales', sales.home);
 app.post('/admin/sales/add', sales.execute);
+// app.get('/admin/login/check',loginMethod.checkBeforeLoggingIn);
 
-app.get('/admin/login',login.dialogue);
-
+app.get('/admin/dashboard', function(req,res){
+  res.render('admin_home',{layout: 'admin'});
+});
 // app.get('/data',function(req, res){
 // 	console.log('body: ' + JSON.stringify(req.body));
 //   // res.send(req.body);
