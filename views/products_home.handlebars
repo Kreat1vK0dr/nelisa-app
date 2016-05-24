@@ -1,7 +1,7 @@
 <h1>Products</h1>
-
+{{#if admin}}
 <a href="/products/add"><div class="add-link">Add</div></a>
-
+{{/if}}
 <table class="center-table">
   <thead>
   <tr>
@@ -11,16 +11,19 @@
   </tr>
   </thead>
   <tbody >
+    {{#if admin}}
   {{#products}}
   <tr>
-    <td class="crud-table highlight">{{p_id}}</td>
-    <td class="crud-table highlight">{{product}}</td>
-    <td class="crud-table highlight">{{category}}</td>
-    <td class="crud-table highlight">{{price}}</td>
-    <td class="crud-table highlight"><a href="/products/edit/{{p_id}}"><div class="links edit">Edit</div></a></td>
-    <td class="crud-table highlight"><a href="/products/delete/{{p_id}}"><div class="links delete">Delete</div></a></td>
+  {{> productsAdmin}}
   </tr>
   {{/products}}
+  {{else}}
+  {{#products}}
+  <tr>
+  {{> productsUser}}
+  </tr>
+  {{/products}}
+  {{/if}}
 </tbody>
 </table>
   {{#no_products}}
