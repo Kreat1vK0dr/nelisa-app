@@ -1,0 +1,8 @@
+<h1>Change Supplier Details</h1>
+
+<form action="/suppliers/update" method="post">
+  <label for="name">Supplier</label>
+  <input type="hidden" name="id" value="{{id}}">
+  <input type="text" name="name" id="name" value="{{name}}">
+  <input type="submit" value="Update Supplier">
+</form>

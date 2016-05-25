@@ -1,7 +1,3 @@
-<div id="loggedInAs">Logged in as {{user}}</div>
-</div>
-</nav>
-
 <div class="overlay"></div>
 <center>
 <div id="execute-alert" class="alert-box">
@@ -47,7 +43,7 @@
 
   <label for="categories">Category</label>
   <select id="categories" name="category">
-    <option value="" selected>Please choose a product</option>
+    <option value="" selected>Category</option>
     {{#categories}}
     <option value="{{id}}" data-description="{{description}}">{{description}}</option>
     {{/categories}}
@@ -62,7 +58,7 @@
 </fieldset>
 </center>
 <center>
-<table id="added-items" class="myTables">
+<table id="added-items-table" class="myTables">
   <thead style="display:none">
     <tr>
       <th>Product</th>

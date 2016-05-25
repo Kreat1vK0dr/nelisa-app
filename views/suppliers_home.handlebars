@@ -1,0 +1,28 @@
+<h1>Suppliers</h1>
+
+<table class="center-table myTables">
+  <thead>
+    <tr>
+      <th>Supplier ID</th>
+      <th>Supplier</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {{#no_suppliers}}
+    <tr>
+      <td class="crud-table" colspan="4">There are no categories. Please add a category above.</td>
+    </tr>
+    {{/no_suppliers}}
+
+    {{#suppliers}}
+    <tr>
+      <td class="crud-table">{{id}}</td>
+      <td class="crud-table">{{name}}</td>
+      <td class="crud-table"><a href="/suppliers/edit/{{id}}"><div>Edit</div></a></td>
+      <td class="crud-table"><a href="/suppliers/delete/{{id}}"><div>Delete</div></a></td>
+    </tr>
+    {{/suppliers}}
+
+  </tbody>
+</table>

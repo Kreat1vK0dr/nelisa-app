@@ -16,7 +16,9 @@ var tmplName = require('./lib/template-name'),
     summary = require('./lib/summary'),
     ProductMethods = require('./lib/products_CRUD'),
     CategoryMethods = require('./lib/categories_CRUD'),
+    suppliers = require('./lib/suppliers_CRUD'),
     sales = require('./lib/sales'),
+    purchases = require('./lib/purchases'),
     helpers = require('./lib/helpers'),
     Login = require('./data-services/loginDataService'),
     loginMethod = require('./lib/loginMethods'),
@@ -92,7 +94,7 @@ app.use(bodyParser.urlencoded({
     }))
     // parse application/json
 app.use(bodyParser.json())
-app.use(session({secret: "pizzadough", cookie: {maxAge: 600000}, resave:true, saveUninitialized: false}));
+app.use(session({secret: "pizzadough", cookie: {maxAge: 3000000}, resave:true, saveUninitialized: false}));
 
 app.get('/', function (req, res) {
   res.redirect("/home");
@@ -128,19 +130,24 @@ app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);
 
+app.get('/suppliers', suppliers.show);
+app.get('/suppliers/add', suppliers.showAdd);
+app.post('/suppliers', suppliers.add);
+app.get('/suppliers/edit/:id', suppliers.get);
+app.post('/suppliers/update', suppliers.update);
+app.get('/suppliers/delete/:id', suppliers.delete);
+
 app.get('/admin/login',loginMethod.adminDialogue);
 app.post('/admin/login/check',loginMethod.checkBeforeLoggingIn);
-app.get('/admin/sales', sales.home);
-app.post('/admin/sales/add', sales.execute);
-// app.get('/admin/login/check',loginMethod.checkBeforeLoggingIn);
+
+app.get('/sales/add', sales.addHome);
+app.post('/sales/add/execute', sales.execute);
+app.get('/purchases/add', purchases.addHome);
+app.post('/purchases/add/execute', purchases.execute);
 
 app.get('/admin/dashboard', function(req,res){
   res.render('admin_home',{layout: 'admin'});
 });
-// app.get('/data',function(req, res){
-// 	console.log('body: ' + JSON.stringify(req.body));
-//   // res.send(req.body);
-// });
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));

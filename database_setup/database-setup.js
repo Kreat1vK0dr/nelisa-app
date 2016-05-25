@@ -39,9 +39,7 @@ connection.query('SELECT id, product_id, date, quantity, remaining, unitcost fro
                     console.log("INSERTED CALCULATIONS INTO SALES_TEMP");
                     console.log("UPDATED " + rows.affectedRows + " rows IN SALES_TEMP.");
                     console.log("CHANGED " + rows.changedRows + " rows IN SALES_TEMP.");
-console.log("");
-// console.log("PURCHASES TO UPDATE: ",purchasesToUpdate);
-console.log("");
+
                     connection.query("INSERT INTO purchases_temp (id, remaining) VALUES ?", [purchasesToUpdateArray], function (err, rows) {
                         if (err) throw err;
                         console.log("INSERTED NEW REMAINING VALUES INTO PURCHASES_TEMP");

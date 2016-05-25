@@ -6,11 +6,19 @@
 <table class="center-table myTables" id="products-table">
   <thead>
   <tr>
+    {{#if admin}}
     <th>Product ID</th>
     <th>Description</th>
     <th>Category</th>
     <th>Price</th>
     <th>Inventory</th>
+    {{else}}
+    <th>Product ID</th>
+    <th>Description</th>
+    <th>Category</th>
+    <th>Price</th>
+    <th>Stock Available</th>
+    {{/if}}
   </tr>
   </thead>
   <tbody >
