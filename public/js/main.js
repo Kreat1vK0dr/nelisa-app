@@ -1,3 +1,5 @@
+// FUNCTIONS
+
 function checkIfCanExecuteSale(dataToPost) {
     var data = JSON.parse(dataToPost),
         cannotExecute = [];
@@ -33,7 +35,12 @@ function createAlertTableHTML(saleItemsArray) {
     return tableBody;
 }
 
+// DOCUMENT READY
+
 $(document).ready(function () {
+
+  // ADD SALE
+
     if (window.location.pathname === '/sales/add') {
         $('#products').change(function () {
             $('#cost').val($('#products option:selected').attr('data-cost'));
@@ -222,6 +229,8 @@ $(document).ready(function () {
             }
         });
     }
+
+// ADD PURCHASE
 
     if (window.location.pathname === '/purchases/add') {
 

@@ -11,6 +11,9 @@ var express = require('express'),
     autoprefixer = require('autoprefixer'),
     session = require('express-session');
 
+    const fs = require('fs');
+    const exec = require('child_process').exec;
+
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
     summary = require('./lib/summary'),
