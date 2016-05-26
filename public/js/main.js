@@ -54,13 +54,13 @@ $(document).ready(function () {
                     return i.html;
                 }).join("");
                 $('#no-items-text').css('display', 'none');
-                $('#added-items thead').css('display', '');
-                $('#added-items tbody').css('display', '');
-                $('#added-items tbody').append(html);
+                $('#added-items-table thead').css('display', '');
+                $('#added-items-table tbody').css('display', '');
+                $('#added-items-table tbody').append(html);
             } else {
                 $('#no-items-text').css('display', '');
-                $('#added-items thead').css('display', 'none');
-                $('#added-items tbody').css('display', 'none');
+                $('#added-items-table thead').css('display', 'none');
+                $('#added-items-table tbody').css('display', 'none');
             }
         }
         //NOTE: here it is ok to use .click(function...) because we only have one element to which the handler is assigned.

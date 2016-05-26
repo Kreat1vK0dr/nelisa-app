@@ -241,6 +241,10 @@
   color: white;
 }
 
+.chart rect:hover {
+  opacity: 0.7;
+}
+
 /*#allbody-home {
   background-color: rgba(22,64,120,0.5);;
   width: 90%;

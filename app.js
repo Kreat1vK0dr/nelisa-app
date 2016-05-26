@@ -24,6 +24,7 @@ var tmplName = require('./lib/template-name'),
     purchases = require('./lib/purchases'),
     helpers = require('./lib/helpers'),
     Login = require('./data-services/loginDataService'),
+    chart = require('./data-services/graphDataService'),
     loginMethod = require('./lib/loginMethods'),
     ConnectionProvider = require('./routes/connectionProvider');
 
@@ -97,7 +98,7 @@ app.use(bodyParser.urlencoded({
     }))
     // parse application/json
 app.use(bodyParser.json())
-app.use(session({secret: "pizzadough", cookie: {maxAge: 3000000}, resave:true, saveUninitialized: false}));
+app.use(session({secret: "pizzadough", cookie: {maxAge: 600000}, resave:true, saveUninitialized: false}));
 
 app.get('/', function (req, res) {
   res.redirect("/home");
@@ -147,6 +148,51 @@ app.get('/sales/add', sales.addHome);
 app.post('/sales/add/execute', sales.execute);
 app.get('/purchases/add', purchases.addHome);
 app.post('/purchases/add/execute', purchases.execute);
+
+app.get('/graphs/data', chart.getGraphData);
+// app.get('/graphs/data', function(req, res,next){
+//   var data;
+//   req.getConnection(function(err,connection){
+//     connection.query("SELECT s.week, p.description product, c.description category, SUM(s.quantity) quantity, SUM(s.quantity*s.price) revenue, SUM(s.cost) cost, SUM((s.quantity*s.price)-s.cost) profit FROM sales_details s, products p, categories c WHERE s.product_id=p.id AND s.category_id=c.id GROUP BY s.category_id ORDER BY s.product_id", function(err, result){
+//       if (err) return next(err);
+//       data = {data: result};
+//       // res.send(JSON.stringify(data));
+//       //   console.log("Sent data");
+//       fs.writeFile('./public/data/sales.json', JSON.stringify(data), function(err){
+//         if (err) return next (err);
+//         console.log("Data written to file");
+//         res.redirect('/graphs');
+//       });
+//       });
+//   });
+// });
+
+app.get('/graphs', function(req,res){
+  const context = {name: "Daniel", graph: "Sales by Product"};
+  res.render('data_home',context);
+});
+
+//USING PARAMETERS FOR DYNAMIC GRAPH SELECTION
+// app.get('/graphs/data/:month/:week', function(req, res,next){
+//   var data;
+        //  var month = req.params.month,
+        //      week = req.params.week;
+//   req.getConnection(function(err,connection){
+//     connection.query('SELECT s.id id, s.product_id p_id, p.description description, s.quantity quantity FROM sales_details s, products p WHERE s.product_id=p.id && monthName(s.date) = ?, s.week = ?ORDER BY s.id',[month,week] ,function(err, result){
+//       if (err) return next(err);
+//       data = {data: result};
+//       // res.send(JSON.stringify(data));
+//       //   console.log("Sent data");
+//       fs.writeFile('./public/data/sales.json', JSON.stringify(data), function(err){
+//         if (err) return next (err);
+//         console.log("Data written to file");
+//         res.redirect('/graphs');
+//       });
+//       });
+//   });
+// });
+
+
 
 app.get('/admin/dashboard', function(req,res){
   res.render('admin_home',{layout: 'admin'});
