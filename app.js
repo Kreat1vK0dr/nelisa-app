@@ -38,7 +38,7 @@ var dbOptions = {
     database: 'nelisa_another_copy'
 };
 
-var dataServiceSetup = function(connection){
+var dataServiceSetup = function(connection) {
 	return {
 		loginService: new Login(connection)
 	}
@@ -106,6 +106,10 @@ app.get('/', function (req, res) {
 
 app.get('/home', function (req, res) {
     res.render("home");
+});
+
+app.get('/about', function (req, res){
+  res.render("about");
 });
 
 app.get('/stats', stats.home);
