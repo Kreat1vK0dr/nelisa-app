@@ -7,25 +7,26 @@ CREATE DATABASE nelisa_another_copy;
 
 USE nelisa_another_copy;
 
-CREATE TABLE adminTypes(
-  admin_code INT PRIMARY KEY NOT NULL,
-  description VARCHAR(10) NOT NULL
-);
+#CREATE TABLE adminTypes(
+#  admin_code INT PRIMARY KEY NOT NULL,
+#  description VARCHAR(10) NOT NULL
+#);
 
-INSERT INTO adminTypes
-(admin_code,description)
-VALUES
-(1,'superuser'),(2,'general');
+#INSERT INTO adminTypes
+#(admin_code,description)
+#VALUES
+#(1,'superuser'),(2,'general');
 
 CREATE TABLE users(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   username VARCHAR(30) NOT NULL,
   password VARCHAR(100) NOT NULL,
   role VARCHAR(10) NOT NULL,
-  admin_type INT NOT NULL,
+  #admin_role INT NOT NULL,
+  admin_role VARCHAR(10),
   date_added DATE,
-  last_login DATE,
-  CONSTRAINT users_admin_type FOREIGN KEY (admin_type) REFERENCES adminTypes(admin_code)
+  last_login DATE
+#  CONSTRAINT users_admin_type FOREIGN KEY (admin_type) REFERENCES adminTypes(admin_code)
 );
 
 CREATE TABLE adminPass(

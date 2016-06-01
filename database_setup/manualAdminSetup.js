@@ -11,11 +11,41 @@ var connection = mysql.createConnection({
 // create hash
 const saltRounds = 12;
 const adminPassword = '0nL7@6m!N';
+const dateAdded = new Date();
+
 const myPassword = '1amdan13l';
 const myUsername = 'daniel';
 const myRole = 'admin';
-const myAdminType = 1;
-const dateAdded = new Date();
+const myAdminRole = 'superuser';
+
+const nelisaPassword = '1amn3l1sa';
+const nelisaUsername = 'nelisa';
+const nelisaRole = 'admin';
+const nelisaAdminRole = 'general';
+
+const xolaniPassword = '1amx0lan1';
+const xolaniUsername = 'xolani';
+const xolaniRole = 'admin';
+const xolaniAdminRole = 'superuser';
+
+var initialUsers = [{username: myUsername, password: myPassword , role: myRole, admin_role: myAdminRole, date_added: dateAdded},
+                   {username: nelisaUsername, password: nelisaPassword, role: nelisaRole, admin_role: nelisaAdminRole, date_added: dateAdded},
+                   {username: xolaniUsername, password: xolaniPassword, role: xolaniRole, admin_role: xolaniAdminRole, date_added: dateAdded}
+                  ];
+
+initialUsers.forEach(function(user){
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+      bcrypt.hash(user.password, salt, function(err, hash) {
+          // Store hash in your password DB.
+          user.password = hash;
+          connection.query("INSERT INTO users SET ?", user, function(err,result){
+            if (err) throw err;
+            console.log("INSERTED HASHED PASSWORD IN DATABASE");
+            console.log("INSERTED HASHED PASSWORD: ", hash);
+          });
+      });
+  });
+});
 
 bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(adminPassword, salt, function(err, hash) {
@@ -37,16 +67,4 @@ bcrypt.genSalt(saltRounds, function(err, salt) {
       }
     });
 });
-});
-
-bcrypt.genSalt(saltRounds, function(err, salt) {
-    bcrypt.hash(myPassword, salt, function(err, hash) {
-        // Store hash in your password DB.
-        var data = {username: myUsername, password: hash, role: myRole, admin_type: myAdminType, date_added: dateAdded};
-        connection.query("INSERT INTO users SET ?", data, function(err,result){
-          if (err) throw err;
-          console.log("INSERTED HASHED PASSWORD IN DATABASE");
-          console.log("INSERTED HASHED PASSWORD: ", hash);
-        });
-    });
 });

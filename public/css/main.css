@@ -48,6 +48,12 @@
   src: url("/fonts/Aleo-Regular.otf");
 }
 
+.nav > li > a {
+  font-size: 0.8em;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
 .homebuttons {
   padding-top: 4.2em;
   position: relative;

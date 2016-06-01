@@ -1,0 +1,26 @@
+<h1>USERS</h1>
+
+<center>
+<table class="myTables">
+  <thead>
+    <tr>
+      <th>User ID</th>
+      <th>User Name</th>
+      <th>Role</th>
+      <th>Admin Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#users}}
+    <tr>
+    <td>{{id}}</td>
+    <td>{{username}}</td>
+    <td>{{role}}</td>
+    <td>{{admin_role}}</td>
+    <td class="crud-table highlight"><a href="/users/edit/{{p_id}}"><div class="links edit">Edit</div></a></td>
+    <td class="crud-table highlight"><a href="/users/delete/{{p_id}}"><div class="links delete">Delete</div></a></td>
+  </tr>
+    {{/users}}
+  </tbody>
+</table>
+</center>

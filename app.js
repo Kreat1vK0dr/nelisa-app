@@ -23,7 +23,7 @@ var tmplName = require('./lib/template-name'),
     sales = require('./lib/sales'),
     purchases = require('./lib/purchases'),
     helpers = require('./lib/helpers'),
-    Login = require('./data-services/loginDataService'),
+    UserDataService = require('./data-services/userDataService'),
     chart = require('./data-services/graphDataService'),
     loginMethod = require('./lib/loginMethods'),
     ConnectionProvider = require('./routes/connectionProvider');
@@ -40,8 +40,8 @@ var dbOptions = {
 
 var dataServiceSetup = function(connection) {
 	return {
-		loginService: new Login(connection)
-	}
+		userDataService: new UserDataService(connection)
+	};
 };
 
 var myConnectionProvider = new ConnectionProvider(dbOptions, dataServiceSetup);
@@ -126,8 +126,10 @@ var products = new ProductMethods();
 app.get('/products', products.show);
 app.get('/products/add', products.showAdd);
 app.post('/products', products.add);
+// app.get('/products/edit', products.get);
 app.get('/products/edit/:id', products.get);
 app.post('/products/update', products.update);
+// app.get('/products/delete', products.delete);
 app.get('/products/delete/:id', products.delete);
 
 var categories = new CategoryMethods();
@@ -152,6 +154,19 @@ app.get('/sales/add', sales.addHome);
 app.post('/sales/add/execute', sales.execute);
 app.get('/purchases/add', purchases.addHome);
 app.post('/purchases/add/execute', purchases.execute);
+
+app.get('/users', function(req, res, next){
+  var context;
+    req.services(function(error, services){
+      var userService = services.userDataService;
+      userService.getAllUsers(function(err, users){
+        if (err) return next (err);
+        console.log("USERS: ", users);
+        context = {users: users, layout: 'admin'};
+        res.render('users', context);
+      });
+    });
+});
 
 app.get('/graphs/data', chart.getGraphData);
 // app.get('/graphs/data', function(req, res,next){

@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     database: 'nelisa_another_copy'
 });
 connection.connect();
-connection.query('SELECT id, product_id, date, quantity, remaining, unitcost from purchases ORDER BY date', function (err, purchasesFromDB, fields) {
+connection.query('SELECT id, product_id, date, quantity, remaining, unitcost FROM purchases ORDER BY date', function (err, purchasesFromDB, fields) {
     if (err) throw err;
     var purchases = purchasesFromDB,
         salesToUpdate = [],

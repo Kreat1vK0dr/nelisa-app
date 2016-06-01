@@ -15,4 +15,12 @@ module.exports = function(connection) {
     getData("SELECT * FROM users WHERE username = ?",data, cb);
 };
 
+  this.getAllUsers = function(cb) {
+    getData("SELECT * FROM users", cb);
+};
+
+this.updateUser = function(data, cb) {
+  insertData("UPDATE users SET ?? = ? WHERE username = ?", cb);
+};
+
 };
