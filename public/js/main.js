@@ -422,4 +422,22 @@ $(document).ready(function () {
             }
         });
     }
+    if (window.location.pathname === '/users/edit') {
+    if ($('#role option:selected').val() === "user") {
+      $('#admin').attr('disabled','disabled');
+    } else if ($('#role option:selected').val() === "admin") {
+      $('#admin').attr('disabled',null);
+    }
+
+    $('#role').change(function(){
+      console.log("select option: ", $('#role option:selected').val());
+      if ($('#role option:selected').val() === "user") {
+        $('#admin').attr('style','display:none;');
+        $('#adminLabel').attr('style','display:none;');
+      } else if ($('#role option:selected').val() === "admin") {
+        $('#admin').attr('style',null);
+        $('#adminLabel').attr('style',null);
+      }
+    });
+}
 });

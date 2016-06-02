@@ -148,6 +148,7 @@ app.get('/suppliers/edit/:id', suppliers.get);
 app.post('/suppliers/update', suppliers.update);
 app.get('/suppliers/delete/:id', suppliers.delete);
 
+app.get('/admin',loginMethod.adminHome);
 app.get('/admin/login',loginMethod.adminDialogue);
 app.post('/admin/login/check',loginMethod.checkBeforeLoggingIn);
 
@@ -157,7 +158,8 @@ app.get('/purchases/add', purchases.addHome);
 app.post('/purchases/add/execute', purchases.execute);
 
 app.get('/users', users.show);
-app.get('/users/edit', users.show);
+app.post('/users/edit', users.edit);
+app.post('/users/edit/update', users.update);
 
 app.get('/graphs/data', chart.getGraphData);
 

@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 // create hash
 const saltRounds = 12;
 const adminPassword = '0nL7@6m!N';
-const dateAdded = new Date();
+const dateAdded = new Date(Date.now());
 
 const myPassword = '1amdan13l';
 const myUsername = 'daniel';

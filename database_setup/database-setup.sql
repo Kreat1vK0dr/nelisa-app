@@ -24,8 +24,8 @@ CREATE TABLE users(
   role VARCHAR(10) NOT NULL,
   #admin_role INT NOT NULL,
   admin_role VARCHAR(10),
-  date_added DATE,
-  last_login DATE
+  date_added DATETIME,
+  last_login DATETIME
 #  CONSTRAINT users_admin_type FOREIGN KEY (admin_type) REFERENCES adminTypes(admin_code)
 );
 
@@ -63,7 +63,7 @@ CREATE TABLE sales (
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     day INT,
     week INT,
-    date DATE NOT NULL,
+    date DATETIME NOT NULL,
     product_id INT NOT NULL,
     category_id INT NOT NULL,
     quantity INT NOT NULL,
@@ -99,7 +99,7 @@ LINES TERMINATED BY '\n'
 
 CREATE TABLE purchases(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  date DATE NOT NULL,
+  date DATETIME NOT NULL,
   supplier_id INT NOT NULL,
   product_id INT NOT NULL,
   category_id INT NOT NULL,
@@ -124,7 +124,7 @@ SET supplier_id = (SELECT id FROM suppliers WHERE name = @supplier),
 
 CREATE TABLE inventory_log(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  date DATE NOT NULL,
+  date DATETIME NOT NULL,
   action VARCHAR(20) NOT NULL,
   action_id INT NOT NULL,
   product_id INT NOT NULL,

@@ -8,6 +8,8 @@
       <th>User Name</th>
       <th>Role</th>
       <th>Admin Role</th>
+      <th>Date Added</th>
+      <th>Last Login</th>
     </tr>
   </thead>
   <tbody>
@@ -20,20 +22,20 @@
     <td>{{date_added}}</td>
     <td>{{last_login}}</td>
     <td class="crud-table highlight">
-    <form action="/uses/edit">
+    <form action="/users/edit" method="post">
       <input type="hidden" name="id" value="{{id}}">
       <input type="hidden" name="username" value="{{username}}">
-      <input type="hidden" name="rold" value="{{role}}">
-      <input type="hidden" name="admin_role" value="{{admin_role}}">
+      <input type="hidden" name="role" value="{{role}}">
+      <input type="hidden" name="admin" value="{{admin_role}}">
     <button type="submit">Edit</button>
     </form>
     </td>
     <input type="hidden" name="id" value="{{id}}">
     <input type="hidden" name="username" value="{{username}}">
-    <input type="hidden" name="rold" value="{{role}}">
-    <input type="hidden" name="admin_role" value="{{admin_role}}">
+    <input type="hidden" name="role" value="{{role}}">
+    <input type="hidden" name="admin" value="{{admin_role}}">
     <td class="crud-table highlight">
-<form action="/users/delete">
+<form action="/users/delete" method="post">
   <input type="hidden" name="id" value="{{id}}">
   <input type="hidden" name="username" value="{{username}}">
   <button type="submit">Delete</button>
