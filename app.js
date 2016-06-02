@@ -26,6 +26,7 @@ var tmplName = require('./lib/template-name'),
     UserDataService = require('./data-services/userDataService'),
     chart = require('./data-services/graphDataService'),
     loginMethod = require('./lib/loginMethods'),
+    users = require('./lib/userMethods'),
     ConnectionProvider = require('./routes/connectionProvider');
 
 var app = express();
@@ -155,18 +156,7 @@ app.post('/sales/add/execute', sales.execute);
 app.get('/purchases/add', purchases.addHome);
 app.post('/purchases/add/execute', purchases.execute);
 
-app.get('/users', function(req, res, next){
-  var context;
-    req.services(function(error, services){
-      var userService = services.userDataService;
-      userService.getAllUsers(function(err, users){
-        if (err) return next (err);
-        console.log("USERS: ", users);
-        context = {users: users, layout: 'admin'};
-        res.render('users', context);
-      });
-    });
-});
+app.get('/users', users.show);
 
 app.get('/graphs/data', chart.getGraphData);
 // app.get('/graphs/data', function(req, res,next){
