@@ -17,8 +17,28 @@
     <td>{{username}}</td>
     <td>{{role}}</td>
     <td>{{admin_role}}</td>
-    <td class="crud-table highlight"><a href="/users/edit/{{p_id}}"><div class="links edit">Edit</div></a></td>
-    <td class="crud-table highlight"><a href="/users/delete/{{p_id}}"><div class="links delete">Delete</div></a></td>
+    <td>{{date_added}}</td>
+    <td>{{last_login}}</td>
+    <td class="crud-table highlight">
+    <form action="/uses/edit">
+      <input type="hidden" name="id" value="{{id}}">
+      <input type="hidden" name="username" value="{{username}}">
+      <input type="hidden" name="rold" value="{{role}}">
+      <input type="hidden" name="admin_role" value="{{admin_role}}">
+    <button type="submit">Edit</button>
+    </form>
+    </td>
+    <input type="hidden" name="id" value="{{id}}">
+    <input type="hidden" name="username" value="{{username}}">
+    <input type="hidden" name="rold" value="{{role}}">
+    <input type="hidden" name="admin_role" value="{{admin_role}}">
+    <td class="crud-table highlight">
+<form action="/users/delete">
+  <input type="hidden" name="id" value="{{id}}">
+  <input type="hidden" name="username" value="{{username}}">
+  <button type="submit">Delete</button>
+</form>
+  </td>
   </tr>
     {{/users}}
   </tbody>

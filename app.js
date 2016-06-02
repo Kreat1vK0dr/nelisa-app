@@ -157,29 +157,16 @@ app.get('/purchases/add', purchases.addHome);
 app.post('/purchases/add/execute', purchases.execute);
 
 app.get('/users', users.show);
+app.get('/users/edit', users.show);
 
 app.get('/graphs/data', chart.getGraphData);
-// app.get('/graphs/data', function(req, res,next){
-//   var data;
-//   req.getConnection(function(err,connection){
-//     connection.query("SELECT s.week, p.description product, c.description category, SUM(s.quantity) quantity, SUM(s.quantity*s.price) revenue, SUM(s.cost) cost, SUM((s.quantity*s.price)-s.cost) profit FROM sales_details s, products p, categories c WHERE s.product_id=p.id AND s.category_id=c.id GROUP BY s.category_id ORDER BY s.product_id", function(err, result){
-//       if (err) return next(err);
-//       data = {data: result};
-//       // res.send(JSON.stringify(data));
-//       //   console.log("Sent data");
-//       fs.writeFile('./public/data/sales.json', JSON.stringify(data), function(err){
-//         if (err) return next (err);
-//         console.log("Data written to file");
-//         res.redirect('/graphs');
-//       });
-//       });
-//   });
-// });
 
 app.get('/graphs', function(req,res){
   const context = {name: "Daniel", graph: "Sales by Product"};
   res.render('data_home',context);
 });
+
+
 
 //USING PARAMETERS FOR DYNAMIC GRAPH SELECTION
 // app.get('/graphs/data/:month/:week', function(req, res,next){
