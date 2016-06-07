@@ -17,6 +17,30 @@
 <body>
 
     <nav class="navbar navbar-inverse">
+{{#if admin}}
+<div class="container-fluid">
+  <div class="navbar-header nelisa-font">
+    <a class="navbar-brand" href="/">Nelisa's Dashboard</a>
+  </div>
+
+  <ul class="nav navbar-nav">
+
+    <!-- <li class="navbutton"><a href="/">about</a></li> -->
+    <li class="navbutton admin-nav"><a href="/graphs">explore data</a></li>
+    <li class="navbutton admin-nav"><a href="/stats">stats</a></li>
+    <li class="navbutton admin-nav"><a href="/summary">summary</a></li>
+    <li class="navbutton admin-nav"><a href="/suppliers">suppliers</a></li>
+    <li class="navbutton admin-nav"><a href="/products">products</a></li>
+    <li class="navbutton admin-nav"><a href="/categories">categories</a></li>
+    <li class="navbutton admin-nav"><a href="/sales/add">add sale</a></li>
+    <li class="navbutton admin-nav"><a href="/purchases/add">Add purchase</a></li>
+    <li class="navbutton admin-nav"><a href="/users">users</a></li>
+    <!-- <li class="navbutton"><a href="/">categories</a></li> -->
+
+  </ul>
+  <div id="loggedInAs">Logged in as {{user}}</div>
+  </div>
+{{else}}
 
         <div class="container-fluid">
             <div class="navbar-header nelisa-font">
@@ -41,6 +65,7 @@
             </a>
 
         </div>
+        {{/if}}
     </nav>
 
     {{{body}}}

@@ -164,7 +164,7 @@ app.post('/users/edit/update', users.update);
 app.get('/graphs/data', chart.getGraphData);
 
 app.get('/graphs', function(req,res){
-  const context = {name: "Daniel", graph: "Sales by Product"};
+  const context = {name: "Daniel", graph: "Sales by Product", layout: "admin"};
   res.render('data_home',context);
 });
 
