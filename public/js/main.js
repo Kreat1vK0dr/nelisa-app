@@ -43,7 +43,7 @@ $(document).ready(function () {
 
     if (window.location.pathname === '/sales/add') {
         $('#products').change(function () {
-            $('#cost').val($('#products option:selected').attr('data-cost'));
+            $('#price').val($('#products option:selected').attr('data-price'));
             $('#categories').val($('#products option:selected').attr('data-category'));
         });
 
@@ -127,7 +127,7 @@ $(document).ready(function () {
                 console.log(localStorage);
                 $('#products').val('');
                 $('#categories').val('');
-                $('#cost').val('');
+                $('#price').val('');
                 $('#quantity').val('');
             } else {
                 alert("Please make sure you have filled in all fields before adding an item.");
@@ -164,7 +164,7 @@ $(document).ready(function () {
         //             .attr({
         //                 value: data.id
         //               })
-        //               .data({cost: data.cost, category: data.category_id})
+        //               .data({price: data.price, category: data.category_id})
         //               .text(data.description).insertBefore("#choose");
         //         });
         //     });
