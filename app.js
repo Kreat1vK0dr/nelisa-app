@@ -29,6 +29,10 @@ var tmplName = require('./lib/template-name'),
     users = require('./lib/userMethods'),
     ConnectionProvider = require('./routes/connectionProvider');
 
+var products = new ProductMethods(),
+    categories = new CategoryMethods();
+
+
 var app = express();
 
 var dbOptions = {
@@ -113,57 +117,58 @@ app.get('/about', function (req, res){
   res.render("about");
 });
 
-app.get('/stats', stats.home);
-app.post('/stats/:type', stats.redirect);
-app.get('/stats/:type/:month/:week', stats.show);
+app.get('/products', products.show);
+
+
+app.get('/admin',loginMethod.authenticate, loginMethod.adminHome);
+app.get('/admin/login',loginMethod.adminDialogue);
+app.post('/admin/login/check',loginMethod.verifyAndLogIn);
+
+app.get('/stats', loginMethod.authenticate,stats.home);
+app.post('/stats/:type', loginMethod.authenticate,stats.redirect);
+app.get('/stats/:type/:month/:week', loginMethod.authenticate, stats.show);
 // app.get('/stats/:type', stats.show);
 
-app.get('/summary', summary.home);
-app.post('/summary/table', summary.redirect);
-app.get('/summary/table/:type/:month/:week', summary.show);
+app.get('/summary', loginMethod.authenticate,summary.home);
+app.post('/summary/table',loginMethod.authenticate, summary.redirect);
+app.get('/summary/table/:type/:month/:week',loginMethod.authenticate, summary.show);
 // app.get('/summary/table', summary.show);
 
-var products = new ProductMethods();
-app.get('/products', products.show);
-app.get('/products/add', products.showAdd);
-app.post('/products', products.add);
+app.get('/products', loginMethod.authenticate,products.show);
+app.get('/products/add', loginMethod.authenticate,products.showAdd);
+app.post('/products',loginMethod.authenticate, products.add);
 // app.get('/products/edit', products.get);
-app.get('/products/edit/:id', products.get);
-app.post('/products/update', products.update);
+app.get('/products/edit/:id',loginMethod.authenticate, products.get);
+app.post('/products/update', loginMethod.authenticate,products.update);
 // app.get('/products/delete', products.delete);
-app.get('/products/delete/:id', products.delete);
+app.get('/products/delete/:id',loginMethod.authenticate, products.delete);
 
-var categories = new CategoryMethods();
-app.get('/categories', categories.show);
-app.get('/categories/add', categories.showAdd);
-app.post('/categories', categories.add);
-app.get('/categories/edit/:id', categories.get);
-app.post('/categories/update', categories.update);
-app.get('/categories/delete/:id', categories.delete);
+app.get('/categories', loginMethod.authenticate,categories.show);
+app.get('/categories/add',loginMethod.authenticate, categories.showAdd);
+app.post('/categories',loginMethod.authenticate, categories.add);
+app.get('/categories/edit/:id',loginMethod.authenticate, categories.get);
+app.post('/categories/update', loginMethod.authenticate,categories.update);
+app.get('/categories/delete/:id',loginMethod.authenticate, categories.delete);
 
-app.get('/suppliers', suppliers.show);
-app.get('/suppliers/add', suppliers.showAdd);
-app.post('/suppliers', suppliers.add);
-app.get('/suppliers/edit/:id', suppliers.get);
-app.post('/suppliers/update', suppliers.update);
-app.get('/suppliers/delete/:id', suppliers.delete);
+app.get('/suppliers', loginMethod.authenticate,suppliers.show);
+app.get('/suppliers/add',loginMethod.authenticate, suppliers.showAdd);
+app.post('/suppliers',loginMethod.authenticate, suppliers.add);
+app.get('/suppliers/edit/:id', loginMethod.authenticate,suppliers.get);
+app.post('/suppliers/update',loginMethod.authenticate, suppliers.update);
+app.get('/suppliers/delete/:id',loginMethod.authenticate, suppliers.delete);
 
-app.get('/admin',loginMethod.adminHome);
-app.get('/admin/login',loginMethod.adminDialogue);
-app.post('/admin/login/check',loginMethod.checkBeforeLoggingIn);
+app.get('/sales/add',loginMethod.authenticate, sales.addHome);
+app.post('/sales/add/execute', loginMethod.authenticate,sales.execute);
+app.get('/purchases/add',loginMethod.authenticate, purchases.addHome);
+app.post('/purchases/add/execute',loginMethod.authenticate, purchases.execute);
 
-app.get('/sales/add', sales.addHome);
-app.post('/sales/add/execute', sales.execute);
-app.get('/purchases/add', purchases.addHome);
-app.post('/purchases/add/execute', purchases.execute);
+app.get('/users',loginMethod.authenticate, users.show);
+app.post('/users/edit',loginMethod.authenticate, users.edit);
+app.post('/users/edit/update',loginMethod.authenticate, users.update);
 
-app.get('/users', users.show);
-app.post('/users/edit', users.edit);
-app.post('/users/edit/update', users.update);
+app.get('/graphs/data',loginMethod.authenticate, chart.getGraphData);
 
-app.get('/graphs/data', chart.getGraphData);
-
-app.get('/graphs', function(req,res){
+app.get('/graphs',loginMethod.authenticate, function(req,res){
   const context = {name: "Daniel", graph: "Sales by Product", layout: "admin"};
   res.render('data_home',context);
 });
@@ -189,8 +194,6 @@ app.get('/graphs', function(req,res){
 //       });
 //   });
 // });
-
-
 
 app.get('/admin/dashboard', function(req,res){
   res.render('admin_home',{layout: 'admin'});
