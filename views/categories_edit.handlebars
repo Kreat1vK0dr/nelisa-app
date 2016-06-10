@@ -2,7 +2,9 @@
 
 <form action="/categories/update" method="post">
   <label for="description">Description</label>
+  {{#category}}
   <input type="hidden" name="id" value="{{id}}">
   <input type="text" name="description" id="description" value="{{description}}">
+{{/category}}
   <input type="submit" value="Update Category">
 </form>

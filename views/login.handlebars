@@ -1,0 +1,31 @@
+<div class="overlay"></div>
+<center>
+<div id="user-login" class="alert-box">
+  {{#if signup}}
+    <h3>SIGN UP</h3>
+  <form action="/signup" method="post">
+    <label for="firstName">First Name</label>
+    <input autofocus type="text" name="firstName" id="firstName"  placeholder="Enter first name" value="{{firstName}}"> <br>
+    <label for="lastName">Last Name</label>
+    <input type="text" name="lastName" id="lastName"  placeholder="Enter last name" value="{{lastName}}"> <br>
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username-signup"  placeholder="Enter username" value="{{username}}"> <br>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email"  placeholder="Enter email" value="{{email}}"> <br>
+    <label for="pass1">Password</label>
+    <input type="password" name="pass1" id="pass1" placeholder="Enter password">
+    <input type="password" name="pass2" id="pass2" placeholder="Repeat password"> <br>
+    <button type="submit">make me a member!</button>
+  </form>
+  {{else}}
+  <h3>LOGIN</h3>
+    <p id="message">{{message}}</p>
+    <form action="/login/check" method="post">
+    <input required type="text" autofocus name="username" id="username" class="login-input" placeholder="Enter username"><br/>
+    <input required type="password" name="password" id="password" class="login-input" placeholder="Enter password"><br/>
+    <button class="myButton" type="submit">LOGIN</button>
+  <a href="/signup" class="myButton">SIGN UP</a>
+    </form>
+{{/if}}
+</div>
+</center>

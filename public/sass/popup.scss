@@ -1,0 +1,25 @@
+#popup {
+  top: 115%;
+  position: absolute;
+  right: 1%;
+  border: 1px solid black;
+  height: 80px;
+  width: 150px;
+  background: grey;
+  display: none;
+  text-align: center;
+  // white-space: nowrap;
+}
+#popup span {
+  color: white;
+}
+// #popup::before {
+//   content: "";
+//   border-bottom: 10px solid black;
+//   border-left: 10px solid transparent;
+//   border-right: 10px solid transparent;
+//   top: -10px;
+//   right: 0;
+//   position: absolute;
+//   display:block;
+// }

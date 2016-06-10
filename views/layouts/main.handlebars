@@ -38,8 +38,38 @@
     <!-- <li class="navbutton"><a href="/">categories</a></li> -->
 
   </ul>
-  <div id="loggedInAs">Logged in as {{user}}</div>
+  <div class="loggedInAs">
+  <div class="user" id="admin">{{user}}</div>
+
+  <div class="caratA"></div>
+  <div class="caratB"></div>
+
   </div>
+  <div id="popup">
+    <b>Logged in as admin<br> <span>{{user}}</span></b>
+    <a  href="/logout"><button id="signOut">Sign out</button></a>
+  </div>
+{{else if user}}
+<div class="container-fluid">
+  <div class="navbar-header nelisa-font">
+    <a class="navbar-brand" href="/">Nelisa's Spaza</a>
+  </div>
+
+  <ul class="nav navbar-nav">
+
+    <li class="navbutton"><a href="/products">Available stock</a></li>
+    <li class="navbutton"><a href="/about">about</a></li>
+
+  </ul>
+  <div class="loggedInAs">
+  <div class="user" id="user">{{user}}</div>
+  <!-- <div id="downarrow">&nbsp;</div> -->
+  <div class="caratA"></div>
+  <div class="caratB"></div>
+  </div>
+  <div id="popup">
+    <b>Logged in as user <br> <span>{{user}}</span></b>
+    <a  href="/logout"><button id="signOut">Sign out</button></a>
 {{else}}
 
         <div class="container-fluid">
@@ -49,21 +79,14 @@
 
             <ul class="nav navbar-nav">
 
-                <!-- <li class="navbutton"><a href="/">about</a></li> -->
                 <li class="navbutton"><a href="/products">Available stock</a></li>
                 <li class="navbutton"><a href="/about">about</a></li>
-                <!-- <li class="navbutton"><a href="/graphs">data</a></li> -->
-                <!-- <li class="navbutton"><a href="/">categories</a></li> -->
 
             </ul>
 
-            <a href="/admin/login">
-                <div class="loginbutton" id="admin-login-button">Admin Login</div>
+            <a href="/login">
+                <div class="loginbutton" id="admin-login-button">Login</div>
             </a>
-            <a href="/user/login">
-                <div class="loginbutton" id="user-login-button">User Login</div>
-            </a>
-
         </div>
         {{/if}}
     </nav>

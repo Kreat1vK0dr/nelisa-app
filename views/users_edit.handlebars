@@ -1,7 +1,7 @@
 <h1>Edit user</h1>
 
 <form action="/users/edit/update" method="post">
-
+{{#userDetails}}
 <label for="currentUsername">Current Username</label>
 <input type="text" name="currentUsername" id="currentUsername" value="{{username}}" disabled>
 
@@ -22,13 +22,13 @@
 <option value="user">User</option>
 </select>
 
-<label for="admin" id="adminLabel">Admin Role</label>
-<select name="admin" id="admin">
+<label for="adminRole" id="adminLabel">Admin Role</label>
+<select name="adminRole" id="adminRole">
   <option value="superuser">superuser</option>
   <option value="general">general</option>
 </select>
 
 <input type="hidden" name="id" value="{{id}}">
-
+{{/userDetails}}
 <button type="submit">Update User Details</button>
 </form>

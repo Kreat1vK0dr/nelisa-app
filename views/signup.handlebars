@@ -1,0 +1,22 @@
+<div class="signup" style="margin:0 auto;">
+<h3>sign up</h3>
+{{#if alert}}
+<h5>{{message}}</h5>
+{{/if}}
+<div style="margin:0 auto;">
+<form action="/signup" method="post">
+  <label for="firstName">First Name</label>
+  <input type="text" name="firstName" id="firstName"  placeholder="Enter first name" value="{{firstName}}"> <br>
+  <label for="lastName">Last Name</label>
+  <input type="text" name="lastName" id="lastName"  placeholder="Enter last name" value="{{lastName}}"> <br>
+  <label for="username">Username</label>
+  <input type="text" name="username" id="username-signup"  placeholder="Enter username" value="{{username}}"> <br>
+  <label for="email">Email</label>
+  <input type="email" name="email" id="email"  placeholder="Enter email" value="{{email}}"> <br>
+  <label for="pass1">Password</label>
+  <input type="password" name="pass1" id="pass1" placeholder="Enter password">
+  <input type="password" name="pass2" id="pass2" placeholder="Repeat password"> <br>
+  <button type="submit">sign up</button>
+</form>
+</div>
+</div>

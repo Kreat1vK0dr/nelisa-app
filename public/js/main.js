@@ -423,21 +423,29 @@ $(document).ready(function () {
         });
     }
     if (window.location.pathname === '/users/edit') {
+      console.log($('#role option:selected').val());
     if ($('#role option:selected').val() === "user") {
-      $('#admin').attr('disabled','disabled');
+      $('#admin').css('display','none');
     } else if ($('#role option:selected').val() === "admin") {
-      $('#admin').attr('disabled',null);
+      $('#admin').css('display',null);
     }
 
     $('#role').change(function(){
       console.log("select option: ", $('#role option:selected').val());
       if ($('#role option:selected').val() === "user") {
-        $('#admin').attr('style','display:none;');
-        $('#adminLabel').attr('style','display:none;');
+        $('#adminRole').css('display','none');
+        $('#adminLabel').css('display','none');
       } else if ($('#role option:selected').val() === "admin") {
-        $('#admin').attr('style',null);
-        $('#adminLabel').attr('style',null);
+        $('#adminRole').css('display',"inline-block");
+        $('#adminLabel').css('display',"inline-block");
       }
     });
 }
+
+$('.user').on('click', function(){
+  $('#popup').toggle();
+  $('.caratA').toggle();
+  $('.caratB').toggle();
+});
+
 });

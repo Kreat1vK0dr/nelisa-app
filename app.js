@@ -17,15 +17,17 @@ var express = require('express'),
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
     summary = require('./lib/summary'),
-    ProductMethods = require('./lib/products_CRUD'),
-    CategoryMethods = require('./lib/categories_CRUD'),
-    suppliers = require('./lib/suppliers_CRUD'),
+    ProductMethods = require('./lib/products'),
+    CategoryMethods = require('./lib/categories'),
+    suppliers = require('./lib/suppliers'),
     sales = require('./lib/sales'),
     purchases = require('./lib/purchases'),
     helpers = require('./lib/helpers'),
     UserDataService = require('./data-services/userDataService'),
     chart = require('./data-services/graphDataService'),
     loginMethod = require('./lib/loginMethods'),
+    signup = require('./lib/signup'),
+    authenticate = require('./lib/authenticate'),
     users = require('./lib/userMethods'),
     ConnectionProvider = require('./routes/connectionProvider');
 
@@ -75,13 +77,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, "views"));
 
-// app.use('/css', sassMiddleware({
-//     src: path.join(__dirname, 'public', 'sass'),
-//     dest: path.join(__dirname, 'public', 'css'),
-//     debug: true,
-//     outputStyle: 'expanded',
-//     // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
-// }));
+app.use('/css', sassMiddleware({
+    src: path.join(__dirname, 'public', 'sass'),
+    dest: path.join(__dirname, 'public', 'css'),
+    debug: true,
+    outputStyle: 'expanded',
+    // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+}));
 
 // app.use(postcssMiddleware({
 //     src: function (req) {
@@ -102,16 +104,14 @@ app.use(bodyParser.urlencoded({
         extended: false
     }))
     // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(session({secret: "pizzadough", cookie: {maxAge: 600000}, resave:true, saveUninitialized: false}));
-
+app.use(authenticate);
 app.get('/', function (req, res) {
   res.redirect("/home");
 });
 
-app.get('/home', function (req, res) {
-    res.render("home");
-});
+app.get('/home', loginMethod.home);
 
 app.get('/about', function (req, res){
   res.render("about");
@@ -119,57 +119,71 @@ app.get('/about', function (req, res){
 
 app.get('/products', products.show);
 
+app.get('/login',loginMethod.loginDialogue);
+app.post('/login/check',loginMethod.verifyAndLogIn);
 
-app.get('/admin',loginMethod.authenticate, loginMethod.adminHome);
-app.get('/admin/login',loginMethod.adminDialogue);
-app.post('/admin/login/check',loginMethod.verifyAndLogIn);
+app.get('/signup', signup.home);
+app.post('/signup', signup.checkUser, signup.addUser);
 
-app.get('/stats', loginMethod.authenticate,stats.home);
-app.post('/stats/:type', loginMethod.authenticate,stats.redirect);
-app.get('/stats/:type/:month/:week', loginMethod.authenticate, stats.show);
+app.get('/admin', loginMethod.home);
+
+app.get('/user', loginMethod.home);
+
+app.get('/logout', function(req,res){
+  delete req.session.user;
+  delete req.session.context;
+  res.redirect('/');
+});
+
+app.get('/stats', stats.home);
+app.post('/stats/:type', stats.redirect);
+app.get('/stats/:type/:month/:week',  stats.show);
 // app.get('/stats/:type', stats.show);
 
-app.get('/summary', loginMethod.authenticate,summary.home);
-app.post('/summary/table',loginMethod.authenticate, summary.redirect);
-app.get('/summary/table/:type/:month/:week',loginMethod.authenticate, summary.show);
+app.get('/summary', summary.home);
+app.post('/summary/table', summary.redirect);
+app.get('/summary/table/:type/:month/:week', summary.show);
 // app.get('/summary/table', summary.show);
 
-app.get('/products', loginMethod.authenticate,products.show);
-app.get('/products/add', loginMethod.authenticate,products.showAdd);
-app.post('/products',loginMethod.authenticate, products.add);
+app.get('/products', products.show);
+app.get('/products/add', products.showAdd);
+app.post('/products', products.add);
 // app.get('/products/edit', products.get);
-app.get('/products/edit/:id',loginMethod.authenticate, products.get);
-app.post('/products/update', loginMethod.authenticate,products.update);
+app.get('/products/edit/:id', products.get);
+app.post('/products/update', products.update);
 // app.get('/products/delete', products.delete);
-app.get('/products/delete/:id',loginMethod.authenticate, products.delete);
+app.get('/products/delete/:id', products.delete);
 
-app.get('/categories', loginMethod.authenticate,categories.show);
-app.get('/categories/add',loginMethod.authenticate, categories.showAdd);
-app.post('/categories',loginMethod.authenticate, categories.add);
-app.get('/categories/edit/:id',loginMethod.authenticate, categories.get);
-app.post('/categories/update', loginMethod.authenticate,categories.update);
-app.get('/categories/delete/:id',loginMethod.authenticate, categories.delete);
+app.get('/categories', categories.show);
+app.get('/categories/add', categories.showAdd);
+app.post('/categories', categories.add);
+app.get('/categories/edit/:id', categories.get);
+app.post('/categories/update', categories.update);
+app.get('/categories/delete/:id', categories.delete);
 
-app.get('/suppliers', loginMethod.authenticate,suppliers.show);
-app.get('/suppliers/add',loginMethod.authenticate, suppliers.showAdd);
-app.post('/suppliers',loginMethod.authenticate, suppliers.add);
-app.get('/suppliers/edit/:id', loginMethod.authenticate,suppliers.get);
-app.post('/suppliers/update',loginMethod.authenticate, suppliers.update);
-app.get('/suppliers/delete/:id',loginMethod.authenticate, suppliers.delete);
+app.get('/suppliers', suppliers.show);
+app.get('/suppliers/add', suppliers.showAdd);
+app.post('/suppliers', suppliers.add);
+app.get('/suppliers/edit/:id', suppliers.get);
+app.post('/suppliers/update', suppliers.update);
+app.get('/suppliers/delete/:id', suppliers.delete);
 
-app.get('/sales/add',loginMethod.authenticate, sales.addHome);
-app.post('/sales/add/execute', loginMethod.authenticate,sales.execute);
-app.get('/purchases/add',loginMethod.authenticate, purchases.addHome);
-app.post('/purchases/add/execute',loginMethod.authenticate, purchases.execute);
+app.get('/sales/add', sales.addHome);
+app.post('/sales/add/execute', sales.execute);
+app.get('/purchases/add', purchases.addHome);
+app.post('/purchases/add/execute', purchases.execute);
 
-app.get('/users',loginMethod.authenticate, users.show);
-app.post('/users/edit',loginMethod.authenticate, users.edit);
-app.post('/users/edit/update',loginMethod.authenticate, users.update);
+app.get('/users', users.show);
+app.post('/users/edit', users.edit);
+app.post('/users/delete', users.delete);
+app.post('/users/edit/update', users.update);
 
-app.get('/graphs/data',loginMethod.authenticate, chart.getGraphData);
+app.get('/graphs/data', chart.getGraphData);
 
-app.get('/graphs',loginMethod.authenticate, function(req,res){
-  const context = {name: "Daniel", graph: "Sales by Product", layout: "admin"};
+app.get('/graphs', function(req,res){
+  var context = req.session.context;
+  context.name = "Daniel";
+  context.graph = "Sales by Product";
   res.render('data_home',context);
 });
 

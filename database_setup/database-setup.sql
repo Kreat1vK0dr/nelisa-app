@@ -19,6 +19,9 @@ USE nelisa_another_copy;
 
 CREATE TABLE users(
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  firstName VARCHAR(20) NOT NULL,
+  lastName VARCHAR(20) NOT NULL,
+  email VARCHAR(50) NOT NULL,
   username VARCHAR(30) NOT NULL,
   password VARCHAR(100) NOT NULL,
   role VARCHAR(10) NOT NULL,

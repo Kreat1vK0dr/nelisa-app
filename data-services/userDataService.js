@@ -3,11 +3,12 @@ module.exports = function(connection) {
   var getAllData = function(query, cb){
         connection.query( query, cb);
     };
+
   var getData = function(query, data, cb){
         connection.query( query, data, cb);
     };
 
-    var insertData = function(query, data, cb){
+    var changeData = function(query, data, cb){
         connection.query(query, data, cb);
     };
 
@@ -19,16 +20,20 @@ module.exports = function(connection) {
     getData("SELECT * FROM users", cb);
 };
 
-this.updateUser = function(data, cb) {
-  insertData("UPDATE users SET username = ?, role = ?, admin_role = ? WHERE id = ?",data, cb);
-};
+  this.updateUser = function(data, cb) {
+    changeData("UPDATE users SET username = ?, role = ?, admin_role = ? WHERE id = ?",data, cb);
+  };
 
-this.updateUserLastLogin = function(data, cb) {
-  insertData("UPDATE users SET last_login = NOW() WHERE id = ?",data, cb);
-};
+  this.updateUserLastLogin = function(data, cb) {
+    changeData("UPDATE users SET last_login = NOW() WHERE id = ?",data, cb);
+  };
 
-this.deleteUser = function(data, cb) {
-  insertData("DELETE FROM users WHERE id = ?", cb);
-};
+  this.deleteUser = function(data, cb) {
+    changeData("DELETE FROM users WHERE id = ?", data, cb);
+  };
+
+  this.addUser = function(data, cb) {
+    changeData("INSERT INTO users SET ?", data,cb);
+  };
 
 };

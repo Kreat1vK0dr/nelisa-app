@@ -2,7 +2,9 @@
 
 <form action="/suppliers/update" method="post">
   <label for="name">Supplier</label>
+  {{#supplier}}
   <input type="hidden" name="id" value="{{id}}">
   <input type="text" name="name" id="name" value="{{name}}">
+  {{/supplier}}
   <input type="submit" value="Update Supplier">
 </form>

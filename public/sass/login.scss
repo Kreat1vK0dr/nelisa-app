@@ -1,4 +1,5 @@
-$login-width: 700px/1300px * 100%;
+$login-width: 500px/1300px * 100%;
+$navbar-height: 40px;
 
 .loginbutton {
     position     : absolute;
@@ -6,12 +7,14 @@ $login-width: 700px/1300px * 100%;
     padding-top  : 8px;
     padding-right: 8px;
     color        : grey;
+    right: 0;
 }
 .loginbutton:hover {
     color: white;
 }
 
 #admin-login {
+  top: 10%;
   background-color: black;
   position: fixed;
   width: $login-width;
@@ -21,12 +24,15 @@ $login-width: 700px/1300px * 100%;
   color: white;
   border: 5px solid #FFF;
 }
-#admin-login-button{
-  right: 0;
 
-}
-#user-login-button{
-  right: 7em;
+#user-login {
+  position: fixed;
+  top: 10%;
+  width: $login-width;
+  left: 50%;
+  margin-left: -$login-width/2;
+  z-index: 10;
+  border: 5px solid black;
 }
 
 #adminPass {
@@ -42,13 +48,64 @@ $login-width: 700px/1300px * 100%;
 
 .login-input {
   margin: 1em 0;
+  width: 80%;
+  font-size: 2em;
+  margin: 0.5em 0;
 }
 
-#loggedInAs {
-  position     : absolute;
-  display      : inline-block;
-  right        : 0;
-  padding-top  : 8px;
-  padding-right: 8px;
+.loggedInAs {
+  float: right;
+  position: relative;
+  display: inline-block;
+}
+
+.user {
+  border-radius: 5px;
+  background: #27332F;
+  padding: 2px;
+  border: 1px solid white;
+  cursor: pointer;
+  margin-top  : ($navbar-height - 26px)/2;
+  margin-bottom  : ($navbar-height - 26px)/2;
+  margin-right: 8px;
   color        : white;
 }
+
+.caratA {
+  border-color: transparent;
+      border-style: dashed dashed solid;
+      border-width: 0 6px 6px;
+      display: none;
+      position: absolute;
+      right: 40%;
+      z-index: 1;
+      height: 0;
+      width: 0;
+      -webkit-animation: gb__a .2s;
+      animation: gb__a .2s;
+      border-bottom-color: #ccc;
+      border-bottom-color: rgba(0,0,0,1);
+      top: 40px;
+}
+
+.caratB {
+  width: 0;
+  height: 0;
+  border-color: transparent;
+    border-bottom-color: grey;
+    border-style: dashed dashed solid;
+    border-width: 0 6px 6px;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    right: 40%;
+    top: 41px;
+}
+
+// .loggedInAs {
+//   position     : relative;
+//   display      : inline-block;
+//   padding-top  : 8px;
+//   padding-right: 8px;
+//   color        : white;
+// }
