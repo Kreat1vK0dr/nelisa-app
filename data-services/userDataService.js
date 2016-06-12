@@ -17,7 +17,7 @@ module.exports = function(connection) {
 };
 
   this.getAllUsers = function(cb) {
-    getData("SELECT * FROM users", cb);
+    getData("SELECT id, username, role, admin_role, DATE_FORMAT(date_added, '%b %a %d %Y %h:%i %p') as dateAdded, DATE_FORMAT(last_login, '%b %a %d %Y %h:%i %p') as lastLogin FROM users", cb);
 };
 
   this.updateUser = function(data, cb) {

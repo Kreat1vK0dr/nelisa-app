@@ -24,6 +24,8 @@ var tmplName = require('./lib/template-name'),
     purchases = require('./lib/purchases'),
     helpers = require('./lib/helpers'),
     UserDataService = require('./data-services/userDataService'),
+    PurchasesDataService = require('./data-services/purchasesDataService'),
+    SalesDataService = require('./data-services/salesDataService'),
     chart = require('./data-services/graphDataService'),
     loginMethod = require('./lib/loginMethods'),
     signup = require('./lib/signup'),
@@ -47,7 +49,9 @@ var dbOptions = {
 
 var dataServiceSetup = function(connection) {
 	return {
-		userDataService: new UserDataService(connection)
+		userDataService: new UserDataService(connection),
+		purchasesDataService: new PurchasesDataService(connection),
+		salesDataService: new SalesDataService(connection)
 	};
 };
 
@@ -168,8 +172,13 @@ app.get('/suppliers/edit/:id', suppliers.get);
 app.post('/suppliers/update', suppliers.update);
 app.get('/suppliers/delete/:id', suppliers.delete);
 
+app.get('/sales', sales.home);
+app.get('/sales/filter/:search', sales.search);
 app.get('/sales/add', sales.addHome);
 app.post('/sales/add/execute', sales.execute);
+
+app.get('/purchases', purchases.home);
+app.get('/purchases/filter/:search', purchases.search);
 app.get('/purchases/add', purchases.addHome);
 app.post('/purchases/add/execute', purchases.execute);
 

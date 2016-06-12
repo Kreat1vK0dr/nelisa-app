@@ -9,6 +9,7 @@
 
     <link href="/css/bootstrap.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+<script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
 
     <title>Nelisa's Online Portal</title>
     <!-- <link href="/css/my.css" rel="stylesheet" type="text/css"/> -->
@@ -35,6 +36,8 @@
     <li class="navbutton admin-nav"><a href="/sales/add">add sale</a></li>
     <li class="navbutton admin-nav"><a href="/purchases/add">Add purchase</a></li>
     <li class="navbutton admin-nav"><a href="/users">users</a></li>
+    <li class="navbutton admin-nav"><a href="/purchases">purchases</a></li>
+    <li class="navbutton admin-nav"><a href="/sales">sales</a></li>
     <!-- <li class="navbutton"><a href="/">categories</a></li> -->
 
   </ul>
@@ -83,10 +86,14 @@
                 <li class="navbutton"><a href="/about">about</a></li>
 
             </ul>
-
-            <a href="/login">
-                <div class="loginbutton" id="admin-login-button">Login</div>
+            <div id="logUp">
+            <a href="/signup">
+                <div class="signupButton" id="signup-button">Sign Up</div>
             </a>
+            <a href="/login">
+                <div class="loginbutton" id="login-button">Login</div>
+            </a>
+            </div>
         </div>
         {{/if}}
     </nav>
@@ -97,7 +104,6 @@
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="/js/jquery-1.12.2.js"></script>
     <script src="/js/bootstrap.js"></script>
 
     <script src="/js/main.js"></script>

@@ -1,9 +1,21 @@
-<tr> <th>Category</th> <th>Quantity Sold</th> <th>Revenue (ZAR)</th> <th>Cost (ZAR)</th> <th>Profit (ZAR)</th> <th>Profit Margin (%)</th></tr>
+<tr>
+  <th>Category</th>
+  <th>Quantity Sold</th>
+  <th>Revenue (ZAR)</th>
+  <th>Cost (ZAR)</th>
+  <th>Profit (ZAR)</th>
+  <th>Profit Margin (%)</th>
+</tr>
 </thead>
 <tbody>
-  {{#each data}}
+  {{#data}}
     <tr>
-      <td class="inverse">{{category}}</td> <td class="left-indent">{{quantity}}</td> <td class="left-indent">{{revenue}}</td> <td class="left-indent">{{cost}}</td> <td class="left-indent">{{profit}}</td> <td class="left-indent">{{profitMargin}}</td>
+      <td class="inverse">{{category}}</td>
+      <td class="left-indent">{{quantity}}</td>
+      <td class="left-indent">{{revenue}}</td>
+      <td class="left-indent">{{cost}}</td>
+      <td class="left-indent">{{profit}}</td>
+      <td class="left-indent">{{profitMargin}}</td>
     </tr>
-    {{/each}}
+    {{/data}}
 </tbody>

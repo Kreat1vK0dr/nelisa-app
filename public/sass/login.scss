@@ -1,6 +1,20 @@
 $login-width: 500px/1300px * 100%;
 $navbar-height: 40px;
 
+#logUp {
+  position: relative;
+  right: 0;
+}
+
+.signupButton {
+  position     : absolute;
+  display: inline-block;
+  padding-top  : 8px;
+  padding-right: 8px;
+  color        : grey;
+  right: 4%;
+}
+
 .loginbutton {
     position     : absolute;
     display      : inline-block;

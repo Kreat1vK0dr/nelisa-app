@@ -1,0 +1,33 @@
+<h3>sales</h3>
+<input type="text" name="search" id="search" placeholder="Search a sale by product">
+<table class="myTables" id='table'>
+  <thead>
+    <tr>
+    <th>date</th>
+    <th>sale ID</th>
+    <th>product</th>
+    <th>category</th>
+    <th>quantity</th>
+    <th>cost</th>
+    <th>revenue</th>
+    <th>profit</th>
+    <th>profitMargin</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#sales}}
+    <tr>
+      <td>{{date}}</td>
+      <td>{{sale_id}}</td>
+      <td>{{product}}</td>
+      <td>{{category}}</td>
+      <td>{{quantity}}</td>
+      <td>{{cost}}</td>
+      <td>{{revenue}}</td>
+      <td>{{profit}}</td>
+      <td>{{profitMargin}}</td>
+    </tr>
+    {{/sales}}
+  </tbody>
+</table>
+<script src="/js/search.js"></script>

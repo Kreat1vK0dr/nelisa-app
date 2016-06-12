@@ -1,0 +1,31 @@
+<h3>Purchases</h3>
+<input type="text" name="search" id="search" placeholder="Search a purchase by product">
+<table class="myTables" id='table'>
+  <thead>
+    <tr>
+    <th>id</th>
+    <th>date</th>
+    <th>supplier</th>
+    <th>product</th>
+    <th>category</th>
+    <th>quantity</th>
+    <th>remaining</th>
+    <th>unitcost</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#purchases}}
+    <tr>
+      <td>{{id}}</td>
+      <td>{{date}}</td>
+      <td>{{supplier}}</td>
+      <td>{{product}}</td>
+      <td>{{category}}</td>
+      <td>{{quantity}}</td>
+      <td>{{remaining}}</td>
+      <td>{{unitcost}}</td>
+    </tr>
+    {{/purchases}}
+  </tbody>
+</table>
+<script src="/js/search.js"></script>
