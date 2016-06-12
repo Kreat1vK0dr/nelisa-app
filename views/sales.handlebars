@@ -1,6 +1,6 @@
 <h3>sales</h3>
 <input type="text" name="search" id="search" placeholder="Search a sale by product">
-<table class="myTables" id='table'>
+<table class="myTables">
   <thead>
     <tr>
     <th>date</th>
@@ -14,7 +14,7 @@
     <th>profitMargin</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id='searchResults'>
     {{#sales}}
     <tr>
       <td>{{date}}</td>

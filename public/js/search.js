@@ -14,7 +14,7 @@ if (searchPath){
     }
     console.log(currentPath+'/filter/'+search);
     $.get(currentPath+'/filter/'+search, function(compiledHTML){
-      $('#table').html(compiledHTML);
+      $('#searchResults').html(compiledHTML);
     });
   });
   }

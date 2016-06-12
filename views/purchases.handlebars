@@ -1,6 +1,6 @@
 <h3>Purchases</h3>
 <input type="text" name="search" id="search" placeholder="Search a purchase by product">
-<table class="myTables" id='table'>
+<table class="myTables">
   <thead>
     <tr>
     <th>id</th>
@@ -13,7 +13,7 @@
     <th>unitcost</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id='searchResults'>
     {{#purchases}}
     <tr>
       <td>{{id}}</td>

@@ -17,7 +17,7 @@ module.exports = function(connection) {
 };
 
   this.getAllPurchases = function(cb) {
-    getData("SELECT pu.id, DATE_FORMAT(pu.date, '%b %a %d %Y %h:%i %p') as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id ORDER BY id", cb);
+    getData("SELECT pu.id, DATE_FORMAT(pu.date, '%a %d %b %Y') as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id ORDER BY id", cb);
 };
 
   this.updatePurchases = function(data, cb) {
@@ -33,6 +33,6 @@ module.exports = function(connection) {
   };
 
   this.searchPurchase = function (data, cb) {
-        getData('SELECT pu.id, DATE_FORMAT(pu.date, "%d/%l/%Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND pr.description LIKE ? ORDER BY id', data, cb);
+        getData('SELECT pu.id, DATE_FORMAT(pu.date, "%a %d %b %Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND pr.description LIKE ? ORDER BY id', data, cb);
     };
 };
