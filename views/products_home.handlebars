@@ -1,5 +1,14 @@
-
 <h1>Products</h1>
+<form action="/products/search" method="post">
+<input type="text" name="search" id="search" placeholder="Find products by name/category">
+<label for="searchBy">Search By</label>
+<select name="searchBy" id="searchBy">
+  <option value="all">Name & Category</option>
+  <option value="product">Product Name</option>
+  <option value="category">Category</option>
+</select>
+<button type="submit" class="btn btn-default button-search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+</form>
 {{#if admin}}
 <a href="/products/add"><div class="add-link">Add</div></a>
 {{/if}}
@@ -21,7 +30,7 @@
     {{/if}}
   </tr>
   </thead>
-  <tbody >
+  <tbody id="searchResults">
 
   {{#products}}
   <tr>
@@ -43,3 +52,5 @@
   {{#no_products}}
     <p>You have no products. Please add one above.</p>
   {{/no_products}}
+
+<script src="/js/search.js"></script>

@@ -1,5 +1,14 @@
 <h3>Purchases</h3>
-<input type="text" name="search" id="search" placeholder="Search a purchase by product">
+<form action="/purchases/search" method="post">
+<input type="text" name="search" id="search" placeholder="Search a purchase by product or category">
+<label for="searchBy">Search By</label>
+<select name="searchBy" id="searchBy">
+  <option value="all">Product & Category</option>
+  <option value="product">Product</option>
+  <option value="category">Category</option>
+</select>
+<button type="submit" id="search-submit">Search</button>
+</form>
 <table class="myTables">
   <thead>
     <tr>

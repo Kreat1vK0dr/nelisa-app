@@ -11,31 +11,32 @@ var express = require('express'),
     autoprefixer = require('autoprefixer'),
     session = require('express-session');
 
-    const fs = require('fs');
-    const exec = require('child_process').exec;
+const fs = require('fs');
+const exec = require('child_process').exec;
 
 var tmplName = require('./lib/template-name'),
     stats = require('./lib/stats'),
     summary = require('./lib/summary'),
-    ProductMethods = require('./lib/products'),
-    CategoryMethods = require('./lib/categories'),
+    products = require('./lib/products'),
+    categories = require('./lib/categories'),
     suppliers = require('./lib/suppliers'),
     sales = require('./lib/sales'),
     purchases = require('./lib/purchases'),
-    helpers = require('./lib/helpers'),
-    UserDataService = require('./data-services/userDataService'),
-    PurchasesDataService = require('./data-services/purchasesDataService'),
-    SalesDataService = require('./data-services/salesDataService'),
-    chart = require('./data-services/graphDataService'),
-    loginMethod = require('./lib/loginMethods'),
+    helpers = require('./lib/helpers');
+
+var loginMethod = require('./lib/loginMethods'),
     signup = require('./lib/signup'),
     authenticate = require('./lib/authenticate'),
-    users = require('./lib/userMethods'),
-    ConnectionProvider = require('./routes/connectionProvider');
+    users = require('./lib/userMethods');
 
-var products = new ProductMethods(),
-    categories = new CategoryMethods();
+var ConnectionProvider = require('./routes/connectionProvider');
 
+var UserDataService = require('./data-services/userDataService'),
+    PurchasesDataService = require('./data-services/purchasesDataService'),
+    SalesDataService = require('./data-services/salesDataService'),
+    ProductDataService = require('./data-services/productDataService'),
+    CategoryDataService = require('./data-services/categoryDataService'),
+    chart = require('./data-services/graphDataService');
 
 var app = express();
 
@@ -51,7 +52,9 @@ var dataServiceSetup = function(connection) {
 	return {
 		userDataService: new UserDataService(connection),
 		purchasesDataService: new PurchasesDataService(connection),
-		salesDataService: new SalesDataService(connection)
+		salesDataService: new SalesDataService(connection),
+		productDataService: new ProductDataService(connection),
+		categoryDataService: new CategoryDataService(connection)
 	};
 };
 
@@ -109,8 +112,11 @@ app.use(bodyParser.urlencoded({
     }))
     // parse application/json
 app.use(bodyParser.json());
+
 app.use(session({secret: "pizzadough", cookie: {maxAge: 600000}, resave:true, saveUninitialized: false}));
+
 app.use(authenticate);
+
 app.get('/', function (req, res) {
   res.redirect("/home");
 });
@@ -120,8 +126,6 @@ app.get('/home', loginMethod.home);
 app.get('/about', function (req, res){
   res.render("about");
 });
-
-app.get('/products', products.show);
 
 app.get('/login',loginMethod.loginDialogue);
 app.post('/login/check',loginMethod.verifyAndLogIn);
@@ -149,8 +153,12 @@ app.post('/summary/table', summary.redirect);
 app.get('/summary/table/:type/:month/:week', summary.show);
 // app.get('/summary/table', summary.show);
 
+
 app.get('/products', products.show);
-app.get('/products/add', products.showAdd);
+app.get('/products/filter/:searchBy/:search', products.search);
+app.post('/products/search', products.search);
+app.get('/products/search/filter/:searchBy/:search', products.search);
+app.get('/products/add', products.showAddPage);
 app.post('/products', products.add);
 // app.get('/products/edit', products.get);
 app.get('/products/edit/:id', products.get);
@@ -159,28 +167,35 @@ app.post('/products/update', products.update);
 app.get('/products/delete/:id', products.delete);
 
 app.get('/categories', categories.show);
-app.get('/categories/add', categories.showAdd);
+app.get('/categories/filter/:searchBy/:search', categories.search);
+app.post('/categories/search', categories.search);
+app.get('/categories/search/filter/:searchBy/:search', categories.search);
+app.get('/categories/add', categories.showAddPage);
 app.post('/categories', categories.add);
 app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);
 
 app.get('/suppliers', suppliers.show);
-app.get('/suppliers/add', suppliers.showAdd);
+app.get('/suppliers/add', suppliers.showAddPage);
 app.post('/suppliers', suppliers.add);
 app.get('/suppliers/edit/:id', suppliers.get);
 app.post('/suppliers/update', suppliers.update);
 app.get('/suppliers/delete/:id', suppliers.delete);
 
 app.get('/sales', sales.home);
-app.get('/sales/filter/:search', sales.search);
-app.get('/sales/add', sales.addHome);
-app.post('/sales/add/execute', sales.execute);
+app.get('/sales/filter/:searchBy/:search', sales.search);
+app.post('/sales/search', sales.search);
+app.get('/sales/search/filter/:searchBy/:search', sales.search);
+app.get('/sales/add', sales.showAddPage);
+app.post('/sales/add/execute', sales.add);
 
-app.get('/purchases', purchases.home);
-app.get('/purchases/filter/:search', purchases.search);
-app.get('/purchases/add', purchases.addHome);
-app.post('/purchases/add/execute', purchases.execute);
+app.get('/purchases', purchases.show);
+app.get('/purchases/filter/:searchBy/:search', purchases.search);
+app.post('/purchases/search', purchases.search);
+app.get('/purchases/search/filter/:searchBy/:search', purchases.search);
+app.get('/purchases/add', purchases.showAddPage);
+app.post('/purchases/add/execute', purchases.add);
 
 app.get('/users', users.show);
 app.post('/users/edit', users.edit);

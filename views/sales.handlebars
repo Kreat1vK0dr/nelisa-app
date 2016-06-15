@@ -1,6 +1,17 @@
 <h3>sales</h3>
+<form action="/sales/search" method="post">
 <input type="text" name="search" id="search" placeholder="Search a sale by product">
-<table class="myTables">
+<label for="searchBy">Search By</label>
+<select name="searchBy" id="searchBy">
+  <option value="all">Product & Category</option>
+  <option value="product">Product</option>
+  <option value="category">Category</option>
+</select>
+<button type="submit" id="search-submit">Search</button>
+</form>
+<!-- <table class="myTables"> -->
+  <table class="table table-bordered table-hover table-sm center-table summary-table">
+  <thead class="thead-inverse">
   <thead>
     <tr>
     <th>date</th>
