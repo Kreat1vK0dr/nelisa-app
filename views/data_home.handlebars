@@ -1,4 +1,54 @@
 <h1 style='padding-top:2em; padding-bottom:1em;'>Hi {{name}}, here is your {{graph}} graph</h1>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/css/jqueryStyle.css">
+  <script>
+  $.get('/graphs/available-dates', function(data){
+
+  var availableDates = JSON.parse(data).availableDates;
+
+function available(date) {
+  dmy = date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+  if ($.inArray(dmy, availableDates) != -1) {
+    return [true, "","Available"];
+  } else {
+    return [false,"","unAvailable"];
+  }
+}
+
+  $(function() {
+    $( "#from" ).datepicker({
+      beforeShowDay: available,
+      defaultDate: "+1w",
+      changeMonth: true,
+      numberOfMonths: 2,
+      onClose: function( selectedDate ) {
+        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+      }
+    });
+    $( "#to" ).datepicker({
+      defaultDate: "+2w",
+      changeMonth: true,
+      numberOfMonths: 2,
+      onClose: function( selectedDate ) {
+        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+      }
+    });
+  });
+});
+  </script>
+
+<label for="from">From</label>
+<input type="text" id="from" name="from">
+<label for="to">to</label>
+<input type="text" id="to" name="to">
+
+<div class="btn-group" role="group" aria-label="...">
+  <button type="button" class="btn btn-default">Left</button>
+  <button type="button" class="btn btn-default">Middle</button>
+  <button type="button" class="btn btn-default">Right</button>
+</div>
 
 <center>
 <svg class="chart"></svg>

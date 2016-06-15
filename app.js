@@ -137,11 +137,7 @@ app.get('/admin', loginMethod.home);
 
 app.get('/user', loginMethod.home);
 
-app.get('/logout', function(req,res){
-  delete req.session.user;
-  delete req.session.context;
-  res.redirect('/');
-});
+app.get('/logout', loginMethod.signout);
 
 app.get('/stats', stats.home);
 app.post('/stats/:type', stats.redirect);
@@ -198,11 +194,14 @@ app.get('/purchases/add', purchases.showAddPage);
 app.post('/purchases/add/execute', purchases.add);
 
 app.get('/users', users.show);
-app.post('/users/edit', users.edit);
+app.get('/users/add', users.addHome);
+app.post('/users/add/update', users.addCheck, users.add);
+app.get('/users/edit/:id', users.edit);
 app.post('/users/delete', users.delete);
 app.post('/users/edit/update', users.update);
 
 app.get('/graphs/data', chart.getGraphData);
+app.get('/graphs/available-dates', chart.getAvailableDates);
 
 app.get('/graphs', function(req,res){
   var context = req.session.context;

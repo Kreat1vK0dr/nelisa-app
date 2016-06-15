@@ -1,0 +1,26 @@
+<h1>Add user</h1>
+{{#alert}}
+{{message}}
+{{/alert}}
+<form action="/users/add/update" method="post">
+  <label for="role">Role</label>
+  <select name="role" id="role">
+  <option value="admin">Admin</option>
+  <option value="user">User</option>
+  </select>
+
+  <label for="adminRole" id="adminLabel">Admin Role</label>
+  <select name="adminRole" id="adminRole">
+    <option value="superuser">superuser</option>
+    <option value="general">general</option>
+  </select>
+  <label for="firstName">First Name</label>
+  <input required autofocus type="text" name="firstName" id="firstName"  placeholder="Enter first name" value="{{firstName}}"> <br>
+  <label for="lastName">Last Name</label>
+  <input required type="text" name="lastName" id="lastName"  placeholder="Enter last name" value="{{lastName}}"> <br>
+  <label for="username">Username</label>
+  <input required type="text" name="username" id="username-signup"  placeholder="Enter username" value="{{username}}"> <br>
+  <label for="email">Email</label>
+  <input required type="email" name="email" id="email"  placeholder="Enter email" value="{{email}}"> <br>
+  <button type="submit">add user!</button>
+</form>

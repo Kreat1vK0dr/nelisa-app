@@ -1,6 +1,10 @@
 <h1>USERS</h1>
 
 <center>
+  {{#alert}}
+  {{message}}
+  {{/alert}}
+  <a href="/users/add"><button>Add user</button></a>
 <table class="myTables">
   <thead>
     <tr>
@@ -21,23 +25,13 @@
     <td>{{admin_role}}</td>
     <td>{{dateAdded}}</td>
     <td>{{lastLogin}}</td>
-    <td class="crud-table highlight">
-    <form action="/users/edit" method="post">
-      <input type="hidden" name="id" value="{{id}}">
-      <input type="hidden" name="username" value="{{username}}">
-      <input type="hidden" name="role" value="{{role}}">
-      <input type="hidden" name="admin" value="{{admin_role}}">
-    <button type="submit">Edit</button>
-    </form>
-    </td>
-    <input type="hidden" name="id" value="{{id}}">
-    <input type="hidden" name="username" value="{{username}}">
-    <input type="hidden" name="role" value="{{role}}">
-    <input type="hidden" name="admin" value="{{admin_role}}">
+    <td class="crud-table highlight"><a href="/users/edit/{{id}}"><button>Edit</button></a></td>
     <td class="crud-table highlight">
 <form action="/users/delete" method="post">
   <input type="hidden" name="id" value="{{id}}">
   <input type="hidden" name="username" value="{{username}}">
+  <input type="hidden" name="role" value="{{role}}">
+  <input type="hidden" name="adminRole" value="{{admin_role}}">
   <button type="submit">Delete</button>
 </form>
   </td>

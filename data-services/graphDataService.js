@@ -16,3 +16,26 @@ exports.getGraphData = function(req, res,next){
       });
   });
 };
+
+exports.getAvailableDates = function(req,res,next) {
+  var allSaleDates, uniqueSaleDates, allPurchaseDates, uniquePurchaseDates, dataService;
+        req.services(function(err, services){
+          dataService = services.salesDataService;
+          dataService.getAllSaleDates(function(err, saleDates){
+            if (err) return next (err);
+            allSaleDates = saleDates.map(function(sale){
+              return sale.date;
+            });
+            uniqueSaleDates = Array.from(new Set(allSaleDates));
+          dataService = services.purchasesDataService;
+          dataService.getAllPurchaseDates(function(err, purchaseDates){
+            if (err) return next (err);
+            allPurchaseDates = purchaseDates.map(function(purchase){
+              return purchase.date;
+            });
+
+            res.send(JSON.stringify({availableDates: uniqueDates}));
+          })
+          });
+      });
+};

@@ -422,12 +422,12 @@ $(document).ready(function () {
             }
         });
     }
-    if (window.location.pathname === '/users/edit') {
+    if (window.location.pathname.split('/')[1] === 'users' && window.location.pathname.split('/')[2] === 'edit') {
       console.log($('#role option:selected').val());
     if ($('#role option:selected').val() === "user") {
-      $('#admin').css('display','none');
+      $('#adminRole').css('display','none');
     } else if ($('#role option:selected').val() === "admin") {
-      $('#admin').css('display',null);
+      $('#adminRole').css('display',null);
     }
 
     $('#role').change(function(){
