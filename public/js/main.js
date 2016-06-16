@@ -422,7 +422,7 @@ $(document).ready(function () {
             }
         });
     }
-    if (window.location.pathname.split('/')[1] === 'users' && window.location.pathname.split('/')[2] === 'edit') {
+    if (window.location.pathname.split('/')[1] === 'users') {
       console.log($('#role option:selected').val());
     if ($('#role option:selected').val() === "user") {
       $('#adminRole').css('display','none');

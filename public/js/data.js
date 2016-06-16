@@ -1,8 +1,50 @@
 $(document).ready(function () {
-    if (window.location.pathname === '/graphs') {
-        // $.get('/data/sales.json',function(data){
-        $.get('/graphs/data', function (data) {
-            // window.location.pathname='/graphs';
+
+    if (window.location.pathname.split('/')[1] === 'graphs') {
+
+      $("#period-compare-btn").click(function(){
+        $("#period-compare").css("display","inline-block");
+        $(this).css("display","none");
+      });
+      $("#cancel-period-compare").click(function(){
+        $("#from-compare").val("");
+        $("#to-compare").val("");
+        $("#period-compare").css("display","none");
+        $("#period-compare-btn").css("display","inline-block");
+      });
+
+      $("#product-btn").click(function(){
+        $("#product-select").toggleClass("show-element-inline");
+        $("#product-select").toggleClass("hide-element");
+        $("#category-select").toggleClass("hide-element",true);
+        $("#category-select").toggleClass("show-element-inline",false);
+
+      });
+      $("#category-btn").click(function(){
+        $("#category-select").toggleClass("show-element-inline");
+        $("#category-select").toggleClass("hide-element");
+        $("#product-select").toggleClass("hide-element",true);
+        $("#product-select").toggleClass("show-element-inline",false);
+      });
+      $("#value-btn").click(function(){
+        $('#default-value-type').prop("checked",true);
+      $('#default-value-type').prop("required",true);
+        $("#data-value-filter").toggleClass("show-element-inline");
+        $("#data-value-filter").toggleClass("hide-element");
+        $("#data-quantity-filter").toggleClass("show-element-inline",false);
+        $("#data-quantity-filter").toggleClass("hide-element",true);
+      });
+      $("#quantity-btn").click(function(){
+        $("#data-quantity-filter").toggleClass("show-element-inline");
+        $("#data-quantity-filter").toggleClass("hide-element");
+        $("#data-value-filter").toggleClass("show-element-inline",false);
+        $("#data-value-filter").toggleClass("hide-element",true);
+      });
+
+      $('#show-chart-btn').on('click', function(e){
+              e.preventDefault();
+
+      $.get('/graphs/data', function (data) {
             console.log('pathname =', window.location.pathname);
             console.log(JSON.parse(data));
             const dataGet = JSON.parse(data);
@@ -166,6 +208,7 @@ $(document).ready(function () {
 
 
         });
+      });
 
     }
 });

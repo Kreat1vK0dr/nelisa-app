@@ -58,6 +58,10 @@
   border-radius: 50%;
 }
 
+#search {
+  width: 20em;
+}
+
 #carat {
   background-image: url("https://ssl.gstatic.com/ui/v1/zippy/arrow_down.png");
 }
@@ -365,8 +369,36 @@
   top: 41px;
 }
 
+.form-element {
+  margin-top: 0.5em;
+}
+
+#period-compare {
+  display: none;
+}
+
+.hide-element {
+  display: none;
+}
+
+.data-filter {
+  display: none;
+}
+
+#period-compare-btn {
+  display: inline-block;
+}
+
 .chart rect:hover {
   opacity: 0.7;
+}
+
+.type-select-graph {
+  width: 8em;
+}
+
+.show-element-inline {
+  display: inline-block;
 }
 
 #map {
@@ -392,6 +424,29 @@
 
 #admin {
   display: inline-block;
+}
+
+.date {
+  background: green !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.purchase-date {
+  background: orange !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.sale-date {
+  background: purple !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.date-input {
+  width: 8em !important;
+  font-weight: bold;
 }
 
 /*#allbody-home {

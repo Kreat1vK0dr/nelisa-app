@@ -19,10 +19,10 @@ module.exports = function(connection) {
     getData("SELECT s.id, DATE_FORMAT(s.date, '%a %d %b %Y') as date, s.total_quantity itemsSold, s.unique_product uniqueProducts, s.sum_total revenue, s.total_cost cost, s.revenue-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id WHERE s.id = ? ORDER BY id",data, cb);
 };
   this.getAllSales = function(data, cb) {
-    getData("SELECT s.id, DATE_FORMAT(s.date, '%d/%m/%Y') as date, s.total_quantity itemsSold, s.unique_product uniqueProducts, s.sum_total revenue, s.total_cost cost, s.revenue-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id ORDER BY date",data, cb);
+    getData("SELECT s.id, DATE_FORMAT(s.date, '%m/%d/%Y') as date, s.total_quantity itemsSold, s.unique_product uniqueProducts, s.sum_total revenue, s.total_cost cost, s.revenue-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id ORDER BY date",data, cb);
 };
   this.getAllSaleDates = function(data, cb) {
-    getData("SELECT DATE_FORMAT(date, '%d-%m-%Y') as date FROM sales",data, cb);
+    getData("SELECT DATE_FORMAT(date, '%m-%d-%Y') as date FROM sales ORDER BY date",data, cb);
 };
 
   this.getAllSalesDetails = function(cb) {
@@ -53,12 +53,7 @@ module.exports = function(connection) {
   this.searchSalesDetails = function (data, cb) {
         getData('SELECT * FROM (SELECT s.id, s.sale_id, DATE_FORMAT(s.date, "%a %d %b %Y") as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id) t WHERE t.category LIKE ? OR t.product LIKE ? ORDER BY t.id', data, cb);
     };
-  this.searchSalesDetailsForGraphByProduct = function(data, cb) {
-    getData('SELECT s.id, s.sale_id, DATE_FORMAT(s.date, "%d/%m/%Y") as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND p.description = ? AND DATE_FORMAT(s.date,"%d/%m/%Y") BETWEEN ? AND ? ORDER BY id')
-  }
-  this.searchSalesDetailsForGraphByCategory = function(data, cb) {
-    getData('SELECT s.id, s.sale_id, DATE_FORMAT(s.date, "%d/%m/%Y") as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND p.description = ? AND DATE_FORMAT(s.date,"%d/%m/%Y") BETWEEN ? AND ? ORDER BY id')
-  }
+    
   this.searchSales = function (data, cb) {
         getData('SELECT s.id, DATE_FORMAT(s.date, "%d/%l/%Y") as date, s.total_quantity itemsSold, s.unique_product uniqueProducts, s.sum_total revenue, s.total_cost cost, s.revenue-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND p.description LIKE ? ORDER BY id', data, cb);
     };

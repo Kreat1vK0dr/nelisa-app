@@ -27,7 +27,7 @@ module.exports = function(connection) {
 };
 
   this.getAllProducts = function(cb) {
-    getData("SELECT p.id p_id, p.description product, c.description category, c.id c_id, p.price price, p.inventory inventory FROM products p, categories c WHERE p.category_id = c.id ORDER BY p.id", cb);
+    getData("SELECT p.id p_id, p.description product, c.description category, c.id c_id, p.price, p.inventory FROM products p, categories c WHERE p.category_id = c.id ORDER BY p.id", cb);
 };
 
   this.deleteProduct = function(data, cb) {

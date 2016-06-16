@@ -32,7 +32,7 @@ module.exports = function(connection) {
     getData("SELECT pu.id, DATE_FORMAT(pu.date, '%a %d %b %Y') as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id ORDER BY id", cb);
 };
   this.getAllPurchaseDates = function(cb) {
-    getData("SELECT DATE_FORMAT(date, '%d-%m-%Y') as date FROM purchases", cb);
+    getData("SELECT DATE_FORMAT(date, '%m-%d-%Y') as date FROM purchases ORDER by date", cb);
 };
 
   this.updatePurchases = function(data, cb) {
@@ -56,14 +56,8 @@ this.purchasesBulkUpdate = function(data,cb) {
   this.searchPurchaseByProduct = function (data, cb) {
         getData('SELECT pu.id, DATE_FORMAT(pu.date, "%a %d %b %Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND pr.description LIKE ? ORDER BY id', data, cb);
     };
-  this.searchPurchasesForGraphByProduct = function (data, cb) {
-        getData('SELECT pu.id, DATE_FORMAT(pu.date, "%d/%m/%Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND pr.description LIKE ? AND DATE_FORMAT(s.date,"%d/%m/%Y") BETWEEN ? AND ? ORDER BY id', data, cb);
-    };
   this.searchPurchasesByCategory = function (data, cb) {
         getData('SELECT pu.id, DATE_FORMAT(pu.date, "%a %d %b %Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND c.description LIKE ? ORDER BY id', data, cb);
-    };
-  this.searchPurchasesForGraphByCategory = function (data, cb) {
-        getData('SELECT pu.id, DATE_FORMAT(pu.date, "%d/%m/%Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND c.description LIKE ? AND DATE_FORMAT(s.date,"%d/%m/%Y") BETWEEN ? AND ? ORDER BY id', data, cb);
     };
   this.searchPurchases = function (data, cb) {
         getData('SELECT * FROM (SELECT pu.id, DATE_FORMAT(pu.date, "%a %d %b %Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id) t WHERE t.product LIKE ? OR t.category LIKE ? ORDER BY t.id', data, cb);

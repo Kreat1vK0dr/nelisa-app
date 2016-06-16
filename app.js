@@ -22,7 +22,9 @@ var tmplName = require('./lib/template-name'),
     suppliers = require('./lib/suppliers'),
     sales = require('./lib/sales'),
     purchases = require('./lib/purchases'),
-    helpers = require('./lib/helpers');
+    helpers = require('./lib/helpers'),
+    chart = require('./lib/chartMethods');
+
 
 var loginMethod = require('./lib/loginMethods'),
     signup = require('./lib/signup'),
@@ -36,7 +38,7 @@ var UserDataService = require('./data-services/userDataService'),
     SalesDataService = require('./data-services/salesDataService'),
     ProductDataService = require('./data-services/productDataService'),
     CategoryDataService = require('./data-services/categoryDataService'),
-    chart = require('./data-services/graphDataService');
+    GraphDataService = require('./data-services/graphDataService');
 
 var app = express();
 
@@ -54,7 +56,8 @@ var dataServiceSetup = function(connection) {
 		purchasesDataService: new PurchasesDataService(connection),
 		salesDataService: new SalesDataService(connection),
 		productDataService: new ProductDataService(connection),
-		categoryDataService: new CategoryDataService(connection)
+		categoryDataService: new CategoryDataService(connection),
+		graphDataService: new GraphDataService(connection)
 	};
 };
 
@@ -203,12 +206,7 @@ app.post('/users/edit/update', users.update);
 app.get('/graphs/data', chart.getGraphData);
 app.get('/graphs/available-dates', chart.getAvailableDates);
 
-app.get('/graphs', function(req,res){
-  var context = req.session.context;
-  context.name = "Daniel";
-  context.graph = "Sales by Product";
-  res.render('data_home',context);
-});
+app.get('/graphs', chart.home);
 
 
 
