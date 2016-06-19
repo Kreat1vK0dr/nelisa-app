@@ -39,7 +39,7 @@ this.getSalesByCategory = function(data, cb) {
 };
 
 this.getPurchasesAllProducts = function (data, cb) {
-      getData('SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, pr.description product, c.description category, s.name supplier, SUM(pu.quantity) quantity , SUM(pu.remaining) remaining, SUM(pu.unitcost) unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND DATE_FORMAT(s.date,"%m/%d/%Y") BETWEEN ? AND ? GROUP BY pu.product_id', data, cb);
+      getData('SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, pr.description product, c.description category, s.name supplier, SUM(pu.quantity) quantity , SUM(pu.remaining) remaining, SUM(pu.unitcost) unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND DATE_FORMAT(pu.date,"%m/%d/%Y") BETWEEN ? AND ? GROUP BY pu.product_id', data, cb);
   };
 
 this.getPurchasesByProduct = function (data, cb) {
@@ -47,10 +47,10 @@ this.getPurchasesByProduct = function (data, cb) {
   };
 
 this.getPurchasesAllCategories = function (data, cb) {
-      getData('SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, pr.description product, c.description category, s.name supplier, SUM(pu.quantity) quantity , SUM(pu.remaining) remaining, SUM(pu.unitcost) unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND DATE_FORMAT(s.date,"%m/%d/%Y") BETWEEN ? AND ? GROUP BY pu.category_id', data, cb);
+      getData('SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, pr.description product, c.description category, s.name supplier, SUM(pu.quantity) quantity , SUM(pu.remaining) remaining, SUM(pu.unitcost) unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND DATE_FORMAT(pu.date,"%m/%d/%Y") BETWEEN ? AND ? GROUP BY pu.category_id', data, cb);
   };
 this.getPurchasesByCategory = function (data, cb) {
-      getData('SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND c.id = ? AND DATE_FORMAT(s.date,"%m/%d/%Y") BETWEEN ? AND ?', data, cb);
+      getData('SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, pr.description product, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND c.id = ? AND DATE_FORMAT(pu.date,"%m/%d/%Y") BETWEEN ? AND ?', data, cb);
   };
 
 };

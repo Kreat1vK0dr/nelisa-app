@@ -86,6 +86,7 @@ if (window.location.pathname.split('/')[1] === 'graphs') {
           const showTimeLine = data.showTimeLine;
           const multifilter = data.multifilter;
           const dates = data.dates;
+          const dataOption = data.dataOption;
           const dataToShow = data.dataToShow;
           const valuesToShow = data.valuesToShow;
           const showCost = valuesToShow.indexOf("cost") === -1;
@@ -138,9 +139,9 @@ function monthText(monthIndex) {
 if (type==="single") {
 
   function dateRestructure(match, month, day, year){
-    var monthText = monthText(month);
-    var yearText = year.replace(/d{2}(d{2})/,"'$1");
-    return day+" "+monthText+" "+yearText;
+    var textMonth = monthText(Number(month));
+    var textYear = year.replace(/d{2}(d{2})/,"'$1");
+    return day+" "+textMonth+" "+textYear;
   }
 
 function dateReadable(date){
@@ -148,15 +149,17 @@ function dateReadable(date){
   }
 
 function dateRangeText(dates){
-  return dateReadable(dates[0])+" to "+dateReadable(dates[1]);
+  return dateReadable(dates[0])+" - "+dateReadable(dates[1]);
 }
 
 function dataTitleText(dataOption, dataToShow, valuesToShow) {
   var title,
       valueText,
-      values = "";
-  valuesToShow.forEach(function(value){values += ", "+value;});
-  valueText = "Showing "+values+" for ";
+      values = "",
+      quantity;
+  valuesToShow.forEach(function(value){values += value+", ";});
+  quantity = valuesToShow[0]==="sold"||"purchased" ? "quantity " : "";
+  valueText = "Showing "+quantity+values.replace(/, $/,"")+" for ";
   var displayAll = dataToShow === "all";
  if (dataOption==='product') {
     title = displayAll ? valueText+"all products" : valueText+dataToShow;
@@ -169,14 +172,17 @@ return title;
 dataset = datasets[0];
 
 margin = {
-    top: 20,
+    top: 65,
     right: 30,
     bottom: 40,
     left: 225
 };
 
-width = 600 - margin.left - margin.right;
-height = 500 - margin.top - margin.bottom;
+var fullWidth = 800,
+    fullHeight = 500;
+
+width = fullWidth - margin.left - margin.right;
+height = fullHeight - margin.top - margin.bottom;
 
 // Get max value from dataset.
 var max = d3.max(dataset, function (d) {
@@ -195,8 +201,8 @@ var y = d3.scale.ordinal()
 
 // Setup svg element.
 var svg = d3.select("#"+newChartId)
-    .attr("width", 600 /*+ margin.left + margin.right*/)
-    .attr("height", 500 /*+ margin.top + margin.bottom*/)
+    .attr("width", fullWidth /*+ margin.left + margin.right*/)
+    .attr("height", fullHeight /*+ margin.top + margin.bottom*/)
     .append('g')
     .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
 // svg.append("svg:rect")
@@ -204,14 +210,27 @@ var svg = d3.select("#"+newChartId)
 //    .attr("height", "100%")
   //  .attr("stroke", "#000")
   //  .attr("fill", "none");
+  var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
+  var dateRangeTitle = dateRangeText(dates[0]);
 
+  //dateRange Title
 svg.append("text")
-        .attr("x", (width / 2))
-        .attr("y", 0 - (margin.top / 2))
+        .attr("class","daterange-title")
+        .attr("x", (width - margin.left)/2)
+        .attr("y", 0 - (margin.top - 20))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        .style("text-decoration", "underline")
-        .text("A");
+        .style("font-weight", "bold")
+        .text(dateRangeTitle);
+//data title
+svg.append("text")
+        .attr("class","data-title")
+        .attr("x", (width - margin.left)/2)
+        .attr("y", 0 - (margin.top - 40))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-style", "italic")
+        .text(dataTitle);
 
 // CAN KEEP THE SAME
 var xAxis = d3.svg.axis()
@@ -308,12 +327,12 @@ svg.selectAll(".text")
     .enter()
     .append('text')
     .attr("y", function (d) {
-        return y(d.product) /*+ y.rangeBand() / 2*/ ;
+        return y(d.product) + y.rangeBand() / 2 ;
     })
     .attr("x", function (d) {
-        return x(d.quantity) - 5;
+        return x(d.quantity) - 2;
     })
-    .attr("dy", "1.5em")
+    .attr("dy", "0.3em")
     .text(function (d) {
         return d.quantity;
     })
