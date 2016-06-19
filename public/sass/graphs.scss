@@ -7,7 +7,9 @@ display: none;
 .hide-element {
   display: none;
 }
-
+.chart-adder-element {
+display: inline-block;
+}
 .data-filter {
   display: none;
 }
@@ -24,4 +26,8 @@ display: none;
 
 .show-element-inline {
   display: inline-block;
+}
+
+.chart-adder {
+  margin-left: 10%;
 }

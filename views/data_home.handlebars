@@ -1,20 +1,20 @@
-<h1 style='padding-top:2em; padding-bottom:1em;'>Hi {{name}}, here is your {{graph}} graph</h1>
+<h1 style='padding-bottom:1em;'>Hi {{name}}, here is your {{graph}} graph</h1>
 <link rel="stylesheet" href="/css/jquery-ui.css">
 <script src="/js/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="/css/jqueryStyle.css">
 <script src="/js/datepicker.js"></script>
 
-<div class="chart-adder">
+<div class="chart-adder center-block">
   <form action="/" method="post">
-<div class="form-inline form-group" id="period-select">
+<div class="form-inline form-group chart-adder-element" id="period-select">
 
     <div id="period">
         <div  class="input-group">
-        <div class="input-group-addon">Time Period</div>
+        <div class="input-group-addon">Period</div>
         <input type="text" class="date-input form-control" id="from" name="from" placeholder="From">
         <input type="text" class="date-input form-control" id="to" name="to" placeholder="To">
         </div>
-        <button type="button" class="btn btn-primary" id="period-compare-btn">Compare A Different Period</button>
+        <button type="button" class="btn btn-warning" id="period-compare-btn">Select Comparison Period</button>
         <div id="period-compare">
           <div  class="input-group">
             <div class="input-group-addon">Comparison Period</div>
@@ -26,50 +26,68 @@
         </div>
         </div>
           </div>
-
-  <p class="help-block">By selecting a comparison period, two graphs will be displayed for each chosen date range.</p>
-
+  <!-- <p class="help-block">By selecting a comparison period, two graphs will be displayed for each chosen date range.</p> -->
 </div>
+<br class="hide-element" id="break-line"/>
 
-<div class="form-inline form-group" id="type-select">
-  <div class="btn-group input-group" role="group" aria-label="...">
-    <div class="input-group-addon">Choose Product or Category</div>
-    <button type="button" class="btn btn-default" id="product-btn">Product</button>
-      <button type="button" class="btn btn-default" id="category-btn">Category</button>
+<div class="form-inline form-group chart-adder-element " id="type-select">
+  <div class="btn-group input-group" id="data-select" data-toggle="buttons" role="group" aria-label="...">
+    <div class="input-group-addon">Data</div>
+    <label class="btn btn-default" id="product-btn">
+      <input type="radio" name="data-type"  autocomplete="off" value="product"> Products
+    </label>
+    <label class="btn btn-default" id="category-btn">
+      <input type="radio" name="data-type"  autocomplete="off" value="category"> Categories
+    </label>
       </div>
 
-    <div id="product-select" class="hide-element">
+    <div id="product-select" class="data-select-option hide-element">
 
-        <label for="product">Product</label>
+        <!-- <label for="product">Product</label> -->
+        <div class="input-group">
         <select class="form-control type-select-graph" data-dropup-auto=false name="product" id="product">
             <option value="all">All Products</option>
             {{#products}}
                 <option value="{{p_id}}">{{product}}</option>
             {{/products}}
         </select>
+        <span class="input-group-btn">
+        <button type="button" class="cancel-data-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
+      </span>
+      </div>
 </div>
-<div id="category-select" class="hide-element">
-        <label for="category">Category</label>
+<div id="category-select" class="data-select-option hide-element">
+        <!-- <label for="category">Category</label> -->
+              <div class="input-group">
         <select class="form-control type-select-graph" data-dropup-auto=false name="category" id="category">
             <option value="all">All Categories</option>
             {{#categories}}
                 <option value="{{id}}">{{description}}</option>
             {{/categories}}
         </select>
-
+        <span class="input-group-btn">
+        <button type="button" class="cancel-data-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
+      </span>
+</div>
     </div>
     </div>
 
-<div class="form-group form-inline" id="data-select">
-  <div class="btn-group input-group" role="group" aria-label="...">
-    <div class="input-group-addon">Filter Data by Value or Quantity</div>
-    <button type="button" class="btn btn-default" id="value-btn">Value</button>
-      <button type="button" class="btn btn-default" id="quantity-btn">Quantity</button>
+<div class="form-group form-inline chart-adder-element" id="data-filter">
+  <div class="btn-group input-group" id="filter-select" data-toggle="buttons" role="group" aria-label="...">
+    <div class="input-group-addon">Filter</div>
+    <label class="btn btn-default" id="quantity-btn">
+      <input type="radio" name="data-filter"  autocomplete="off" value="quantity"> Quantity
+    </label>
+    <label class="btn btn-default" id="value-btn">
+      <input type="radio" name="data-filter"  autocomplete="off" value="value"> Value
+    </label>
       </div>
 
-      <div class="btn-group data-filter hide-element" data-toggle="buttons" id="data-value-filter">
-        <label class="btn btn-primary active">
-          <input type="checkbox" name="data-value" id="default-value-type" autocomplete="off" checked value="revenue"> Revenue
+      <div class=" data-filter hide-element" id="data-value-filter">
+        <div class="input-group btn-group"  data-toggle="buttons">
+        <div class="input-group-addon">Value</div>
+        <label class="btn btn-primary">
+          <input type="checkbox" name="data-value" id="" autocomplete="off" value="revenue"> Revenue
         </label>
         <label class="btn btn-primary">
           <input type="checkbox" name="data-value" id="" autocomplete="off" value="profit"> Profit
@@ -77,30 +95,39 @@
         <label class="btn btn-primary">
           <input type="checkbox" name="data-value" id="" autocomplete="off" value="cost"> Cost
         </label>
-        <!-- <label class="btn btn-warning" id="value-metrics-compare">
-          <input type="radio" name="options" id="" autocomplete="off"> Compare
-        </label> -->
+        <span class="input-group-btn">
+        <button type="button" class="cancel-filter-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
+      </span>
+      </div>
       </div>
 
-      <div class="btn-group data-filter hide-element" data-toggle="buttons" id="data-quantity-filter">
-        <label class="btn btn-primary active">
-          <input type="checkbox" name="data-quanitity" id="default-quantity-type" autocomplete="off" checked value="revenue"> Quantity Sold
+
+      <div class="data-filter hide-element"  id="data-quantity-filter">
+        <div class="input-group btn-group input-group" data-toggle="buttons" role="group" aria-label="...">
+        <div class="input-group-addon">Quantity</div>
+        <label class="btn btn-primary">
+          <input type="checkbox" name="data-quantity" id="" autocomplete="off" value="sold"> Sold
         </label>
         <label class="btn btn-primary">
-          <input type="checkbox" name="data-quanitity" id="" autocomplete="off" value="profit"> Quantity Purchased
+          <input type="checkbox" name="data-quantity" id="" autocomplete="off" value="purchased"> Purchased
         </label>
+        <span class="input-group-btn">
+        <button type="button" class="cancel-filter-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
+      </span>
+      </div>
+        </div>
         <!-- <label class="btn btn-warning" id="quantity-metrics-compare">
           <input type="radio" name="options" id="" autocomplete="off"> Compare
         </label> -->
       </div>
-<p class="help-block">You can choose one or more of the value or quantity types for comparison.</p>
-</div>
+<!-- <p class="help-block">You can choose one or more of the value or quantity types for comparison.</p> -->
 <button type="submit" class="btn btn-success" id="show-chart-btn">Show Chart</button>
 </form>
 </div>
 
 <center>
-    <svg class="chart"></svg>
+    <div id="charts"></div>
+
 </center>
 
 <div style='height:5em;'></div>

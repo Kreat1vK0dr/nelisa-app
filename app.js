@@ -38,7 +38,8 @@ var UserDataService = require('./data-services/userDataService'),
     SalesDataService = require('./data-services/salesDataService'),
     ProductDataService = require('./data-services/productDataService'),
     CategoryDataService = require('./data-services/categoryDataService'),
-    GraphDataService = require('./data-services/graphDataService');
+    ChartDataService = require('./data-services/graphDataService'),
+    ProductServicePromise = require('./data-services/productServicePromise');
 
 var app = express();
 
@@ -57,7 +58,8 @@ var dataServiceSetup = function(connection) {
 		salesDataService: new SalesDataService(connection),
 		productDataService: new ProductDataService(connection),
 		categoryDataService: new CategoryDataService(connection),
-		graphDataService: new GraphDataService(connection)
+		chartDataService: new ChartDataService(connection),
+		productServicePromise: new ProductServicePromise(connection)
 	};
 };
 
@@ -203,7 +205,7 @@ app.get('/users/edit/:id', users.edit);
 app.post('/users/delete', users.delete);
 app.post('/users/edit/update', users.update);
 
-app.get('/graphs/data', chart.getGraphData);
+app.post('/graphs/data', chart.getGraphData);
 app.get('/graphs/available-dates', chart.getAvailableDates);
 
 app.get('/graphs', chart.home);

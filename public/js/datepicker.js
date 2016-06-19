@@ -4,12 +4,12 @@ console.log(JSON.parse(data));
 var availableDates = JSON.parse(data).availableDates.sort();
 var dateDetails = JSON.parse(data).dateDetails;
 console.log("available dates", availableDates);
-
+// var formattedAvailableDates = availableDates.map(function(i){ return i.replace(/(\d+)\/(\d+)\/(\d+)/g,"$2/$1/$3");});
 function available(date) {
 var dateToCheck = jQuery.datepicker.formatDate('mm-dd-yy', date);
 if ($.inArray(dateToCheck, availableDates) != -1) {
   var dateAttributes = dateDetails.find(function(i){return i.date === dateToCheck; });
-  console.log("dateAttributes: ", dateAttributes);
+  // console.log("dateAttributes: ", dateAttributes);
   return [true, dateAttributes.cssClass,dateAttributes.toolTipText];
 } else {
   return [false,"","No Data Available"];
@@ -59,19 +59,24 @@ console.log("defaultfrom",defaultDateFrom );
 console.log("defaultto",defaultDateTo );
 // var defaultDates = defaultDates(availableDates);
 
+
+
 $(function() {
   $( "#from" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateFrom,
+    dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function(selectedDate) {
-      $( "#to" ).datepicker( "option", "minDate", selectedDate );
+      console.log("This is selected date: ", selectedDate);
+      $( "#to" ).datepicker( "option", "minDate", selectedDate);
     }
   });
   $( "#to" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateTo,
+    dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function( selectedDate ) {
@@ -81,6 +86,7 @@ $(function() {
   $( "#from-compare" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateFrom,
+    dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function(selectedDate) {
@@ -90,6 +96,7 @@ $(function() {
   $( "#to-compare" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateTo,
+    dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function( selectedDate ) {

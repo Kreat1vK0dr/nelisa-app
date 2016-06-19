@@ -1,5 +1,16 @@
+var Promise = require('bluebird')
+
+// Promise.promisify(connection.query, connection)('SELECT 1').then(function (rows) {
+//   console.log('got rows!')
+//   console.dir(rows)
+//   connection.end()
+// })
+
 module.exports = function(connection) {
 
+  // var getAllData = function(query, cb){
+  //       Promise.promisify(connection.query, connection)( query).then(cb);
+  //   };
   var getAllData = function(query, cb){
         connection.query( query, cb);
     };
@@ -27,7 +38,7 @@ module.exports = function(connection) {
 };
 
   this.getAllProducts = function(cb) {
-    getData("SELECT p.id p_id, p.description product, c.description category, c.id c_id, p.price, p.inventory FROM products p, categories c WHERE p.category_id = c.id ORDER BY p.id", cb);
+    getAllData("SELECT p.id p_id, p.description product, c.description category, c.id c_id, p.price, p.inventory FROM products p, categories c WHERE p.category_id = c.id ORDER BY p.id", cb);
 };
 
   this.deleteProduct = function(data, cb) {
