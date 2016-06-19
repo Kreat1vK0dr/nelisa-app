@@ -19,7 +19,10 @@ display: inline-block;
 .chart rect:hover {
   opacity: 0.7;
 }
-
+.chart {
+  border: 1px solid grey;
+  text-align: center;
+}
 .type-select-graph {
   width: 8em;
 }
