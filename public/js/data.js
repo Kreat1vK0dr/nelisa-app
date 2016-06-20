@@ -71,12 +71,21 @@ if (window.location.pathname.split('/')[1] === 'graphs') {
     });
 
     $('#show-chart-btn').on('click', function (e) {
-                e.preventDefault();
-                console.log("press show chart button");
+          e.preventDefault();
+          console.log("press show chart button");
 
-              d3.select("svg").remove();
+          var noChart = $(".chart").length===0;
+          var newChartId = createNewId(getLastId());
 
-              var dataToSend = getDataToSend();
+          if (noChart) {
+            d3.select("center").append("svg")
+                         .attr('class', 'chart')
+                         .attr("id", newChartId);
+                        //  .attr("id", newChartId);
+          }
+              // d3.select("svg").remove();
+
+      var dataToSend = getDataToSend();
 
       $.post('/graphs/data', dataToSend, function (dataReceived) {
           console.log('pathname =', window.location.pathname);
@@ -106,71 +115,18 @@ if (window.location.pathname.split('/')[1] === 'graphs') {
 });
 
 function addChart(datasets, dates, valuesToShow, dataToShow, dataOption, type) {
-
+var displayAll = dataToShow === "all";
 var margin, dataset, width, height;
 
 var winW = window.innerWidth - 200;
 
-var newChartId = createNewId(getLastId());
-var barColour = '#0099ff';
-
-d3.select("center").append("svg")
-             .attr('class', 'chart')
-             .attr("id", newChartId);
-
 // BARS GO SIDEWAYS
-function monthText(monthIndex) {
-  switch(monthIndex) {
-    case 1: return "Jan";
-    case 2: return "Feb";
-    case 3: return "Mar";
-    case 4: return "Apr";
-    case 5: return "May";
-    case 6: return "Jun";
-    case 7: return "Jul";
-    case 8: return "Aug";
-    case 9: return "Sep";
-    case 10: return "Oct";
-    case 11: return "Nov";
-    case 12: return "Dec";
-    default: return null;
-  }
-}
-if (type==="single") {
 
-  function dateRestructure(match, month, day, year){
-    var textMonth = monthText(Number(month));
-    var textYear = year.replace(/d{2}(d{2})/,"'$1");
-    return day+" "+textMonth+" "+textYear;
-  }
-
-function dateReadable(date){
-  return date.replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/, dateRestructure);
-  }
-
-function dateRangeText(dates){
-  return dateReadable(dates[0])+" - "+dateReadable(dates[1]);
-}
-
-function dataTitleText(dataOption, dataToShow, valuesToShow) {
-  var title,
-      valueText,
-      values = "",
-      quantity;
-  valuesToShow.forEach(function(value){values += value+", ";});
-  quantity = valuesToShow[0]==="sold"||"purchased" ? "quantity " : "";
-  valueText = "Showing "+quantity+values.replace(/, $/,"")+" for ";
-  var displayAll = dataToShow === "all";
- if (dataOption==='product') {
-    title = displayAll ? valueText+"all products" : valueText+dataToShow;
- } else if (dataOption==='category') {
-   title = displayAll ? valueText+"all categories" : valueText+dataToShow;
-}
-return title;
-}
+if (type==="single" && displayAll) {
 
 dataset = datasets[0];
 
+// displayAll
 margin = {
     top: 65,
     right: 30,
@@ -178,16 +134,51 @@ margin = {
     left: 225
 };
 
+// all graphs
 var fullWidth = 800,
     fullHeight = 500;
 
+//all graphs
 width = fullWidth - margin.left - margin.right;
 height = fullHeight - margin.top - margin.bottom;
 
+var svg = d3.select("#chart1")
+    .attr("width", fullWidth /*+ margin.left + margin.right*/)
+    .attr("height", fullHeight /*+ margin.top + margin.bottom*/)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
+
+svg.append("text")
+        .attr("id","daterange-title")
+        .attr("x", (width - margin.left)/2)
+        .attr("y", 0 - (margin.top - 20))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold");
+
+svg.append("text")
+        .attr("id","data-title")
+        .attr("x", (width - margin.left)/2)
+        .attr("y", 0 - (margin.top - 40))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-style", "italic");
+
+svg.append("g")
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + height + ')');
+
+svg.append("g")
+    .attr('class', 'y axis');
+
+function bars(dataset){
+//all graphs
 // Get max value from dataset.
 var max = d3.max(dataset, function (d) {
     return d.quantity;
 });
+
+//display all
 // Set x and y scales.
 var x = d3.scale.linear()
     .range([0, width])
@@ -199,40 +190,21 @@ var y = d3.scale.ordinal()
         return d.product;
     }));
 
-// Setup svg element.
-var svg = d3.select("#"+newChartId)
-    .attr("width", fullWidth /*+ margin.left + margin.right*/)
-    .attr("height", fullHeight /*+ margin.top + margin.bottom*/)
-    .append('g')
-    .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
-// svg.append("svg:rect")
-//    .attr("width", "100%")
-//    .attr("height", "100%")
-  //  .attr("stroke", "#000")
-  //  .attr("fill", "none");
+//chart specific
   var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
   var dateRangeTitle = dateRangeText(dates[0]);
 
-  //dateRange Title
-svg.append("text")
-        .attr("class","daterange-title")
-        .attr("x", (width - margin.left)/2)
-        .attr("y", 0 - (margin.top - 20))
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-weight", "bold")
-        .text(dateRangeTitle);
-//data title
-svg.append("text")
-        .attr("class","data-title")
-        .attr("x", (width - margin.left)/2)
-        .attr("y", 0 - (margin.top - 40))
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-style", "italic")
-        .text(dataTitle);
+// chart specific - in bars.
+d3.select("#daterange-title")
+  .text(dateRangeTitle);
 
+//chart specific - in bars.
+d3.select("#data-title")
+  .text(dataTitle);
+}
 // CAN KEEP THE SAME
+
+// display all -
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
@@ -241,11 +213,12 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
+// all charts
 // append x axis
-svg.append("g")
-    .attr('class', 'x axis')
+
+//chart specific
+d3.selectAll('x.axis')
     .call(xAxis)
-    .attr('transform', 'translate(0,' + height + ')')
     // .attr("dx", "-.8em")
     // .attr("dy", ".15em")
     .append("text")
@@ -255,11 +228,11 @@ svg.append("g")
     .style("font-style","italic")
     .text('Quantity');
 
-
 // append y axis
-svg.append("g")
-    .attr('class', 'y axis')
+d3.selectAll('y.axis')
     .call(yAxis)
+
+    // Text for Y-axis for bars going up
     .append('text')
     .attr('transform', 'rotate(-90)')
     .attr('y', -50) // NOTE THAT when ROTATED perpendicular 'y' moves element left/right
@@ -292,34 +265,13 @@ var bar = svg.selectAll(".bar")
     .attr("width", function (d) {
         return x(d.quantity);
     })
-    .attr('fill', barColour);
-
-
-    // .on("mouseover", function(d){
-		// 	d3.select(this).attr("fill", "green");
-		// })
-		// .on("mouseout", function(d){
-		// 	d3.select(this).attr("fill", "orange");
-		// })
-		// .on("click", function(d){
-		// 	d3.select(this)
-		// 		.transition()
-		// 		.duration(1000)
-		// 		.ease('linear')
-		// 		// .attr("cx", width-xPadding)
-		// 		.each("end", function(){
-		// 			d3.select(this)
-		// 				.transition()
-		// 				.delay(500)
-		// 				.duration(500)
-		// 				.attr({
-		// 					cx: xPadding
-		// 				})
-		// 		})
-		// })
-// .attr('fill', function (d) {
-//     return "rgb(" + d.quantity + ",0,0)";
-// });
+    .attr('fill', "green")
+  .on("mouseover", function(d){
+			d3.select(this).attr("fill", "orange");
+		})
+		.on("mouseout", function(d){
+			d3.select(this).attr("fill", "green");
+		});
 
 // add numbers in bars
 svg.selectAll(".text")
@@ -351,52 +303,54 @@ svg.selectAll(".text")
 }
 
 }
+function monthText(monthIndex) {
+  switch(monthIndex) {
+    case 1: return "Jan";
+    case 2: return "Feb";
+    case 3: return "Mar";
+    case 4: return "Apr";
+    case 5: return "May";
+    case 6: return "Jun";
+    case 7: return "Jul";
+    case 8: return "Aug";
+    case 9: return "Sep";
+    case 10: return "Oct";
+    case 11: return "Nov";
+    case 12: return "Dec";
+    default: return null;
+  }
+}
 
-function bars(data, chartId, x, y, barColour)
-      {
+function dateRestructure(match, month, day, year){
+  var textMonth = monthText(Number(month));
+  var textYear = year.replace(/d{2}(d{2})/,"'$1");
+  return day+" "+textMonth+" "+textYear;
+}
 
-          // max = d3.max(data)
-          //
-          // x = d3.scale.linear()
-          //     .domain([0, max])
-          //     .range([0, w])
-          //
-          // y = d3.scale.ordinal()
-          //     .domain(d3.range(data.length))
-          //     .rangeBands([0, h], .2)
-          //
-          //
-          var vis = d3.select("#"+chartId);
+function dateReadable(date){
+return date.replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/, dateRestructure);
+}
 
-          var bars = vis.selectAll("rect.bar")
-              .data(data)
+function dateRangeText(dates){
+return dateReadable(dates[0])+" - "+dateReadable(dates[1]);
+}
 
-          //enter
-          bars.enter()
-              .append("svg:rect")
-              .attr("class", "bar")
-              .attr("fill", "#800")
-
-          //exit
-          bars.exit()
-          .transition()
-          .duration(300)
-          .ease("exp")
-              .attr("width", 0)
-              .remove()
-
-
-          bars
-          .transition()
-          .duration(300)
-          .ease("quad")
-              .attr("width", x)
-              .attr("height", y.rangeBand())
-              .attr("transform", function(d,i) {
-                  return "translate(" + [0, y(i)] + ")"
-              })
-
-      }
+function dataTitleText(dataOption, dataToShow, valuesToShow) {
+var title,
+    valueText,
+    values = "",
+    quantity;
+valuesToShow.forEach(function(value){values += value+", ";});
+quantity = valuesToShow[0]==="sold"||"purchased" ? "quantity " : "";
+valueText = "Showing "+quantity+values.replace(/, $/,"")+" for ";
+var displayAll = dataToShow === "all";
+  if (dataOption==='product') {
+    title = displayAll ? valueText+"all products" : valueText+dataToShow;
+  } else if (dataOption==='category') {
+   title = displayAll ? valueText+"all categories" : valueText+dataToShow;
+  }
+  return title;
+}
 
   function convertDate(date) {
     return date.replace(/(\d+)-(\d+)-(\d+)/g, "$2/$1/$3");
@@ -520,6 +474,7 @@ function bars(data, chartId, x, y, barColour)
           return chart + Number(chartNumber) + 1;
         }
       }
+
         function getLastId(){
           var charts = $(".chart");
           var firstChart = charts.length===0 ? true : false;

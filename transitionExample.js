@@ -1,3 +1,22 @@
+// .on("click", function(d){
+  // 	d3.select(this)
+  // 		.transition()
+  // 		.duration(1000)
+  // 		.ease('linear')
+  // 		// .attr("cx", width-xPadding)
+  // 		.each("end", function(){
+  // 			d3.select(this)
+  // 				.transition()
+  // 				.delay(500)
+  // 				.duration(500)
+  // 				.attr({
+  // 					cx: xPadding
+  // 				})
+  // 		})
+  // })
+// .attr('fill', function (d) {
+//     return "rgb(" + d.quantity + ",0,0)";
+
 function bars(data)
 {
 
@@ -37,7 +56,6 @@ function bars(data)
     .ease("exp")
         .attr("width", 0)
         .remove()
-
 
     bars
         .attr("stroke-width", 4)
