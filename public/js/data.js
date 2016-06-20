@@ -70,11 +70,11 @@ if (window.location.pathname.split('/')[1] === 'graphs') {
         $("#filter-select").toggle(true);
     });
 
-    $('#show-chart-btn').on('click', function (e) {
+$('#show-chart-btn').on('click', function (e) {
           e.preventDefault();
           console.log("press show chart button");
 
-          var noChart = $(".chart").length===0;
+          var firstChart = $(".chart").length===0;
           var newChartId = createNewId(getLastId());
 
           if (noChart) {
@@ -91,133 +91,219 @@ if (window.location.pathname.split('/')[1] === 'graphs') {
           console.log('pathname =', window.location.pathname);
 
           const data = JSON.parse(dataReceived);
-          const compareDates = data.compareDateRange;
-          const showTimeLine = data.showTimeLine;
-          const multifilter = data.multifilter;
-          const dates = data.dates;
-          const dataOption = data.dataOption;
-          const dataToShow = data.dataToShow;
-          const valuesToShow = data.valuesToShow;
-          const showCost = valuesToShow.indexOf("cost") === -1;
-          const showRevenue = valuesToShow.indexOf("revenue") === -1;
-          const showProfit = valuesToShow.indexOf("profit") === -1;
-          const showSales = valuesToShow.indexOf("sold") === -1;
-          const showPurchases = valuesToShow.indexOf("purchased") === -1;
+          // const showCost = data.valuesToShow.indexOf("cost") === -1;
+          // const showRevenue = data.valuesToShow.indexOf("revenue") === -1;
+          // const showProfit = data.valuesToShow.indexOf("profit") === -1;
+          // const showSales = data.valuesToShow.indexOf("sold") === -1;
+          // const showPurchases = data.valuesToShow.indexOf("purchased") === -1;
+          const datasets = retrieveData(data, data.compareDates, data.dataOption, data.valuesToShow);
 
-          var datasets = [];
+          var winW = window.innerWidth - 200;
+          var margin = {
+               top: 65,
+               right: 30,
+               bottom: 40,
+               left: 225
+           };
 
-          valuesToShow.forEach(function (filter) {
-              datasets.push(retrieveData(compareDates, filter, data));
-          });
+          if (showTimeLine) margin.left = 50;
+          var svgWidth = 800,
+              svgHeight = 500;
 
-            addChart(datasets, dates, valuesToShow, dataToShow, dataOption, "single");
+              var newChart = {
+                             data: datasets,
+                             compareDates: data.compareDateRange,
+                             showTimeLine: data.showTimeLine,
+                             multifilter: data.multifilter,
+                             dates: data.dates,
+                             dataOption: data.dataOption,
+                             dataToShow: data.dataToShow,
+                             valuesToShow: data.valuesToShow,
+                             svgWidth: svgWidth,
+                             svgHeight: svgHeight,
+                             margins: margin
+                            };
+
+
+            addChart(newChart);
       });
 });
 
-function addChart(datasets, dates, valuesToShow, dataToShow, dataOption, type) {
-var displayAll = dataToShow === "all";
-var margin, dataset, width, height;
+function addChart(newChart) {
+var  data = newChart.data,
+     compareDates = newChart.compareDates,
+     showTimeLine = newChart.showTimeLine,
+     multifilter = newChart.multifilter,
+     dates = newChart.dates,
+     dataOption = newChart.dataOption,
+     dataToShow = newChart.dataToShow,
+     valuesToShow = newChart.data.valuesToShow,
+     svgWidth = newChart.svgWidth,
+     svgHeight = newChart.svgHeight,
+     margin = newChart.margins;
 
-var winW = window.innerWidth - 200;
+var chartWidth = svgWidth - margin.left - margin.right,
+    chartHeight = svgHeight - margin.top - margin.bottom;
 
 // BARS GO SIDEWAYS
 
-if (type==="single" && displayAll) {
+if (!showTimeLine) {
 
-dataset = datasets[0];
-
-// displayAll
-margin = {
-    top: 65,
-    right: 30,
-    bottom: 40,
-    left: 225
-};
-
-// all graphs
-var fullWidth = 800,
-    fullHeight = 500;
-
-//all graphs
-width = fullWidth - margin.left - margin.right;
-height = fullHeight - margin.top - margin.bottom;
+dataset = data[0];
 
 var svg = d3.select("#chart1")
-    .attr("width", fullWidth /*+ margin.left + margin.right*/)
-    .attr("height", fullHeight /*+ margin.top + margin.bottom*/)
+    .attr("width", svgWidth /*+ margin.left + margin.right*/)
+    .attr("height", svgHeight /*+ margin.top + margin.bottom*/)
     .append('g')
     .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
 
+
+var dateRangeTitle = dateRangeText(dates[0]);
 svg.append("text")
         .attr("id","daterange-title")
-        .attr("x", (width - margin.left)/2)
+        .attr("x", (chartWidth - margin.left)/2)
         .attr("y", 0 - (margin.top - 20))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .style("font-weight", "bold");
+        .text(dateRangeTitle);
 
+var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
 svg.append("text")
         .attr("id","data-title")
-        .attr("x", (width - margin.left)/2)
+        .attr("x", (chartWidth - margin.left)/2)
         .attr("y", 0 - (margin.top - 40))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .style("font-style", "italic");
+        .text(dataTitle);
 
-svg.append("g")
-    .attr('class', 'x axis')
-    .attr('transform', 'translate(0,' + height + ')');
+var max,
+    max1,
+    max2,
+    extent,
+    extent1,
+    extent2;
 
-svg.append("g")
-    .attr('class', 'y axis');
+// calculating max domain.
+if (multifilter && !compareDates) {
+max = d3.max(dataset[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
+extent = d3.extent(dataset[0], function(d) { return d.date; })
 
-function bars(dataset){
-//all graphs
-// Get max value from dataset.
-var max = d3.max(dataset, function (d) {
-    return d.quantity;
+} else if (!multifilter && !compareDates){
+max = d3.max(dataset[0], function (d) {
+    return d.datapoint;
 });
+extent = d3.extent(dataset[0], function(d) { return d.date; })
+} else if (multifilter && compareDates) {
+  max1 = d3.max(dataset[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
+  max2 = d3.max(dataset[1], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
 
-//display all
-// Set x and y scales.
-var x = d3.scale.linear()
-    .range([0, width])
-    .domain([0, max]);
+  extent1 = d3.extent(dataset[0], function(d) { return d.date; })
+  extent2 = d3.extent(dataset[1], function(d) { return d.date; })
 
-var y = d3.scale.ordinal()
-    .rangeRoundBands([height, 0], .05)
-    .domain(dataset.map(function (d) {
-        return d.product;
-    }));
+} else if (!multifilter && compareDates) {
+  max1 = d3.max(dataset[0], function (d) {
+      return d.datapoint;
+  });
+  max2 = d3.max(dataset[1], function (d) {
+      return d.datapoint;
+  });
+  extent1 = d3.extent(dataset[0], function(d) { return d.date; })
+  extent2 = d3.extent(dataset[1], function(d) { return d.date; })
 
-//chart specific
-  var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
-  var dateRangeTitle = dateRangeText(dates[0]);
-
-// chart specific - in bars.
-d3.select("#daterange-title")
-  .text(dateRangeTitle);
-
-//chart specific - in bars.
-d3.select("#data-title")
-  .text(dataTitle);
 }
-// CAN KEEP THE SAME
 
-// display all -
+// implement compare date functionality here...
+// setting scales dynamically
+if (multifilter && showTimeLine) {
+  var	parseDate = d3.time.format("%m/%d/%y").parse;
+
+  dataset[0].forEach(function(d){d.date = parseDate(d.date);});
+  // Parse the date / time
+
+  var	x0 = d3.time.scale().range([0, width]);
+                          .domain(extent);
+
+  var x1 = d3.scale.ordinal();
+                   .domain(valuesToShow).rangeRoundBands([0, x0.rangeBand()]);
+
+  var y = d3.scale.linear()
+                  .range([chartHeight, 0]);
+                  .domain([0, max]);
+
+  var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
+  var color = d3.scale.ordinal()
+                      .range(colorRange);
+
+  var xAxis = d3.svg.axis()
+  .scale(x0)
+  .orient("bottom");
+
+} else if (multifilter && !showTimeLine) {
+  var y0 = d3.scale.ordinal()
+                   .rangeRoundBands([chartHeight, 0], .1);
+                   .domain(data.map(function(d) { return d.name; }));
+
+  var y1 = d3.scale.ordinal();
+                   .domain(valuesToShow).rangeRoundBands([0, y0.rangeBand()]);
+
+  var x = d3.scale.linear()
+      .range([0, chartWidth]);
+      .domain([0, max]);
+
+  var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
+  var color = d3.scale.ordinal()
+                      .range(colorRange);
+
+  var yAxis = d3.svg.axis()
+  .scale(y0)
+  .orient("left");
+
+} else if (!multifilter && !showTimeLine) {
+      var x = d3.scale.linear()
+          .range([0, chartWidth])
+          .domain([0, max]);
+
+      var y = d3.scale.ordinal()
+          .rangeRoundBands([chartHeight, 0], .05)
+          .domain(dataset.map(function (d) {
+              return d.name;
+          }));
+
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+
+} else if (!multifilter && showTimeLine) {
+  var	parseDate = d3.time.format("%m/%d/%y").parse;
+
+  dataset[0].forEach(function(d){d.date = parseDate(d.date);});
+
+  var y = d3.scale.linear()
+      .range([chartHeight, 0])
+      .domain([0, max]);
+
+  var	x0 = d3.time.scale().range([0, width]);
+                          .domain(extent);
+
 var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
+  .scale(x)
+  .orient("bottom");
 
 var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
+  .scale(y)
+  .orient("left");
+}
 
-// all charts
-// append x axis
-
-//chart specific
-d3.selectAll('x.axis')
+// create x axis
+svg.append("g")
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + chartHeight + ')');
     .call(xAxis)
     // .attr("dx", "-.8em")
     // .attr("dy", ".15em")
@@ -228,17 +314,10 @@ d3.selectAll('x.axis')
     .style("font-style","italic")
     .text('Quantity');
 
-// append y axis
-d3.selectAll('y.axis')
+//create y axis
+svg.append("g")
+    .attr('class', 'y axis');
     .call(yAxis)
-
-    // Text for Y-axis for bars going up
-    .append('text')
-    .attr('transform', 'rotate(-90)')
-    .attr('y', -50) // NOTE THAT when ROTATED perpendicular 'y' moves element left/right
-    .attr('x', -(height - 20) / 2) // NOTE THAT when ROTATED perpendicular 'x' moves element up/down
-    .attr('dy', '.71em')
-    .style('text-anchor', 'end')
 
 svg.selectAll('.axis line, .axis path')
     .style({
@@ -248,15 +327,16 @@ svg.selectAll('.axis line, .axis path')
         'shape-rendering': 'crispEdges'
     });
 
+// add bars
 var bar = svg.selectAll(".bar")
     .data(dataset)
     .enter()
-    .append("a")
-    .attr("xlink:href", function (d) {
-        var s = d.product.replace(/\s/g, '%20');
-        return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
-    })
-    .attr("style", "text-decoration: none;")
+    // .append("a")
+    // .attr("xlink:href", function (d) {
+    //     var s = d.product.replace(/\s/g, '%20');
+    //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
+    // })
+    // .attr("style", "text-decoration: none;")
     .append("rect") // change .append("g") to .append("rect").
     .attr("y", function (d) {
         return y(d.product);
@@ -266,9 +346,9 @@ var bar = svg.selectAll(".bar")
         return x(d.quantity);
     })
     .attr('fill', "green")
-  .on("mouseover", function(d){
-			d3.select(this).attr("fill", "orange");
-		})
+    .on("mouseover", function(d){
+  			d3.select(this).attr("fill", "orange");
+  		})
 		.on("mouseout", function(d){
 			d3.select(this).attr("fill", "green");
 		});
@@ -294,15 +374,174 @@ svg.selectAll(".text")
     .attr('text-anchor', 'end')
     .attr('fill', 'white');
 
-} else if (type==="double") {
+} else if (showTimeLine) {
 
-} else if (type==="multiSingle") {
+}
+}
 
-} else if (type==="multiDouble") {
+function redraw(newChart){
+  var  datasets = newChart.data,
+       compareDates = newChart.compareDates,
+       showTimeLine = newChart.showTimeLine,
+       multifilter = newChart.multifilter,
+       dates = newChart.dates,
+       dataOption = newChart.dataOption,
+       dataToShow = newChart.dataToShow,
+       valuesToShow = newChart.data.valuesToShow,
+       svgWidth = newChart.svgWidth,
+       svgHeight = newChart.svgHeight,
+       margin = newChart.margins;
 
+const width = svgWidth - margin.left - margin.right;
+const height = svgHeight - margin.top - margin.bottom;
+//all graphs
+// Get max value from dataset.
+
+var max,
+    max1,
+    max2;
+
+if (multifilter && !compareDates) {
+max = d3.max(datasets[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
+} else if (!multifilter && !compareDates){
+max = d3.max(dataset[0], function (d) {
+    return d.datapoint;
+});
+} else if (multifilter && compareDates) {
+  max1 = d3.max(datasets[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
+  max2 = d3.max(datasets[1], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
+} else if (!multifilter && !compareDates) {
+  max1 = d3.max(datasets[0], function (d) {
+      return d.datapoint;
+  });
+  max2 = d3.max(datasets[1], function (d) {
+      return d.datapoint;
+  });
+}
+
+// Set x scale.
+var x = d3.scale.linear()
+    .range([0, width])
+    .domain([0, max]);
+
+// Set y scale
+var y = d3.scale.ordinal()
+    .rangeRoundBands([height, 0], .05)
+    .domain(dataset.map(function (d) {
+        return d.name;
+    }));
+
+// set date-range title
+var dateRangeTitle = dateRangeText(dates[0]);
+d3.select("#daterange-title")
+  .text(dateRangeTitle);
+
+// set data title
+var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
+d3.select("#data-title")
+  .text(dataTitle);
+
+// set xAxis based on new scale
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+// set yAxis based on new scale
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+// call x axis and append text (only if bars sideways)
+d3.selectAll('x.axis')
+    .call(xAxis)
+    // .attr("dx", "-.8em")
+    // .attr("dy", ".15em")
+    .append("text")
+    .style("text-anchor", "end")
+    .attr("x",width)
+    .attr("dy",-5)
+    .style("font-style","italic")
+    .text('Quantity');
+
+// call y axis and append text (only if bars going up)
+d3.selectAll('y.axis')
+    .call(yAxis)
+    // Text for Y-axis for bars going up
+    // .append('text')
+    // .attr('transform', 'rotate(-90)')
+    // .attr('y', -50) // NOTE THAT when ROTATED perpendicular 'y' moves element left/right
+    // .attr('x', -(height - 20) / 2) // NOTE THAT when ROTATED perpendicular 'x' moves element up/down
+    // .attr('dy', '.71em')
+    // .style('text-anchor', 'end')
+
+// create axis lines
+svg.selectAll('.axis line, .axis path')
+    .style({
+        'stroke': 'Black',
+        'fill': 'none',
+        'stroke-width': '1px',
+        'shape-rendering': 'crispEdges'
+    });
+
+// create and attach bars to chart
+var bar = svg.selectAll(".bar")
+    .data(dataset)
+    .enter()
+    // .append("a")
+    // .attr("xlink:href", function (d) {
+    //     var s = d.product.replace(/\s/g, '%20');
+    //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
+    // })
+    // .attr("style", "text-decoration: none;")
+    .append("rect") // change .append("g") to .append("rect").
+    .transition()
+    .duration(300)
+    .ease("exp")
+    .attr("y", function (d) {
+        return y(d.product);
+    })
+    .attr("height", y.rangeBand())
+    .attr("width", function (d) {
+        return x(d.quantity);
+    })
+    .attr('fill', "green")
+  .on("mouseover", function(d){
+			d3.select(this).attr("fill", "orange");
+		})
+		.on("mouseout", function(d){
+			d3.select(this).attr("fill", "green");
+		})
+    .exit()
+    .transition()
+    .duration(300)
+    .ease("exp")
+        .attr("width", 0)
+        .remove();
+
+// add numbers in bars
+svg.selectAll(".text")
+    .data(dataset)
+    .enter()
+    .append('text')
+    .attr("y", function (d) {
+        return y(d.product) + y.rangeBand() / 2 ;
+    })
+    .attr("x", function (d) {
+        return x(d.quantity) - 2;
+    })
+    .attr("dy", "0.3em")
+    .text(function (d) {
+        return d.quantity;
+    })
+    .attr('class', 'text')
+    .attr('font-family', 'sans-serif')
+    .attr('font-size', '11px')
+    .attr('text-anchor', 'end')
+    .attr('fill', 'white');
 }
 
 }
+
 function monthText(monthIndex) {
   switch(monthIndex) {
     case 1: return "Jan";
@@ -410,28 +649,50 @@ var displayAll = dataToShow === "all";
     });
     return inputDates;
   }
+function valuesToShowArray(valuesToShow){
 
-  function setDataPoints(filter, data) {
-    if (filter === "sold" || "purchased") {
+}
+  function setDataPoints(valuesToShow, data, dataOption) {
+    var showingProducts = dataOption==="product" ? true : false;
+    var showMultiVal = valuesToShow.length > 1;
+    var showAmount = valuesToShow[0] === "cost" || valuesToShow[0] === "revenue" || valuesToShow[0] === "profit";
+    var showQuantity = valuesToShow[0] === "sold" || valuesToShow[0] === "purchased";
+
+    if (!showMultiVal && valuesToShow === "sold" || "purchased") {
         return data.map(function (d) {
             d.datapoint = d.quantity;
+            d.name = showingProducts ? d.product : d.category;
             return d;
         });
-    } else if (filter === "cost") {
+    } else if (!showMultiVal && valuesToShow === "cost") {
         return data.map(function (d) {
             d.datapoint = d.cost;
+            d.name = showingProducts ? d.product : d.category;
             return d;
         });
-    } else if (filter === "revenue") {
+    } else if (!showMultiVal && valuesToShow === "revenue") {
         return data.map(function (d) {
             d.datapoint = d.revenue;
+            d.name = showingProducts ? d.product : d.category;
             return d;
         });
-    } else if (filter === "profit") {
+    } else if (!showMultiVal && valuesToShow === "profit") {
         return data.map(function (d) {
             d.datapoint = d.profit;
+            d.name = showingProducts ? d.product : d.category;
             return d;
         });
+    } else if (showMultiVal && showQuantity) {
+      return data.map(function (d) {
+          d.datapoints = [{name: sales, value: +d.quantity}, {name: purchases, value: +d.purchases}];
+          d.name = showingProducts ? d.product : d.category;
+          return d;
+      });
+    } else if (showMultiVal && showAmount) {
+      data.forEach(function(d){
+        d.datapoints = valuesToShow.map(function(value){return {name: value, value: d[value]};});
+        d.name = showingProducts ? d.product : d.category;
+      });
     }
   }
 
@@ -439,28 +700,28 @@ var displayAll = dataToShow === "all";
       return a.datapoint - b.datapoint;
   }
 
-  function structureData(filter, data) {
+  function structureData(filter, data, dataOption) {
     if (data.length) {
-      return setDataPoints(filter, data).sort(sortData);
+      return setDataPoints(filter, data, dataOption).sort(sortData);
 
     } else {
-        return [setDataPoints(filter, data.set1).sort(sortData), setDataPoint(filter, data.set2).sort(sortData)];
+        return [setDataPoints(filter, data.set1, dataOption).sort(sortData), setDataPoint(filter, data.set2, dataOption).sort(sortData)];
 
     }
   }
 
-  function retrieveData(compareDates, filter, data) {
+  function retrieveData(data, compareDates, dataOption, valuesToShow) {
     switch (filter) {
     case "sold":
-        return compareDates ? structureData(filter, {set1: data.salesData, set2: data.salesDataCompare}) : structureData(filter, data.salesData);
+        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
     case "purchased":
-        return compareDates ? structureData(filter, {set1: data.purchasesData, set2: data.purchasesDataCompare}) : structureData(filter, data.purchasesData);
+        return compareDates ? structureData(valuesToShow, {set1: data.purchasesData, set2: data.purchasesDataCompare}, dataOption) : structureData(valuesToShow, data.purchasesData, dataOption);
     case "revenue":
-        return compareDates ? structureData(filter, {set1: data.salesData, set2: data.salesDataCompare}) : structureData(filter, data.salesData);
+        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
     case "cost":
-        return compareDates ? structureData(filter, {set1: data.salesData, set2: data.salesDataCompare}) : structureData(filter, data.salesData);
+        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
     case "profit":
-        return compareDates ? structureData(filter, {set1: data.salesData, set2: data.salesDataCompare}) : structureData(filter, data.salesData);
+        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
     default:
         return null;
     }
