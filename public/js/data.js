@@ -74,472 +74,843 @@ $('#show-chart-btn').on('click', function (e) {
           e.preventDefault();
           console.log("press show chart button");
 
-          var firstChart = $(".chart").length===0;
-          var newChartId = createNewId(getLastId());
-
-          if (noChart) {
-            d3.select("center").append("svg")
-                         .attr('class', 'chart')
-                         .attr("id", newChartId);
-                        //  .attr("id", newChartId);
-          }
               // d3.select("svg").remove();
 
       var dataToSend = getDataToSend();
 
       $.post('/graphs/data', dataToSend, function (dataReceived) {
           console.log('pathname =', window.location.pathname);
-
-          const data = JSON.parse(dataReceived);
+          const received = JSON.parse(dataReceived);
           // const showCost = data.valuesToShow.indexOf("cost") === -1;
           // const showRevenue = data.valuesToShow.indexOf("revenue") === -1;
           // const showProfit = data.valuesToShow.indexOf("profit") === -1;
           // const showSales = data.valuesToShow.indexOf("sold") === -1;
           // const showPurchases = data.valuesToShow.indexOf("purchased") === -1;
-          const datasets = retrieveData(data, data.compareDates, data.dataOption, data.valuesToShow);
+          const dataset = retrieveData(received.dataset, received.compareDates, received.dataOption, received.valuesToShow);
 
           var winW = window.innerWidth - 200;
           var margin = {
                top: 65,
                right: 30,
                bottom: 40,
-               left: 225
+               left: received.showTimeLine ? 50 : 225
            };
+           const maxDomain = getMaxDomain(dataset, received.multifilter);
+           const timeExtent = getTimeScaleExtent(dataset, received.compareDates, received.showTimeLine);
 
-          if (showTimeLine) margin.left = 50;
           var svgWidth = 800,
               svgHeight = 500;
 
-              var newChart = {
-                             data: datasets,
-                             compareDates: data.compareDateRange,
-                             showTimeLine: data.showTimeLine,
-                             multifilter: data.multifilter,
-                             dates: data.dates,
-                             dataOption: data.dataOption,
-                             dataToShow: data.dataToShow,
-                             valuesToShow: data.valuesToShow,
-                             svgWidth: svgWidth,
-                             svgHeight: svgHeight,
-                             margins: margin
-                            };
+          const chartWidth = svgWidth - margin.left - margin.right,
+                chartHeight = svgHeight - margin.top - margin.bottom;
 
+          var newChart = {
+                         dataset: dataset,
+                         compareDates: received.compareDateRange,
+                         showTimeLine: received.showTimeLine,
+                         multifilter: received.multifilter,
+                         dates: received.dates,
+                         dataOption: received.dataOption,
+                         dataToShow: received.dataToShow,
+                         valuesToShow: received.valuesToShow,
+                         chartHeight: chartHeight,
+                         chartWidth: chartWidth,
+                         margins: margin,
+                         maxDomain: maxDomain,
+                         timeExtent: timeExtent,
+                        };
 
+          var firstChart = $(".chart").length===0,
+              newChartId;
+              // newChartId = createNewId(getLastId());
+
+          if (firstChart) {
+            newChartId = createNewId(getLastId());
+            d3.select("center").append("svg")
+                         .attr('class', 'chart')
+                         .attr('id', 'svg-'+newChartId);
+
+                        //  .attr("id", newChartId);
+            newChart.svg = d3.select("#svg-"+"chart1")
+                .attr("width", svgWidth /*+ margin.left + margin.right*/)
+                .attr("height", svgHeight /*+ margin.top + margin.bottom*/)
+                .append('g')
+                .attr("id", newChartId)
+                .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
+            newChart.newChartId = newChartId;
             addChart(newChart);
+          } else {
+            newChart.svg = d3.select("#svg-"+"chart1")
+                              .attr("width", svgWidth /*+ margin.left + margin.right*/)
+                              .attr("height", svgHeight /*+ margin.top + margin.bottom*/)
+                            .select("#"+"chart1")
+                            .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
+
+            redraw(newChart);
+          }
       });
 });
 
+}// !-- window.location.path == /graphs
+
 function addChart(newChart) {
-var  data = newChart.data,
-     compareDates = newChart.compareDates,
-     showTimeLine = newChart.showTimeLine,
-     multifilter = newChart.multifilter,
-     dates = newChart.dates,
-     dataOption = newChart.dataOption,
-     dataToShow = newChart.dataToShow,
-     valuesToShow = newChart.data.valuesToShow,
-     svgWidth = newChart.svgWidth,
-     svgHeight = newChart.svgHeight,
-     margin = newChart.margins;
-
-var chartWidth = svgWidth - margin.left - margin.right,
-    chartHeight = svgHeight - margin.top - margin.bottom;
-
-// BARS GO SIDEWAYS
-
-if (!showTimeLine) {
-
-dataset = data[0];
-
-var svg = d3.select("#chart1")
-    .attr("width", svgWidth /*+ margin.left + margin.right*/)
-    .attr("height", svgHeight /*+ margin.top + margin.bottom*/)
-    .append('g')
-    .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
-
-
-var dateRangeTitle = dateRangeText(dates[0]);
-svg.append("text")
-        .attr("id","daterange-title")
-        .attr("x", (chartWidth - margin.left)/2)
-        .attr("y", 0 - (margin.top - 20))
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-weight", "bold");
-        .text(dateRangeTitle);
-
-var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
-svg.append("text")
-        .attr("id","data-title")
-        .attr("x", (chartWidth - margin.left)/2)
-        .attr("y", 0 - (margin.top - 40))
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("font-style", "italic");
-        .text(dataTitle);
-
-var max,
-    max1,
-    max2,
-    extent,
-    extent1,
-    extent2;
-
-// calculating max domain.
-if (multifilter && !compareDates) {
-max = d3.max(dataset[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
-extent = d3.extent(dataset[0], function(d) { return d.date; })
-
-} else if (!multifilter && !compareDates){
-max = d3.max(dataset[0], function (d) {
-    return d.datapoint;
-});
-extent = d3.extent(dataset[0], function(d) { return d.date; })
-} else if (multifilter && compareDates) {
-  max1 = d3.max(dataset[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
-  max2 = d3.max(dataset[1], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
-
-  extent1 = d3.extent(dataset[0], function(d) { return d.date; })
-  extent2 = d3.extent(dataset[1], function(d) { return d.date; })
-
-} else if (!multifilter && compareDates) {
-  max1 = d3.max(dataset[0], function (d) {
-      return d.datapoint;
-  });
-  max2 = d3.max(dataset[1], function (d) {
-      return d.datapoint;
-  });
-  extent1 = d3.extent(dataset[0], function(d) { return d.date; })
-  extent2 = d3.extent(dataset[1], function(d) { return d.date; })
-
-}
-
-// implement compare date functionality here...
-// setting scales dynamically
-if (multifilter && showTimeLine) {
-  var	parseDate = d3.time.format("%m/%d/%y").parse;
-
-  dataset[0].forEach(function(d){d.date = parseDate(d.date);});
-  // Parse the date / time
-
-  var	x0 = d3.time.scale().range([0, width]);
-                          .domain(extent);
-
-  var x1 = d3.scale.ordinal();
-                   .domain(valuesToShow).rangeRoundBands([0, x0.rangeBand()]);
-
-  var y = d3.scale.linear()
-                  .range([chartHeight, 0]);
-                  .domain([0, max]);
-
-  var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
-  var color = d3.scale.ordinal()
-                      .range(colorRange);
-
-  var xAxis = d3.svg.axis()
-  .scale(x0)
-  .orient("bottom");
-
-} else if (multifilter && !showTimeLine) {
-  var y0 = d3.scale.ordinal()
-                   .rangeRoundBands([chartHeight, 0], .1);
-                   .domain(data.map(function(d) { return d.name; }));
-
-  var y1 = d3.scale.ordinal();
-                   .domain(valuesToShow).rangeRoundBands([0, y0.rangeBand()]);
-
-  var x = d3.scale.linear()
-      .range([0, chartWidth]);
-      .domain([0, max]);
-
-  var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
-  var color = d3.scale.ordinal()
-                      .range(colorRange);
-
-  var yAxis = d3.svg.axis()
-  .scale(y0)
-  .orient("left");
-
-} else if (!multifilter && !showTimeLine) {
-      var x = d3.scale.linear()
-          .range([0, chartWidth])
-          .domain([0, max]);
-
-      var y = d3.scale.ordinal()
-          .rangeRoundBands([chartHeight, 0], .05)
-          .domain(dataset.map(function (d) {
-              return d.name;
-          }));
-
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .orient("bottom");
-
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
-
-} else if (!multifilter && showTimeLine) {
-  var	parseDate = d3.time.format("%m/%d/%y").parse;
-
-  dataset[0].forEach(function(d){d.date = parseDate(d.date);});
-
-  var y = d3.scale.linear()
-      .range([chartHeight, 0])
-      .domain([0, max]);
-
-  var	x0 = d3.time.scale().range([0, width]);
-                          .domain(extent);
-
-var xAxis = d3.svg.axis()
-  .scale(x)
-  .orient("bottom");
-
-var yAxis = d3.svg.axis()
-  .scale(y)
-  .orient("left");
-}
-
-// create x axis
-svg.append("g")
-    .attr('class', 'x axis')
-    .attr('transform', 'translate(0,' + chartHeight + ')');
-    .call(xAxis)
-    // .attr("dx", "-.8em")
-    // .attr("dy", ".15em")
-    .append("text")
-    .style("text-anchor", "end")
-    .attr("x",width)
-    .attr("dy",-5)
-    .style("font-style","italic")
-    .text('Quantity');
-
-//create y axis
-svg.append("g")
-    .attr('class', 'y axis');
-    .call(yAxis)
-
-svg.selectAll('.axis line, .axis path')
-    .style({
-        'stroke': 'Black',
-        'fill': 'none',
-        'stroke-width': '1px',
-        'shape-rendering': 'crispEdges'
-    });
-
-// add bars
-var bar = svg.selectAll(".bar")
-    .data(dataset)
-    .enter()
-    // .append("a")
-    // .attr("xlink:href", function (d) {
-    //     var s = d.product.replace(/\s/g, '%20');
-    //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
-    // })
-    // .attr("style", "text-decoration: none;")
-    .append("rect") // change .append("g") to .append("rect").
-    .attr("y", function (d) {
-        return y(d.product);
-    })
-    .attr("height", y.rangeBand())
-    .attr("width", function (d) {
-        return x(d.quantity);
-    })
-    .attr('fill', "green")
-    .on("mouseover", function(d){
-  			d3.select(this).attr("fill", "orange");
-  		})
-		.on("mouseout", function(d){
-			d3.select(this).attr("fill", "green");
-		});
-
-// add numbers in bars
-svg.selectAll(".text")
-    .data(dataset)
-    .enter()
-    .append('text')
-    .attr("y", function (d) {
-        return y(d.product) + y.rangeBand() / 2 ;
-    })
-    .attr("x", function (d) {
-        return x(d.quantity) - 2;
-    })
-    .attr("dy", "0.3em")
-    .text(function (d) {
-        return d.quantity;
-    })
-    .attr('class', 'text')
-    .attr('font-family', 'sans-serif')
-    .attr('font-size', '11px')
-    .attr('text-anchor', 'end')
-    .attr('fill', 'white');
-
-} else if (showTimeLine) {
-
-}
-}
-
-function redraw(newChart){
-  var  datasets = newChart.data,
+const  dataset = newChart.dataset,
        compareDates = newChart.compareDates,
        showTimeLine = newChart.showTimeLine,
        multifilter = newChart.multifilter,
        dates = newChart.dates,
        dataOption = newChart.dataOption,
        dataToShow = newChart.dataToShow,
-       valuesToShow = newChart.data.valuesToShow,
-       svgWidth = newChart.svgWidth,
-       svgHeight = newChart.svgHeight,
+       valuesToShow = newChart.valuesToShow,
+       svg = newChart.svg,
+       chartHeight = newChart.chartHeight,
+       chartWidth = newChart.chartWidth,
        margin = newChart.margins;
+       max = newChart.maxDomain;
+       extent = newChart.timeExtent;
 
-const width = svgWidth - margin.left - margin.right;
-const height = svgHeight - margin.top - margin.bottom;
-//all graphs
-// Get max value from dataset.
+// set titles
+const dateRangeTitle = dateRangeText(dates[0]),
+      dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
 
+svg.append("text")
+        .attr("id","daterange-title")
+        .attr("x", (chartWidth - margin.left)/2)
+        .attr("y", 0 - (margin.top - 20))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .text(dateRangeTitle);
+
+svg.append("text")
+        .attr("id","data-title")
+        .attr("x", (chartWidth - margin.left)/2)
+        .attr("y", 0 - (margin.top - 40))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("font-style", "italic")
+        .text(dataTitle);
+
+// implement compare date functionality here...
+// setting scales dynamically
+if (multifilter && showTimeLine) {
+        var	parseDate = d3.time.format("%m/%d/%y").parse;
+
+        dataset[0].forEach(function(d){d.date = parseDate(d.date);});
+
+        var	x0 = d3.time.scale().range([0, width])
+                                .domain(extent);
+
+        var x1 = d3.scale.ordinal()
+                         .domain(valuesToShow).rangeRoundBands([0, x0.rangeBand()]);
+
+        var y = d3.scale.linear()
+                        .range([chartHeight, 0])
+                        .domain([0, max]);
+
+        var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
+        var color = d3.scale.ordinal()
+                            .range(colorRange);
+
+      var xAxis = d3.svg.axis()
+        .scale(x0)
+        .orient("bottom");
+
+      var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left");
+
+      var date = svg.selectAll(".date")
+          .data(dataset[0])
+        .enter().append("g")
+          .attr("class", "date")
+          .attr("transform", function(d) { return "translate(" + x0(d.date) + ",0)"; });
+
+      date.selectAll("rect")
+          .data(function(d) { return d.values; })
+        .enter().append("rect")
+          .attr("width", x1.rangeBand())
+          .attr("x", function(d) { return x1(d.name); })
+          .attr("y", function(d) { return y(d.value); })
+          .attr("height", function(d) { return height - y(d.value); })
+          .style("fill", function(d) { return color(d.name); });
+
+      var legend = svg.selectAll(".legend")
+          .data(valuesToShow.slice().reverse())
+        .enter().append("g")
+          .attr("class", "legend")
+          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+      legend.append("rect")
+          .attr("x", width - 18)
+          .attr("width", 18)
+          .attr("height", 18)
+          .style("fill", color);
+
+      legend.append("text")
+          .attr("x", width - 24)
+          .attr("y", 9)
+          .attr("dy", ".35em")
+          .style("text-anchor", "end")
+          .text(function(d) { return d; });
+
+} else if (multifilter && !showTimeLine) {
+
+        var y0 = d3.scale.ordinal()
+                           .rangeRoundBands([chartHeight, 0], .1)
+                           .domain(data.map(function(d) { return d.name; }));
+
+          var y1 = d3.scale.ordinal()
+                           .domain(valuesToShow).rangeRoundBands([0, y0.rangeBand()]);
+
+          var x = d3.scale.linear()
+              .range([0, chartWidth])
+              .domain([0, max]);
+
+          var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
+          var color = d3.scale.ordinal()
+                              .range(colorRange);
+
+          var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+          var yAxis = d3.svg.axis()
+          .scale(y0)
+          .orient("left");
+
+          var date = svg.selectAll(".item")
+              .data(dataset[0])
+            .enter().append("g")
+              .attr("class", "item")
+              .attr("transform", function(d) { return "translate(" + x0(d.name) + ",0)"; });
+
+          date.selectAll("rect")
+              .data(function(d) { return d.values; })
+            .enter().append("rect")
+              .attr("width", x1.rangeBand())
+              .attr("x", function(d) { return x1(d.name); })
+              .attr("y", function(d) { return y(d.value); })
+              .attr("height", function(d) { return height - y(d.value); })
+              .style("fill", function(d) { return color(d.name); });
+
+          var legend = svg.selectAll(".legend")
+              .data(valuesToShow.slice().reverse())
+            .enter().append("g")
+              .attr("class", "legend")
+              .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+          legend.append("rect")
+              .attr("x", width - 18)
+              .attr("width", 18)
+              .attr("height", 18)
+              .style("fill", color);
+
+          legend.append("text")
+              .attr("x", width - 24)
+              .attr("y", 9)
+              .attr("dy", ".35em")
+              .style("text-anchor", "end")
+              .text(function(d) { return d; });
+
+} else if (!multifilter && !showTimeLine) {
+
+              var x = d3.scale.linear()
+                        .range([0, chartWidth])
+                        .domain([0, max]);
+
+              var y = d3.scale.ordinal()
+                        .rangeRoundBands([0,chartHeight], .05)
+                        .domain(dataset[0].map(function (d) {
+                            return d.name;
+                        }));
+
+              var yDomainData = dataset[0].map(function (d) {
+                  return d.name;
+              });
+
+              var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
+
+              var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left");
+
+              svg.append("g")
+                  .attr('class', 'x axis')
+                  .attr('transform', 'translate(0,' + chartHeight + ')')
+                  .call(xAxis)
+                  // .attr("dx", "-.8em")
+                  // .attr("dy", ".15em")
+                  .append("text")
+                  .style("text-anchor", "end")
+                  .attr("x",chartWidth)
+                  .attr("dy",-5)
+                  .style("font-style","italic")
+                  .text('Quantity'); // make dynamic!
+
+              //create y axis (!showTimeLine)
+              svg.append("g")
+                  .attr('class', 'y axis')
+                  .call(yAxis);
+
+              svg.selectAll('.axis line, .axis path')
+                  .style({
+                      'stroke': 'Black',
+                      'fill': 'none',
+                      'stroke-width': '1px',
+                      'shape-rendering': 'crispEdges'
+                  });
+
+                  // add numbers in bars
+                  svg.selectAll(".text")
+                      .data(dataset[0])
+                      .enter()
+                      .append('text')
+                      .attr("y", function (d) {
+                        var yVal = y(d.name);
+                        var rangeBand = y.rangeBand();
+                          return y(d.name) + y.rangeBand() / 2 ;
+                      })
+                      .attr("x", function (d) {
+                        var xVal = x(d.value);
+                          return x(d.value) - 2;
+                      })
+                      .attr("dy", "0.3em")
+                      .text(function (d) {
+                          return d.value;
+                      })
+                      .attr('class', 'text')
+                      .attr('font-family', 'sans-serif')
+                      .attr('font-size', '11px')
+                      .attr('text-anchor', 'end')
+                      .attr('fill', 'white');
+
+              // add bars
+              var bars = svg.selectAll("rect.bar")
+                  .data(dataset[0]);
+                  // entering bars
+              bars.enter()
+                  // .append("a")
+                  // .attr("xlink:href", function (d) {
+                  //     var s = d.product.replace(/\s/g, '%20');
+                  //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
+                  // })
+                  // .attr("style", "text-decoration: none;")
+                  .append("rect") // change .append("g") to .append("rect").
+                  .attr("class","bar") // change .append("g") to .append("rect").
+                  .attr("y", function (d) {
+                      var yVal = y(d.name);
+                      return y(d.name);
+                  })
+                  .attr("height", y.rangeBand())
+                  .attr("width", function (d) {
+                    var xVal = x(d.value);
+                      return x(d.value);
+                  })
+                  .attr('fill', "green")
+                  .on("mouseover", function(d){
+                			d3.select(this).attr("fill", "orange");
+                		})
+              		.on("mouseout", function(d){
+              			d3.select(this).attr("fill", "green");
+              		});
+
+
+
+} else if (!multifilter && showTimeLine) {
+
+              var	parseDate = d3.time.format("%m/%d/%y").parse;
+
+              dataset[0].forEach(function(d){d.date = parseDate(d.date);});
+
+              var y = d3.scale.linear()
+                    .range([chartHeight, 0])
+                    .domain([0, max]);
+
+              var	x = d3.time.scale().range([0, width])
+                                        .domain(extent);
+
+              var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+              var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+}
+// !--!multfilter && showTimeLine
+
+// NEXT TASK IS TO APPLY THE FOLLOWING TO YOUR CODE
+// var state = svg.selectAll(".state")
+//     .data(data)
+//   .enter().append("g")
+//     .attr("class", "state")
+//     .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; });
+//
+// state.selectAll("rect")
+//     .data(function(d) { return d.ages; })
+//   .enter().append("rect")
+//     .attr("width", x1.rangeBand())
+//     .attr("x", function(d) { return x1(d.name); })
+//     .attr("y", function(d) { return y(d.value); })
+//     .attr("height", function(d) { return height - y(d.value); })
+//     .style("fill", function(d) { return color(d.name); });
+//
+// var legend = svg.selectAll(".legend")
+//     .data(ageNames.slice().reverse())
+//   .enter().append("g")
+//     .attr("class", "legend")
+//     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+//
+// legend.append("rect")
+//     .attr("x", width - 18)
+//     .attr("width", 18)
+//     .attr("height", 18)
+//     .style("fill", color);
+//
+// legend.append("text")
+//     .attr("x", width - 24)
+//     .attr("y", 9)
+//     .attr("dy", ".35em")
+//     .style("text-anchor", "end")
+//     .text(function(d) { return d; });
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+// create x axis (!showTimeLine)
+// svg.append("g")
+//     .attr('class', 'x axis')
+//     .attr('transform', 'translate(0,' + chartHeight + ')')
+//     .call(xAxis)
+//     // .attr("dx", "-.8em")
+//     // .attr("dy", ".15em")
+//     .append("text")
+//     .style("text-anchor", "end")
+//     .attr("x",chartWidth)
+//     .attr("dy",-5)
+//     .style("font-style","italic")
+//     .text('Quantity'); // make dynamic!
+//
+// //create y axis (!showTimeLine)
+// svg.append("g")
+//     .attr('class', 'y axis')
+//     .call(yAxis);
+//
+// svg.selectAll('.axis line, .axis path')
+//     .style({
+//         'stroke': 'Black',
+//         'fill': 'none',
+//         'stroke-width': '1px',
+//         'shape-rendering': 'crispEdges'
+//     });
+//
+// // add bars
+// var bar = svg.selectAll(".bar")
+//     .data(dataset[0])
+//     .enter()
+//     // .append("a")
+//     // .attr("xlink:href", function (d) {
+//     //     var s = d.product.replace(/\s/g, '%20');
+//     //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
+//     // })
+//     // .attr("style", "text-decoration: none;")
+//     .append("rect") // change .append("g") to .append("rect").
+//     .attr("y", function (d) {
+//         return y(d.name);
+//     })
+//     .attr("height", y.rangeBand())
+//     .attr("width", function (d) {
+//         return x(d.value);
+//     })
+//     .attr('fill', "green")
+//     .on("mouseover", function(d){
+//   			d3.select(this).attr("fill", "orange");
+//   		})
+// 		.on("mouseout", function(d){
+// 			d3.select(this).attr("fill", "green");
+// 		});
+//
+// // add numbers in bars
+// svg.selectAll(".text")
+//     .data(dataset[0])
+//     .enter()
+//     .append('text')
+//     .attr("y", function (d) {
+//         return y(d.name) + y.rangeBand() / 2 ;
+//     })
+//     .attr("x", function (d) {
+//         return x(d.value) - 2;
+//     })
+//     .attr("dy", "0.3em")
+//     .text(function (d) {
+//         return d.value;
+//     })
+//     .attr('class', 'text')
+//     .attr('font-family', 'sans-serif')
+//     .attr('font-size', '11px')
+//     .attr('text-anchor', 'end')
+//     .attr('fill', 'white');
+
+} // !-- add chart
+
+function redraw(newChart){
+  const  dataset = newChart.dataset,
+         compareDates = newChart.compareDates,
+         showTimeLine = newChart.showTimeLine,
+         multifilter = newChart.multifilter,
+         dates = newChart.dates,
+         dataOption = newChart.dataOption,
+         dataToShow = newChart.dataToShow,
+         valuesToShow = newChart.valuesToShow,
+         svg = newChart.svg,
+         chartHeight = newChart.chartHeight,
+         chartWidth = newChart.chartWidth,
+         margin = newChart.margins,
+         max = newChart.maxDomain,
+         extent = newChart.timeExtent;
+
+// generate titles
+const dateRangeTitle = dateRangeText(dates[0]),
+      dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
+
+// set titles
+d3.select("#daterange-title")
+  .text(dateRangeTitle);
+
+d3.select("#data-title")
+  .text(dataTitle);
+
+
+  // setting scales dynamically
+  if (multifilter && showTimeLine) {
+          var	parseDate = d3.time.format("%m/%d/%y").parse;
+
+          dataset[0].forEach(function(d){d.date = parseDate(d.date);});
+
+          var	x0 = d3.time.scale().range([0, width])
+                                  .domain(extent);
+
+          var x1 = d3.scale.ordinal()
+                           .domain(valuesToShow).rangeRoundBands([0, x0.rangeBand()]);
+
+          var y = d3.scale.linear()
+                          .range([chartHeight, 0])
+                          .domain([0, max]);
+
+          var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
+          var color = d3.scale.ordinal()
+                              .range(colorRange);
+
+        var xAxis = d3.svg.axis()
+          .scale(x0)
+          .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+        var date = svg.selectAll(".date")
+            .data(dataset[0])
+          .enter().append("g")
+            .attr("class", "date")
+            .attr("transform", function(d) { return "translate(" + x0(d.date) + ",0)"; });
+
+        date.selectAll("rect")
+            .data(function(d) { return d.values; })
+          .enter().append("rect")
+          .transition()
+          .duration(300)
+          .ease("exp")
+            .attr("width", x1.rangeBand())
+            .attr("x", function(d) { return x1(d.name); })
+            .attr("y", function(d) { return y(d.value); })
+            .attr("height", function(d) { return height - y(d.value); })
+            .style("fill", function(d) { return color(d.name); });
+
+        var legend = svg.selectAll(".legend")
+            .data(valuesToShow.slice().reverse())
+          .enter().append("g")
+          .transition()
+          .duration(300)
+          .ease("exp")
+            .attr("class", "legend")
+            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", width - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", color);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(d) { return d; });
+
+        legend.exit()
+            .transition()
+            .duration(300)
+            .ease("exp")
+                .attr("width", 0)
+                .remove();
+
+  } else if (multifilter && !showTimeLine) {
+
+          var y0 = d3.scale.ordinal()
+                             .rangeRoundBands([chartHeight, 0], .1)
+                             .domain(data.map(function(d) { return d.name; }));
+
+            var y1 = d3.scale.ordinal()
+                             .domain(valuesToShow).rangeRoundBands([0, y0.rangeBand()]);
+
+            var x = d3.scale.linear()
+                .range([0, chartWidth])
+                .domain([0, max]);
+
+            var colorRange = valuesToShow.length===2 ? ["#6b486b", "#a05d56"] : ["#6b486b", "#a05d56", "#d0743c"];
+            var color = d3.scale.ordinal()
+                                .range(colorRange);
+
+            var xAxis = d3.svg.axis()
+              .scale(x)
+              .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+            .scale(y0)
+            .orient("left");
+
+            var date = svg.selectAll(".item")
+                .data(dataset[0])
+              .enter().append("g")
+                .attr("class", "item")
+                .attr("transform", function(d) { return "translate(" + x0(d.name) + ",0)"; });
+
+            date.selectAll("rect")
+                .data(function(d) { return d.values; })
+              .enter().append("rect")
+                .attr("width", x1.rangeBand())
+                .attr("x", function(d) { return x1(d.name); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("height", function(d) { return height - y(d.value); })
+                .style("fill", function(d) { return color(d.name); });
+
+            var legend = svg.selectAll(".legend")
+                .data(valuesToShow.slice().reverse())
+              .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                .attr("x", width - 18)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
+
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) { return d; });
+
+  } else if (!multifilter && !showTimeLine) {
+
+                var x = d3.scale.linear()
+                          .range([0, chartWidth])
+                          .domain([0, max]);
+
+                var y = d3.scale.ordinal()
+                          .rangeRoundBands([0,chartHeight], .05)
+                          .domain(dataset[0].map(function (d) {
+                              return d.name;
+                          }));
+
+                var yDomainData = dataset[0].map(function (d) {
+                    return d.name;
+                });
+
+                var xAxis = d3.svg.axis()
+                      .scale(x)
+                      .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                      .scale(y)
+                      .orient("left");
+
+                // update x axis
+            svg.selectAll("g.x.axis")
+                // .attr('transform', 'translate(0,' + chartHeight + ')')
+                .transition().duration(300).ease("sin-in-out")
+                .call(xAxis);
+
+                    // .attr("dx", "-.8em")
+                    // .attr("dy", ".15em")
+                    // .text('Quantity'); // make dynamic!
+
+                //update y axis (!showTimeLine)
+                svg.selectAll("g.y.axis")
+                   .transition().duration(300).ease("sin-in-out")
+                    .call(yAxis);
+
+
+                svg.selectAll('.axis line, .axis path')
+                    .style({
+                        'stroke': 'Black',
+                        'fill': 'none',
+                        'stroke-width': '1px',
+                        'shape-rendering': 'crispEdges'
+                    });
+
+                    // add numbers in bars
+                // var numbers = svg.selectAll(".text")
+                //         .data(dataset[0]);
+                //
+                //  numbers.enter()
+                //         .append('text')
+                //         .attr('class', 'text')
+                //         .attr('font-family', 'sans-serif')
+                //         .attr('font-size', '11px')
+                //         .attr('text-anchor', 'end')
+                //         .attr('fill', 'white');
+                //
+                //  numbers.transition()
+                //         .duration(300)
+                //         .ease("exp")
+                //         .attr("y", function (d) {
+                //           var yVal = y(d.name);
+                //           var rangeBand = y.rangeBand();
+                //             return y(d.name) + y.rangeBand() / 2 ;
+                //         })
+                //         .attr("x", function (d) {
+                //           var xVal = x(d.value);
+                //             return x(d.value) - 2;
+                //         })
+                //         .attr("dy", "0.3em")
+                //         .text(function (d) {
+                //             return d.value;
+                //         })
+                //
+                //   numbers.exit()
+                //         .transition()
+                //         .duration(300)
+                //         .ease("exp")
+                //             .attr("width", 0)
+                //             .remove();
+                // add bars
+                var bars = svg.selectAll("rect.bar")
+                    .data(dataset[0]);
+
+                bars.enter()
+                    // .append("a")
+                    // .attr("xlink:href", function (d) {
+                    //     var s = d.product.replace(/\s/g, '%20');
+                    //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
+                    // })
+                    // .attr("style", "text-decoration: none;")
+                    .append("rect") // change .append("g") to .append("rect").
+                    .attr("class","bar")
+                    .attr('fill', "green")
+                    .on("mouseover", function(d){
+                        d3.select(this).attr("fill", "orange");
+                      })
+                    .on("mouseout", function(d){
+                      d3.select(this).attr("fill", "green");
+                    });
+
+
+            bars.exit()
+                // .transition()
+                // .duration(300)
+                // .ease("exp")
+                //     .attr("width", 0)
+                    .remove();
+
+                bars.transition()
+                    .duration(300)
+                    .ease("quad")
+                    .attr("y", function (d) {
+                        var yVal = y(d.name);
+                        return y(d.name);
+                    })
+                    .attr("height", y.rangeBand())
+                    .attr("width", function (d) {
+                      var xVal = x(d.value);
+                        return x(d.value);
+                    });
+
+
+
+
+  } else if (!multifilter && showTimeLine) {
+
+                var	parseDate = d3.time.format("%m/%d/%y").parse;
+
+                dataset[0].forEach(function(d){d.date = parseDate(d.date);});
+
+                var y = d3.scale.linear()
+                      .range([chartHeight, 0])
+                      .domain([0, max]);
+
+                var	x = d3.time.scale().range([0, width])
+                                          .domain(extent);
+
+                var xAxis = d3.svg.axis()
+                  .scale(x)
+                  .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                  .scale(y)
+                  .orient("left");
+
+  }
+}
+// end redraw
+
+function getTimeScaleExtent(dataset, compareDates, showTimeLine) {
+  var extent, extent1, extent2;
+if (compareDates && showTimeLine) {
+  extent1 = d3.extent(dataset[0], function(d) { return d.date; });
+  extent2 = d3.extent(dataset[1], function(d) { return d.date; });
+return [extent1,extent2];
+} else if (!compareDates && showTimeLine) {
+  extent = d3.extent(dataset[0], function(d) { return d.date; });
+  return extent;
+}
+}
+
+function getMaxDomain(dataset, multifilter, compareDates) {
 var max,
     max1,
     max2;
 
 if (multifilter && !compareDates) {
-max = d3.max(datasets[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
+    max = d3.max(dataset[0], function(d) { return d3.max(d.values, function(d) { return d.value; }); });
+    return max;
+
 } else if (!multifilter && !compareDates){
-max = d3.max(dataset[0], function (d) {
-    return d.datapoint;
-});
-} else if (multifilter && compareDates) {
-  max1 = d3.max(datasets[0], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
-  max2 = d3.max(datasets[1], function(d) { return d3.max(d.datapoints, function(d) { return d.value; }); });
-} else if (!multifilter && !compareDates) {
-  max1 = d3.max(datasets[0], function (d) {
-      return d.datapoint;
-  });
-  max2 = d3.max(datasets[1], function (d) {
-      return d.datapoint;
-  });
-}
-
-// Set x scale.
-var x = d3.scale.linear()
-    .range([0, width])
-    .domain([0, max]);
-
-// Set y scale
-var y = d3.scale.ordinal()
-    .rangeRoundBands([height, 0], .05)
-    .domain(dataset.map(function (d) {
-        return d.name;
-    }));
-
-// set date-range title
-var dateRangeTitle = dateRangeText(dates[0]);
-d3.select("#daterange-title")
-  .text(dateRangeTitle);
-
-// set data title
-var dataTitle = dataTitleText(dataOption, dataToShow, valuesToShow);
-d3.select("#data-title")
-  .text(dataTitle);
-
-// set xAxis based on new scale
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-// set yAxis based on new scale
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
-
-// call x axis and append text (only if bars sideways)
-d3.selectAll('x.axis')
-    .call(xAxis)
-    // .attr("dx", "-.8em")
-    // .attr("dy", ".15em")
-    .append("text")
-    .style("text-anchor", "end")
-    .attr("x",width)
-    .attr("dy",-5)
-    .style("font-style","italic")
-    .text('Quantity');
-
-// call y axis and append text (only if bars going up)
-d3.selectAll('y.axis')
-    .call(yAxis)
-    // Text for Y-axis for bars going up
-    // .append('text')
-    // .attr('transform', 'rotate(-90)')
-    // .attr('y', -50) // NOTE THAT when ROTATED perpendicular 'y' moves element left/right
-    // .attr('x', -(height - 20) / 2) // NOTE THAT when ROTATED perpendicular 'x' moves element up/down
-    // .attr('dy', '.71em')
-    // .style('text-anchor', 'end')
-
-// create axis lines
-svg.selectAll('.axis line, .axis path')
-    .style({
-        'stroke': 'Black',
-        'fill': 'none',
-        'stroke-width': '1px',
-        'shape-rendering': 'crispEdges'
+    max = d3.max(dataset[0], function (d) {
+        return d.value;
     });
-
-// create and attach bars to chart
-var bar = svg.selectAll(".bar")
-    .data(dataset)
-    .enter()
-    // .append("a")
-    // .attr("xlink:href", function (d) {
-    //     var s = d.product.replace(/\s/g, '%20');
-    //     return 'https://www.google.co.za/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=' + s;
-    // })
-    // .attr("style", "text-decoration: none;")
-    .append("rect") // change .append("g") to .append("rect").
-    .transition()
-    .duration(300)
-    .ease("exp")
-    .attr("y", function (d) {
-        return y(d.product);
-    })
-    .attr("height", y.rangeBand())
-    .attr("width", function (d) {
-        return x(d.quantity);
-    })
-    .attr('fill', "green")
-  .on("mouseover", function(d){
-			d3.select(this).attr("fill", "orange");
-		})
-		.on("mouseout", function(d){
-			d3.select(this).attr("fill", "green");
-		})
-    .exit()
-    .transition()
-    .duration(300)
-    .ease("exp")
-        .attr("width", 0)
-        .remove();
-
-// add numbers in bars
-svg.selectAll(".text")
-    .data(dataset)
-    .enter()
-    .append('text')
-    .attr("y", function (d) {
-        return y(d.product) + y.rangeBand() / 2 ;
-    })
-    .attr("x", function (d) {
-        return x(d.quantity) - 2;
-    })
-    .attr("dy", "0.3em")
-    .text(function (d) {
-        return d.quantity;
-    })
-    .attr('class', 'text')
-    .attr('font-family', 'sans-serif')
-    .attr('font-size', '11px')
-    .attr('text-anchor', 'end')
-    .attr('fill', 'white');
+    return max;
+} else if (multifilter && compareDates) {
+      max1 = d3.max(dataset[0], function(d) { return d3.max(d.values, function(d) { return d.value; }); });
+      max2 = d3.max(dataset[1], function(d) { return d3.max(d.values, function(d) { return d.value; }); });
+      return [max1,max2];
+} else if (!multifilter && compareDates) {
+      max1 = d3.max(dataset[0], function (d) {
+          return d.value;
+      });
+      max2 = d3.max(dataset[1], function (d) {
+          return d.value;
+      });
+      return [max1,max2];
 }
-
 }
 
 function monthText(monthIndex) {
@@ -658,73 +1029,49 @@ function valuesToShowArray(valuesToShow){
     var showAmount = valuesToShow[0] === "cost" || valuesToShow[0] === "revenue" || valuesToShow[0] === "profit";
     var showQuantity = valuesToShow[0] === "sold" || valuesToShow[0] === "purchased";
 
-    if (!showMultiVal && valuesToShow === "sold" || "purchased") {
+    if (!showMultiVal && showQuantity) {
         return data.map(function (d) {
-            d.datapoint = d.quantity;
+            d.value = d.quantity;
             d.name = showingProducts ? d.product : d.category;
             return d;
-        });
-    } else if (!showMultiVal && valuesToShow === "cost") {
+        }).sort(sortData);
+    } else if (!showMultiVal && showAmount) {
         return data.map(function (d) {
-            d.datapoint = d.cost;
+            d.value = d[valuesToShow[0]];
             d.name = showingProducts ? d.product : d.category;
             return d;
-        });
-    } else if (!showMultiVal && valuesToShow === "revenue") {
-        return data.map(function (d) {
-            d.datapoint = d.revenue;
-            d.name = showingProducts ? d.product : d.category;
-            return d;
-        });
-    } else if (!showMultiVal && valuesToShow === "profit") {
-        return data.map(function (d) {
-            d.datapoint = d.profit;
-            d.name = showingProducts ? d.product : d.category;
-            return d;
-        });
+        }).sort(sortData);
     } else if (showMultiVal && showQuantity) {
       return data.map(function (d) {
-          d.datapoints = [{name: sales, value: +d.quantity}, {name: purchases, value: +d.purchases}];
+          d.values = [{name: sales, value: +d.quantity}, {name: purchases, value: +d.purchases}];
           d.name = showingProducts ? d.product : d.category;
           return d;
       });
     } else if (showMultiVal && showAmount) {
       data.forEach(function(d){
-        d.datapoints = valuesToShow.map(function(value){return {name: value, value: d[value]};});
+        d.values = valuesToShow.map(function(value){return {name: value, value: d[value]};});
         d.name = showingProducts ? d.product : d.category;
       });
+      return data;
     }
   }
 
   function sortData(a, b) {
-      return a.datapoint - b.datapoint;
+      return b.value - a.value;
   }
 
-  function structureData(filter, data, dataOption) {
-    if (data.length) {
-      return setDataPoints(filter, data, dataOption).sort(sortData);
+  function structureData(valuesToShow, data, dataOption) {
+    if (data.length===1) {
+      return [setDataPoints(valuesToShow, data[0], dataOption)];
 
-    } else {
-        return [setDataPoints(filter, data.set1, dataOption).sort(sortData), setDataPoint(filter, data.set2, dataOption).sort(sortData)];
+    } else if (data.length===2){
+        return [setDataPoints(valuesToShow, data[0], dataOption), setDataPoint(valuesToShow, data[1], dataOption)];
 
     }
   }
 
   function retrieveData(data, compareDates, dataOption, valuesToShow) {
-    switch (filter) {
-    case "sold":
-        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
-    case "purchased":
-        return compareDates ? structureData(valuesToShow, {set1: data.purchasesData, set2: data.purchasesDataCompare}, dataOption) : structureData(valuesToShow, data.purchasesData, dataOption);
-    case "revenue":
-        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
-    case "cost":
-        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
-    case "profit":
-        return compareDates ? structureData(valuesToShow, {set1: data.salesData, set2: data.salesDataCompare}, dataOption) : structureData(valuesToShow, data.salesData, dataOption);
-    default:
-        return null;
-    }
+        return compareDates ? structureData(valuesToShow, [data[0], data[1]], dataOption) : structureData(valuesToShow, [data[0]], dataOption);
   }
 
         function changeId(match, chart, chartNumber, suffixLetter) {
@@ -752,7 +1099,7 @@ function valuesToShowArray(valuesToShow){
 
           return newId;
         }
-  }
+
         // BARS GO UP
         //   } else if (!compareDates && showTimeLine) {
         //     margin.left = 50;
