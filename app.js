@@ -89,13 +89,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, "views"));
 
-app.use('/css', sassMiddleware({
-    src: path.join(__dirname, 'public', 'sass'),
-    dest: path.join(__dirname, 'public', 'css'),
-    debug: true,
-    outputStyle: 'expanded',
-    // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
-}));
+// app.use('/css', sassMiddleware({
+//     src: path.join(__dirname, 'public', 'sass'),
+//     dest: path.join(__dirname, 'public', 'css'),
+//     debug: true,
+//     outputStyle: 'expanded',
+//     // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+// }));
 
 // app.use(postcssMiddleware({
 //     src: function (req) {
