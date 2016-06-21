@@ -20,3 +20,4 @@ public/js/bootstrap-hover-dropdown.js
 public/js/bootstrap-hover-dropdown.min.js
 public/jquery-ui-1.11.4.custom/
 lib/drawTable.js
+data-services/productServicePromise.js

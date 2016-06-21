@@ -38,8 +38,8 @@ var UserDataService = require('./data-services/userDataService'),
     SalesDataService = require('./data-services/salesDataService'),
     ProductDataService = require('./data-services/productDataService'),
     CategoryDataService = require('./data-services/categoryDataService'),
-    ChartDataService = require('./data-services/graphDataService'),
-    ProductServicePromise = require('./data-services/productServicePromise');
+    ChartDataService = require('./data-services/graphDataService');
+    // ProductServicePromise = require('./data-services/productServicePromise');
 
 var app = express();
 
@@ -58,8 +58,8 @@ var dataServiceSetup = function(connection) {
 		salesDataService: new SalesDataService(connection),
 		productDataService: new ProductDataService(connection),
 		categoryDataService: new CategoryDataService(connection),
-		chartDataService: new ChartDataService(connection),
-		productServicePromise: new ProductServicePromise(connection)
+		chartDataService: new ChartDataService(connection)
+		// productServicePromise: new ProductServicePromise(connection)
 	};
 };
 
