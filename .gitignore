@@ -16,7 +16,7 @@ transitionExample.js
 useful_SQL.sql
 sass/
 php/
-js/bootstrap-hover-dropdown.js
-js/bootstrap-hover-dropdown.min.js
-jquery-ui-1.11.4.custom/
+public/js/bootstrap-hover-dropdown.js
+public/js/bootstrap-hover-dropdown.min.js
+public/jquery-ui-1.11.4.custom/
 lib/drawTable.js
