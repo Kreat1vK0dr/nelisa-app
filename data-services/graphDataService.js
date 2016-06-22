@@ -7,12 +7,12 @@ var Promise = require('bluebird')
 // })
 module.exports = function(connection) {
 
-  var getAllData = function(query, cb){
-        Promise.promisify(connection.query, conneciton)(query).then(cb);
-    };
   // var getAllData = function(query, cb){
-  //       connection.query( query, cb);
+  //       Promise.promisify(connection.query, conneciton)(query).then(cb);
   //   };
+  var getAllData = function(query, cb){
+        connection.query( query, cb);
+    };
 
   var getData = function(query, data, cb){
         connection.query( query, data, cb);
@@ -52,5 +52,9 @@ this.getPurchasesAllCategories = function (data, cb) {
 this.getPurchasesByCategory = function (data, cb) {
       getData('SELECT * FROM (SELECT pu.id, DATE_FORMAT(pu.date, "%m/%d/%Y") as date, c.description category, s.name supplier, pu.quantity , pu.remaining, pu.unitcost FROM purchases pu, products pr, categories c, suppliers s WHERE pu.product_id = pr.id AND pu.supplier_id=s.id AND pu.category_id = c.id AND c.id = ? AND DATE_FORMAT(pu.date,"%m/%d/%Y") BETWEEN ? AND ?) t GROUP BY t.date', data, cb);
   };
+
+// this.getInventoryRemainingAllCategories = function(data,cb) {
+//   getData("SELECT * FROM (SELECT * FROM inventory_log WHERE category_id = ? AND action="SALE" ORDER BY product_id, date, )")
+// }
 
 };

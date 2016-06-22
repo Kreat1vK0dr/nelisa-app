@@ -363,30 +363,6 @@ if (multifilter && showTimeLine) {
                       'shape-rendering': 'crispEdges'
                   });
 
-                  // add numbers in bars
-                  svg.selectAll(".text")
-                      .data(dataset[0])
-                      .enter()
-                      .append('text')
-                      .attr("y", function (d) {
-                        var yVal = y(d.name);
-                        var rangeBand = y.rangeBand();
-                          return y(d.name) + y.rangeBand() / 2 ;
-                      })
-                      .attr("x", function (d) {
-                        var xVal = x(d.value);
-                          return x(d.value) - 2;
-                      })
-                      .attr("dy", "0.3em")
-                      .text(function (d) {
-                          return d.value;
-                      })
-                      .attr('class', 'text')
-                      .attr('font-family', 'sans-serif')
-                      .attr('font-size', '11px')
-                      .attr('text-anchor', 'end')
-                      .attr('fill', 'white');
-
               // add bars
               var bars = svg.selectAll("rect.bar")
                   .data(dataset[0]);
@@ -417,6 +393,26 @@ if (multifilter && showTimeLine) {
               			d3.select(this).attr("fill", "green");
               		});
 
+                  // add numbers in bars
+                  svg.selectAll("text.numbers")
+                      .data(dataset[0])
+                      .enter()
+                      .append('text')
+                      .attr("class","values")
+                      .attr("y", function (d) {
+                          return y(d.name) + y.rangeBand() / 2 ;
+                      })
+                      .attr("x", function (d) {
+                          return x(d.value) - 2;
+                      })
+                      .attr("dy", "0.3em")
+                      .text(function (d) {
+                          return d.value;
+                      })
+                      .attr('font-family', 'sans-serif')
+                      .attr('font-size', '11px')
+                      .attr('text-anchor', 'end')
+                      .attr('fill', 'white');
 
 
 } else if (!multifilter && showTimeLine) {
@@ -767,41 +763,6 @@ d3.select("#data-title")
                         'shape-rendering': 'crispEdges'
                     });
 
-                    // add numbers in bars
-                // var numbers = svg.selectAll(".text")
-                //         .data(dataset[0]);
-                //
-                //  numbers.enter()
-                //         .append('text')
-                //         .attr('class', 'text')
-                //         .attr('font-family', 'sans-serif')
-                //         .attr('font-size', '11px')
-                //         .attr('text-anchor', 'end')
-                //         .attr('fill', 'white');
-                //
-                //  numbers.transition()
-                //         .duration(300)
-                //         .ease("exp")
-                //         .attr("y", function (d) {
-                //           var yVal = y(d.name);
-                //           var rangeBand = y.rangeBand();
-                //             return y(d.name) + y.rangeBand() / 2 ;
-                //         })
-                //         .attr("x", function (d) {
-                //           var xVal = x(d.value);
-                //             return x(d.value) - 2;
-                //         })
-                //         .attr("dy", "0.3em")
-                //         .text(function (d) {
-                //             return d.value;
-                //         })
-                //
-                //   numbers.exit()
-                //         .transition()
-                //         .duration(300)
-                //         .ease("exp")
-                //             .attr("width", 0)
-                //             .remove();
                 // add bars
                 var bars = svg.selectAll("rect.bar")
                     .data(dataset[0]);
@@ -844,7 +805,41 @@ d3.select("#data-title")
                         return x(d.value);
                     });
 
+          // add numbers in bars
+          var numbers = svg.selectAll("text.values")
+                  .data(dataset[0]);
 
+           numbers.enter()
+                  .append('text')
+                  .attr('class', 'values')
+                  .attr('font-family', 'sans-serif')
+                  .attr('font-size', '11px')
+                  .attr('text-anchor', 'end')
+                  .attr('fill', 'white');
+
+           numbers.transition()
+                  .duration(300)
+                  .ease("exp")
+                  .attr("y", function (d) {
+                    var yVal = y(d.name);
+                    var rangeBand = y.rangeBand();
+                      return y(d.name) + y.rangeBand() / 2 ;
+                  })
+                  .attr("x", function (d) {
+                    var xVal = x(d.value);
+                      return x(d.value) - 2;
+                  })
+                  .attr("dy", "0.3em")
+                  .text(function (d) {
+                      return d.value;
+                  })
+
+            numbers.exit()
+                  .transition()
+                  .duration(300)
+                  .ease("exp")
+                      .attr("width", 0)
+                      .remove();
 
 
   } else if (!multifilter && showTimeLine) {

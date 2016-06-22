@@ -37,7 +37,7 @@
   <select id="products" name="product">
     <option value="" selected>Please select a product</option>
     {{#products}}
-    <option value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
+    <option value="{{p_id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{product}}" data-category="{{c_id}}">{{product}}</option>
     {{/products}}
   </select>
 

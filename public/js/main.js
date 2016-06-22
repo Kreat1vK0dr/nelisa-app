@@ -81,14 +81,14 @@ $(document).ready(function () {
             if (allFieldsFilledIn) {
                 var sub_total = price * quantity;
 
-                var id = storage === null ? 1 : storage.length + 1;
+                var rowId = storage === null ? 1 : storage.length + 1;
                 var sale = {
-                        itemId: id,
+                        itemId: rowId,
                         data: [product_id, category_id, price, quantity, inventory]
                     },
                     item = [product, category, price, quantity, inventory, sub_total];
 
-                var newRowContent = "<tr data-row-id='" + id + "'>";
+                var newRowContent = "<tr data-row-id='" + rowId + "'>";
 
                 item.forEach(function (content) {
                     newRowContent += "<td>" + content + "</td>";
@@ -101,21 +101,20 @@ $(document).ready(function () {
                     items.push(sale);
                     window.localStorage.setItem('sale', JSON.stringify(items));
                     previousState.push({
-                        rowId: id,
+                        rowId: rowId,
                         html: newRowContent
                     });
                     var newState = previousState;
                     window.localStorage.setItem('table', JSON.stringify(newState));
 
                     $('#no-items-text').css('display', 'none');
-
                     $('#added-items-table thead').css('display', '');
                     $('#added-items-table tbody').css('display', '');
                     $('#added-items-table tbody').append(newRowContent);
                 } else {
                     window.localStorage.setItem('sale', JSON.stringify([sale]));
                     window.localStorage.setItem('table', JSON.stringify([{
-                        rowId: id,
+                        rowId: rowId,
                         html: newRowContent
                     }]));
                     console.log(newRowContent);
@@ -182,15 +181,17 @@ $(document).ready(function () {
 
                 if (canExecuteSale.length === 0 && JSON.parse(dataToPost).length != 0) {
                     $.post('http://localhost:5000/sales/add/execute', {
-                        data: dataToPost
-                    });
+                        data: dataToPost  });
+
                     window.localStorage.clear();
                     $('#execute-success').css('display', 'block');
                     $('#execute-success-ok').click(function () {
+                      window.localStorage.removeItem("sale");
                         $('.overlay').css('display', 'none');
                         $('#execute-success').css('display', 'none');
                         window.location.replace("/sales/add");
                     });
+
                 } else {
                     var overlay = document.getElementsByClassName('overlay')[0],
                         alertBox = document.getElementById('execute-alert'),
@@ -209,6 +210,7 @@ $(document).ready(function () {
                     $('#alert-table tbody').append(tableBody);
 
                     $('#execute-alert-ok').click(function () {
+                      $('#alert-table tbody').empty();
                         overlay.style.display = 'none';
                         alertBox.style.display = 'none';
                     });

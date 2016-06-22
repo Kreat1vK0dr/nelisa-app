@@ -65,8 +65,6 @@ BEGIN
   DECLARE inv_bef_sale INT;
   DECLARE inv_aft_sale INT;
 
-  IF (new.date = CURDATE())
-  THEN
   SET @date := new.date;
   SET @sale_id := new.sale_id;
   SET @quantity := new.quantity;
@@ -75,7 +73,6 @@ BEGIN
   SET @inv_aft_sale := @inv_bef_sale - @quantity;
   INSERT INTO inventory_log (date, action, action_id, product_id, quantity, inv_bef_action, inv_aft_action)
   VALUES (@date, 'SALE', @sale_id , @product_id, @quantity, @inv_bef_sale, @inv_aft_sale);
-  END IF;
 END$$
 DELIMITER ;
 
@@ -90,8 +87,6 @@ BEGIN
   DECLARE inv_bef_purchase INT;
   DECLARE inv_aft_purchase INT;
 
-  IF (new.date = CURDATE())
-  THEN
   SET @date := new.date;
   SET @purchase_id := new.id;
   SET @quantity := new.quantity;
@@ -101,6 +96,5 @@ BEGIN
 
   INSERT INTO inventory_log (date, action, action_id, product_id, quantity, inv_bef_action, inv_aft_action)
   VALUES (@date, 'PURCHASE', @purchase_id ,  @product_id,@quantity, @inv_bef_purchase, @inv_aft_purchase);
-  END IF;
 END$$
 DELIMITER ;
