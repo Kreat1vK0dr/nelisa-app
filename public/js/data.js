@@ -98,7 +98,7 @@ $('#show-chart-btn').on('click', function (e) {
            const maxDomain = getMaxDomain(dataset, received.multifilter);
            const timeExtent = getTimeScaleExtent(dataset, received.compareDates, received.showTimeLine);
 
-          var svgWidth = 800,
+          var svgWidth = 1000,
               svgHeight = 500;
 
           const chartWidth = svgWidth - margin.left - margin.right,
@@ -1022,11 +1022,12 @@ function valuesToShowArray(valuesToShow){
     var showingProducts = dataOption==="product" ? true : false;
     var showMultiVal = valuesToShow.length > 1;
     var showAmount = valuesToShow[0] === "cost" || valuesToShow[0] === "revenue" || valuesToShow[0] === "profit";
-    var showQuantity = valuesToShow[0] === "sold" || valuesToShow[0] === "purchased";
+    var showQuantity = valuesToShow[0] === "sold" || valuesToShow[0] === "purchased" || valuesToShow[0] === "remaining";
+    var showRemaining = valuesToShow.indexOf('remaining') != -1;
 
     if (!showMultiVal && showQuantity) {
         return data.map(function (d) {
-            d.value = d.quantity;
+            d.value = showRemaining ? d.remaining : d.quantity;
             d.name = showingProducts ? d.product : d.category;
             return d;
         }).sort(sortData);
@@ -1037,14 +1038,14 @@ function valuesToShowArray(valuesToShow){
             return d;
         }).sort(sortData);
     } else if (showMultiVal && showQuantity) {
-      return data.map(function (d) {
-          d.values = [{name: sales, value: +d.quantity}, {name: purchases, value: +d.purchases}];
+      data.forEach(function(d){
+          d.values = valuesToShow.map(function(value){return {name: value, value: value==="remaining" ? +d.remaining : +d.quantity};});
           d.name = showingProducts ? d.product : d.category;
-          return d;
       });
+      return data;
     } else if (showMultiVal && showAmount) {
       data.forEach(function(d){
-        d.values = valuesToShow.map(function(value){return {name: value, value: d[value]};});
+        d.values = valuesToShow.map(function(value){return {name: value, value: +d[value]};});
         d.name = showingProducts ? d.product : d.category;
       });
       return data;
