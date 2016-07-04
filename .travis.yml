@@ -2,8 +2,6 @@
 
 before_script:
   - npm install
-  # - mysql -u root -e 'create database nelisa_another_copy;'
-  # - mysql -u root nelisa_another_copy < tables.sql
 - mysql --local-infile -u root -p1amdan13l < ./database_setup/database-setup.sql
 - node ./database_setup/database-setup.js
 - mysql --local-infile -u root -p1amdan13l < ./database_setup/database-setup-2.sql
