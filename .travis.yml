@@ -2,9 +2,9 @@
 
 before_script:
   - npm install
-- mysql --local-infile -u root -p1amdan13l < ./database_setup/database-setup.sql
-- node ./database_setup/database-setup.js
-- mysql --local-infile -u root -p1amdan13l < ./database_setup/database-setup-2.sql
-- node ./database_setup/manualAdminSetup.js
+  - mysql --local-infile -u root -p1amdan13l < ./database_setup/database-setup.sql
+  - node ./database_setup/database-setup.js
+  - mysql --local-infile -u root -p1amdan13l < ./database_setup/database-setup-2.sql
+  - node ./database_setup/manualAdminSetup.js
 
-script: mocha
+script: mocha ./test/dataTest.js
