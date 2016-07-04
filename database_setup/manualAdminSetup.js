@@ -1,12 +1,15 @@
 var mysql = require('mysql'),
     bcrypt = require('bcrypt');
 
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '1amdan13l',
-  database : 'nelisa_another_copy'
-});
+    const password = process.env.MYSQL_PWD !== null ? process.env.MYSQL_PWD : "1amdan13l",
+          user = process.env.MYSQL_USER !== null ? process.env.MYSQL_USER : "root";
+
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: user,
+        password: password,
+        database: 'nelisa_another_copy'
+    });
 
 // create hash
 const saltRounds = 12;

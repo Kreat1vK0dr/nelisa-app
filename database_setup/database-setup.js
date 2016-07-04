@@ -2,11 +2,13 @@ var mysql = require('mysql'),
     fs = require('fs');
 
 var costOfSales = require('../lib/cost-of-sales.js');
+const password = process.env.MYSQL_PWD !== null ? process.env.MYSQL_PWD : "1amdan13l",
+      user = process.env.MYSQL_USER !== null ? process.env.MYSQL_USER : "root";
 
 var connection = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: '1amdan13l',
+    user: user,
+    password: password,
     database: 'nelisa_another_copy'
 });
 connection.connect();
