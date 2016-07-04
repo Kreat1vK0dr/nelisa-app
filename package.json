@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "postcss-middleware": "^1.0.0"
   },
   "devDependencies": {
+    "mocha": "^2.5.3",
     "node-sass": "^3.6.0"
   }
 }
