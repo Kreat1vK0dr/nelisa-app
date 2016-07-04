@@ -59,10 +59,8 @@ console.log("defaultfrom",defaultDateFrom );
 console.log("defaultto",defaultDateTo );
 // var defaultDates = defaultDates(availableDates);
 
-
-
 $(function() {
-  $( "#from" ).datepicker({
+  $( ".chart-add .from" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateFrom,
     dateFormat: 'dd-mm-yy',
@@ -70,38 +68,62 @@ $(function() {
     numberOfMonths: 2,
     onClose: function(selectedDate) {
       console.log("This is selected date: ", selectedDate);
-      $( "#to" ).datepicker( "option", "minDate", selectedDate);
+      $( ".chart-add .to" ).datepicker( "option", "minDate", selectedDate);
     }
   });
-  $( "#to" ).datepicker({
+  $( ".chart-add .to" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateTo,
     dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function( selectedDate ) {
-      $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+      $( ".chart-add .from" ).datepicker( "option", "maxDate", selectedDate );
     }
   });
-  $( "#from-compare" ).datepicker({
+  // $( ".chart-add .from-compare" ).datepicker({
+  //   beforeShowDay: available,
+  //   defaultDate: defaultDateFrom,
+  //   dateFormat: 'dd-mm-yy',
+  //   changeMonth: true,
+  //   numberOfMonths: 2,
+  //   onClose: function(selectedDate) {
+  //     $( ".to-compare" ).datepicker( "option", "minDate", selectedDate );
+  //   }
+  // });
+  // $( ".chart-add .to-compare" ).datepicker({
+  //   beforeShowDay: available,
+  //   defaultDate: defaultDateTo,
+  //   dateFormat: 'dd-mm-yy',
+  //   changeMonth: true,
+  //   numberOfMonths: 2,
+  //   onClose: function( selectedDate ) {
+  //     $( ".from-compare" ).datepicker( "option", "maxDate", selectedDate );
+  //   }
+  // });
+});
+$(function() {
+  $( ".chart-edit .from" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateFrom,
     dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function(selectedDate) {
-      $( "#to-compare" ).datepicker( "option", "minDate", selectedDate );
+      console.log("This is selected date: ", selectedDate);
+      $( ".chart-edit .to" ).datepicker( "option", "minDate", selectedDate);
     }
   });
-  $( "#to-compare" ).datepicker({
+  $( ".chart-edit .to" ).datepicker({
     beforeShowDay: available,
     defaultDate: defaultDateTo,
     dateFormat: 'dd-mm-yy',
     changeMonth: true,
     numberOfMonths: 2,
     onClose: function( selectedDate ) {
-      $( "#from-compare" ).datepicker( "option", "maxDate", selectedDate );
+      $( ".chart-edit .from" ).datepicker( "option", "maxDate", selectedDate );
     }
   });
+
 });
 });

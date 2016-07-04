@@ -22,7 +22,7 @@ module.exports = function(connection) {
         connection.query(query, data, cb);
       };
 
-  var getDataAndLoop = function(query1, query2, data, cb) {
+  var getDataAndLoop = function(query, data, cb) {
     var track,
      remaining = [],
      showTimeLine = data[0],
@@ -30,22 +30,19 @@ module.exports = function(connection) {
 
     if (showTimeLine) {
       var product = data[1],
-            date1 = data[2][0],
-            date2 = data[2][1];
+            dates = data[2];
 
-      connection.query(query1,[product,date1,date2], function(err,data){
-      const allLogDates = data.map(function(log){return log.date});
-      const dates = Array.from(new Set(allLogDates));
       track = dates.length;
       dates.forEach(function(date){
         if (byCategory) {
           var remainingAtDate = {p_ids: [], date: date, remaining: 0};
           for (var i = 0; i<product.length;i++) {
-          connection.query(query2,[product[i], date],function (err, data){
+          connection.query(query,[product[i], date],function (err, data){
             if (err) throw err;
-
             remainingAtDate.p_ids.push(product[i]);
+            if (data.length!=0){
             remainingAtDate.remaining += data[0].remaining;
+          }
             if (i===product.length-1) {
             remaining.push(remainingAtDate);
             track--;
@@ -56,9 +53,13 @@ module.exports = function(connection) {
           });
         }
         } else {
-        connection.query(query2,[product, date],function (err, data){
+        connection.query(query,[product, date],function (err, data){
           if (err) throw err;
-          remaining.push({p_id: product, date: date, remaining: data[0].remaining});
+          var remainingAtDate = {p_id: product, date: date, remaining: 0};
+          if (data.length!=0){
+          remainingAtDate.remaining = data[0].remaining;
+          }
+          remaining.push(remainingAtDate);
           track--;
           if (track===0) {
             cb(null, remaining);
@@ -66,21 +67,27 @@ module.exports = function(connection) {
         });
       }
     });
-  });
   } else if (!showTimeLine) {
     var products = data[1],
-          date1 = data[2][0],
-          date2 = data[2][1];
+          endDate = data[2][1];
 
     track = products.length
-// console.log("THIS IS PRODUCTS", products);
+
     products.forEach(function(product){
-      // console.log("THIS IS EACH PRODUCT",product);
-      connection.query(query1,[product,date1,date2],function (err, data){
+
+      connection.query(query,[product,endDate],function (err, data){
         if (err) throw err;
+        console.log("THIS IS PRODUCTS", products);
+        console.log("THIS IS EACH PRODUCT",product);
+        console.log("THIS IS DATA LENGTH", data.length);
+        if (data.length!=0) {
         remaining.push(data[0].remaining);
+      } else {
+        remaining.push(0);
+      }
         track--;
         if (track===0) {
+          // console.log("COMPLETED BATCH",remaining);
           cb(null, remaining);
         }
       });
@@ -120,15 +127,15 @@ this.getPurchasesByCategory = function (data, cb) {
   };
 
 this.getInventoryRemainingAll = function(data,cb) {
-  var sqlQuery = "SELECT product_id p_id, inv_aft_action remaining FROM inventory_log WHERE product_id = ? AND DATE_FORMAT(date,'%m/%d/%Y') BETWEEN ? AND ? ORDER BY date DESC LIMIT 1";
-  getDataAndLoop(sqlQuery, null, data, cb);
+  var sqlQuery = "SELECT product_id p_id, inv_aft_action remaining FROM inventory_log WHERE product_id = ? AND DATE_FORMAT(date, '%Y-%m-%d') <= STR_TO_DATE(?, '%m/%d/%Y') ORDER BY date DESC LIMIT 1";
+  getDataAndLoop(sqlQuery, data, cb);
 };
 
 this.getInventoryRemainingSingle = function(data, cb) {
-  var sqlQuery1 = "SELECT DATE_FORMAT(date,'%m/%d/%Y') date FROM inventory_log WHERE product_id = ? AND DATE_FORMAT(date,'%m/%d/%Y') BETWEEN ? AND ?";
-  var sqlQuery2 = "SELECT product_id p_id, inv_aft_action remaining FROM inventory_log WHERE product_id = ? AND DATE_FORMAT(date,'%m/%d/%Y') = ? ORDER BY sale_id DESC LIMIT 1";
+  var sqlquery = "SELECT product_id p_id, inv_aft_action remaining FROM inventory_log WHERE product_id = ? AND DATE_FORMAT(date, '%Y-%m-%d') <= STR_TO_DATE(?, '%m/%d/%Y') ORDER BY id DESC LIMIT 1";
+  // var sqlquery = "SELECT product_id p_id, inv_aft_action remaining FROM inventory_log WHERE product_id = ? AND DATE_FORMAT(date,'%m/%d/%Y') <= ? ORDER BY id DESC LIMIT 1";
 
-  getDataAndLoop(sqlQuery1,sqlQuery2, data, cb);
+  getDataAndLoop(sqlquery, data, cb);
 };
 this.getCategory = function(data,cb) {
   getData("SELECT id, description category FROM categories WHERE id = ?",data,cb);

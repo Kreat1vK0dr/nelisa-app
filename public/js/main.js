@@ -86,7 +86,7 @@ $(document).ready(function () {
                         itemId: rowId,
                         data: [product_id, category_id, price, quantity, inventory]
                     },
-                    item = [product, category, price, quantity, inventory, sub_total];
+                    item = [product, category, price, quantity, sub_total];
 
                 var newRowContent = "<tr data-row-id='" + rowId + "'>";
 

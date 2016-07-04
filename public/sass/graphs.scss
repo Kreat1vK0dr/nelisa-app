@@ -1,7 +1,7 @@
 .form-element {
   margin-top: 0.5em;
 }
-#period-compare {
+.period-compare {
 display: none;
 }
 .hide-element {
@@ -10,18 +10,26 @@ display: none;
 .chart-adder-element {
 display: inline-block;
 }
-.data-filter {
-  display: none;
-}
-#period-compare-btn {
+// .data-filter {
+//   display: none;
+// }
+.period-compare-btn {
   display: inline-block;
 }
-.chart rect:hover {
-  opacity: 0.7;
-}
-.chart {
+
+svg {
   border: 1px solid #cccccc;
-  text-align: center;
+    display:block;
+  // text-align: center;
+}
+.svg-remove{
+  position: relative;
+  width: 50%;
+}
+.svg-edit {
+  position: relative;
+  width: 50%;
+
 }
 .type-select-graph {
   width: 8em;
@@ -31,6 +39,77 @@ display: inline-block;
   display: inline-block;
 }
 
-.chart-adder {
+.chart-add {
   margin-left: 10%;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: '1px';
+  shape-rendering: crispEdges;
+}
+
+rect.bar {
+  fill: green;
+}
+
+rect.bar:hover {
+  // fill: blue ;
+  fill: orangered ;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.chartedit {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+.chart-edit {
+  position: absolute;
+  width: 20%;
+  z-index: 20;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.product-select {
+  max-width: 180px;
+}
+
+.data-quantity-filter {
+  // max-width: 280px;
 }

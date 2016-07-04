@@ -33,6 +33,10 @@ SET unique_products = 1,
 ALTER TABLE sales
 DROP price;
 
+UPDATE inventory_log
+SET inv_aft_action = 0
+WHERE inv_aft_action < 0;
+
 DELIMITER $$
  DROP PROCEDURE IF EXISTS initialize_inventory$$
  CREATE PROCEDURE initialize_inventory()
