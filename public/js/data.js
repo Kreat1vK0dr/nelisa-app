@@ -348,7 +348,8 @@ $('#show-chart-btn').on('click', function (e) {
 
             if (multifilter) {
               var radio = ["grouped","stacked"]
-              var form = div.append("form");
+              var form = div.append("form")
+                            .attr("class","group-stack");
 
               radio.forEach(function(i){
                 form.append("label")
@@ -471,6 +472,7 @@ chart.append("text")
         .style("font-style", "italic")
         .text(dataTitle);
   }
+
 function addStackedGroupedColumnChart(newChart){
   var x0, x1, y, xAxis, yAxis, bars, groups, legend;
 
@@ -484,7 +486,7 @@ function addStackedGroupedColumnChart(newChart){
         axisLabel = newChart.axisLabel,
         chartId = newChart.chartId,
         chart = newChart.chart;
-console.log("THIS IS CHART ID", chartId);
+
   const name = showTimeLine ? "date" : "name";
 
   var stackTip = d3.tip()

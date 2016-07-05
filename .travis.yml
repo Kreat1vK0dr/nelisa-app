@@ -1,8 +1,10 @@
 .travis.yml:
 
 language: node_js
+
 node_js:
   - "5"
+  
 before_script:
   - npm install
   - mysql --local-infile -u root < ./database_setup/database-setup.sql

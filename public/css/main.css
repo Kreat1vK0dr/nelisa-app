@@ -484,6 +484,12 @@ rect.bar:hover {
   max-width: 180px;
 }
 
+.group-stack {
+  top: -35em;
+  left: 30em;
+  position: relative;
+}
+
 #map {
   width: 500px;
   height: 400px;
