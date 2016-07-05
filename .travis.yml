@@ -1,15 +1,12 @@
 .travis.yml:
 
-language: node_js
-
-node_js:
-  - "5"
-  
 before_script:
   - npm install
-  - mysql --local-infile -u root < ./database_setup/database-setup.sql
-  - nodejs ./database_setup/database-setup.js
-  - mysql --local-infile -u root < ./database_setup/database-setup-2.sql
-  - nodejs ./database_setup/manualAdminSetup.js
 
-script: mocha ./test/dataTest.js
+
+script:
+    - mysql --local-infile -u root < ./database_setup/database-setup.sql
+    - nodejs ./database_setup/database-setup.js
+    - mysql --local-infile -u root < ./database_setup/database-setup-2.sql
+    - nodejs ./database_setup/manualAdminSetup.js
+    - mocha ./test/dataTest.js
