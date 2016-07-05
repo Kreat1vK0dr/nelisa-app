@@ -346,30 +346,6 @@ $('#show-chart-btn').on('click', function (e) {
                        newChart.chartId = newChartId;
                        addChartTitle(newChart);
 
-                //  svg.append("rect")
-                //      .attr("class","svgbutton")
-                //      .attr("id","remove")
-                //      .attr("height", bHeight)
-                //      .attr("width", bWidth)
-                //      .attr("x",svgWidth - bWidth)
-                //      .style("fill", "#d9534f")
-                //     .on("mouseover",function(d){
-                //   			d3.select(this).attr("fill", "#c9302c");
-                //   		})
-                //     .on("mouseout",function(d){
-                //   			d3.select(this).attr("fill", "#d9534f");
-                //   		})
-                 //
-                //   svg.append("rect")
-                //      .attr("class","svgbutton")
-                //      .attr("id","edit")
-                //      .attr("height", bHeight)
-                //      .attr("width", bWidth)
-                //      .attr("x",svgWidth - bWidth*2)
-                //      .style("fill", "#337ab7")
-
-
-
             if (multifilter) {
               var radio = ["grouped","stacked"]
               var form = div.append("form");
@@ -508,7 +484,7 @@ function addStackedGroupedColumnChart(newChart){
         axisLabel = newChart.axisLabel,
         chartId = newChart.chartId,
         chart = newChart.chart;
-
+console.log("THIS IS CHART ID", chartId);
   const name = showTimeLine ? "date" : "name";
 
   var stackTip = d3.tip()
@@ -672,7 +648,7 @@ layers[i].map(function(d, j){
         .attr('text-anchor', 'middle')
         .attr('fill', 'black');
 
-      d3.selectAll("input").on("change", change);
+      d3.selectAll("#"+chartId+" input").on("change", change);
 
       var timeout = setTimeout(function() {
         d3.select("#"+chartId+" input[value='grouped']").property("checked", true).each(change);
