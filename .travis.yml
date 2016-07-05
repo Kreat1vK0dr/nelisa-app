@@ -6,7 +6,7 @@ before_script:
 
 script:
     - mysql --local-infile -u root < ./database_setup/database-setup.sql
-    - nodejs ./database_setup/database-setup.js
+    - node ./database_setup/database-setup.js
     - mysql --local-infile -u root < ./database_setup/database-setup-2.sql
-    - nodejs ./database_setup/manualAdminSetup.js
+    - node ./database_setup/manualAdminSetup.js
     - mocha ./test/dataTest.js
