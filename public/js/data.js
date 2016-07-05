@@ -1019,16 +1019,6 @@ function addTimeColumnChart(newChart){
     // d.date = +date[1]+" "+monthText(+date[0])+" "+date[2].replace(/(\d{2})(\d{2})/,"$2");
   });
 
-  var tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([-10, 0])
-    .html(function(d) {
-      return "<div style='text-align:center;'>"+d.date+"<br/><strong><span style='color:grey'>"+valuesToShow[0]+": </span></strong> <span style='color:white'>" + d.value + "</span></div>";
-      // return d.date+"<br/><strong>"+valuesToShow[0]+": </strong> <span style='color:white'>" + d.value + "</span>";
-    });
-
-chart.call(tip);
-
   var y = d3.scale.linear()
         .range([h, 0])
         .domain([0, max]);
@@ -1038,6 +1028,16 @@ chart.call(tip);
                               console.log("THIS IS D DATE", d.date);
                               return d.date;
                             }));
+
+  var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-(10+x.rangeBand()/2), 0])
+    .html(function(d) {
+      return "<div style='text-align:center;'>"+d.date+"<br/><strong><span style='color:grey'>"+valuesToShow[0]+": </span></strong> <span style='color:white'>" + d.value + "</span></div>";
+      // return d.date+"<br/><strong>"+valuesToShow[0]+": </strong> <span style='color:white'>" + d.value + "</span>";
+    });
+
+chart.call(tip);
 
   var xAxis = d3.svg.axis()
     .scale(x)
