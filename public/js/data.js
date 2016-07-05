@@ -618,6 +618,9 @@ layers[i].map(function(d, j){
           .attr("width", x.rangeBand())
           .attr("height", 0)
           .style("fill", function(d, i) {
+            if (d.value<0) {
+              d.valueName = "loss";
+            }
             return color(d.valueName);
           });
 
