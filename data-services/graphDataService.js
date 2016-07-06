@@ -96,6 +96,7 @@ module.exports = function(connection) {
   };
 
 this.getSalesAllProducts = function(data, cb) {
+  if (request==="categ")
   getData('SELECT s.id, s.sale_id, p.description product, s.product_id p_id, c.description category, s.category_id c_id, SUM(s.quantity) quantity, SUM(s.quantity*s.price) revenue, SUM(s.cost) cost, SUM((s.quantity*s.price)-s.cost) profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND DATE_FORMAT(s.date,"%m/%d/%Y") BETWEEN ? AND ? GROUP BY s.product_id',data,cb);
 };
 

@@ -1121,9 +1121,8 @@ chart.call(tip);
             .text(function (d) {
             return d.value;
           });
-
-
 }
+
 function addBarChart(newChart){
 
   var x, y, xAxis, yAxis;
