@@ -25,7 +25,7 @@ module.exports = function (connection) {
     };
 
     this.addCategory = function (data, cb) {
-        changeData('INSERT INTO categories (description) VALUES ?', data, cb);
+        changeData('INSERT INTO categories SET ?', data, cb);
     };
 
     this.updateCategory = function (data, cb) {

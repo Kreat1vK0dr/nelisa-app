@@ -1,0 +1,10 @@
+{{#categories}}
+<tr>
+  <td class="crud-table">{{id}}</td>
+  <td class="crud-table">{{description}}</td>
+  {{#if ../admin}}
+  <td class="crud-table"><a href="/categories/edit/{{id}}"><div>Edit</div></a></td>
+  <td class="crud-table"><a href="/categories/delete/{{id}}"><div>Delete</div></a></td>
+  {{/if}}
+</tr>
+{{/categories}}

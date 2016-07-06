@@ -1,4 +1,5 @@
 var assert = require('assert'),
+    _ = require('underscore'),
     ProductDataService = require('../data-services/productDataService'),
     CategoryDataService = require('../data-services/categoryDataService'),
     SalesDataService = require('../data-services/salesDataService'),
@@ -23,147 +24,200 @@ const connection = mysql.createConnection({
 });
 
 describe('Products', function() {
+  var newId;
   var productDS = new ProductDataService(connection);
-      it("getProduct should return a specific product", function() {
-            productDS.getProduct(1, function(err,product){
+      it("getProduct should return a specific product", function(done) {
+            productDS.getProduct([1], function(err,product){
             assert.equal("Milk 1l", product[0].description);
+            done();
       });
 });
-      it("getAllProducts should return all products", function() {
+      it("getAllProducts should return all products", function(done) {
             productDS.getAllProducts(function(err,products){
             assert.equal(18, products.length);
+            done();
       });
 });
-      it("addProduct should insert a product into the database", function() {
+      it("addProduct should insert a product into the database", function(done) {
         var peaches = {
             description: "Peaches",
             category_id: 10,
             price: 8
         };
-            productDS.addProduct(peaches, function(err,result){
-            var rowInserted = result.affectedRows === 1;
-            var newId = +result.insertId === 19;
-            var rowAdded = rowInserted && newId;
-            assert.equal(true, rowAdded);
+            productDS.addProduct(peaches, function(err,result) {
+              if (err) throw err;
+              newId = result.insertId;
+              var addedRow = result.affectedRows===1;
+              productDS.getAllProducts(function(err, result){
+                if (err) throw err;
+                var correctNumberOfProducts = result.length===19;
+                var addedCorrectProduct = result[result.length-1].product === "Peaches";
+                var addedProduct = addedRow && correctNumberOfProducts && addedCorrectProduct;
+            assert.equal(true, addedProduct);
+            done();
+          });
       });
 });
 
 
-it("updateProducts should update changes to a product", function() {
-  var peaches = {
-      description: "Canned Peaches",
-      category_id: 3,
-      price: 15
-  }
-      productDS.updateProducts(peaches, function(err,result){
-      var rowChanged = result.changedRows === 1;
-      productDS.getProduct(19, function(err, result){
+it("updateProducts should update changes to a product", function(done) {
+  var peaches = ["Canned Peaches", 3, 15, newId];
 
+      productDS.updateProducts(peaches, function(err,result){
+        if (err) throw err;
+      var rowChanged = result.changedRows === 1;
+      productDS.getProduct([newId], function(err, result){
+        if (err) throw err;
       var productChanged = result[0].description === "Canned Peaches" && +result[0].category_id===3 && +result[0].price===15 && rowChanged;
 
       assert.equal(true, productChanged);
+      done();
     });
 });
 });
 
-it("deleteProduct should delete a specific product from the database", function() {
-      productDS.deleteProduct(19, function(err,result){
-      var rowDeleted = result.affectedRows === 1;
+it("deleteProduct should delete a specific product from the database", function(done) {
+  console.log("THIS IS NEW ID", newId);
+      productDS.deleteProduct([newId], function(err,result){
+        if (err) throw err;
+      var oneRowAffected = result.affectedRows === 1;
       productDS.getAllProducts(function(err, result){
+        if (err) throw err;
         var productsEqualPrevious = result.length === 18;
-        var rowDeleted = rowDeleted && productsEqualPrevious;
+        var rowDeleted = oneRowAffected && productsEqualPrevious;
         assert.equal(true, rowDeleted);
+        done();
       });
 });
 });
-it("searchProducts should return a list of products that matches the search parameter given by name or category", function() {
-      productDS.searchProducts("%f%", function(err,result){
+it("searchProducts should return a list of products that matches the search parameter given by name or category", function(done) {
+      productDS.searchProducts(["%f%","%f%"], function(err,result){
+        if (err) throw err;
+
         var correctNumberOfProducts = result.length === 5;
-        var products = products.map(function(p){return p.product;});
-        var correctProducts = products === ["Chakalaka Can", "Gold Dish Vegetable Curry Can", "Fanta 500ml", "Bananas - loose", "Apples - loose"];
+        console.log("CORRECT NUMBER OF PRODUCTS", correctNumberOfProducts,result.length);
+        var products = result.map(function(p){return p.product;});
+        var correctProducts = _.isEqual(products, ["Chakalaka Can", "Gold Dish Vegetable Curry Can", "Fanta 500ml", "Bananas - loose", "Apples - loose"]);
+        console.log("THIS IS PRODUCTS", correctProducts, products, products);
         var returnedCorrectResults = correctProducts && correctNumberOfProducts;
       assert.equal(true, returnedCorrectResults);
+      done();
 });
 });
-it("searchProductsByName should return a list of products that matches the search parameter given by name only", function() {
-      productDS.searchProducts("%f%", function(err,result){
+it("searchProductsByName should return a list of products that matches the search parameter given by name only", function(done) {
+      productDS.searchProductsByName(["%f%"], function(err,result){
+        if (err) throw err;
+
         var correctNumberOfProducts = result.length === 1;
-        var products = products.map(function(p){return p.product;});
-        var correctProducts = products === ["Fanta 500ml"];
+        var products = result.map(function(p){return p.product;});
+        var correctProducts = _.isEqual(products, ["Fanta 500ml"]);
         var returnedCorrectResults = correctProducts && correctNumberOfProducts;
       assert.equal(true, returnedCorrectResults);
+      done();
 });
 });
-it("searchProductsByCategory should return a list of products that matches the search parameter given by category only", function() {
-      productDS.searchProducts("%f%", function(err,result){
+it("searchProductsByCategory should return a list of products that matches the search parameter given by category only", function(done) {
+      productDS.searchProductsByCategory(["%f%"], function(err,result){
+        if (err) throw err;
+
         var correctNumberOfProducts = result.length === 4;
-        var products = products.map(function(p){return p.product;});
-        var correctProducts = products === ["Chakalaka Can", "Gold Dish Vegetable Curry Can","Bananas - loose", "Apples - loose"];;
+        var products = result.map(function(p){return p.product;});
+        var correctProducts = _.isEqual(products, ["Chakalaka Can", "Gold Dish Vegetable Curry Can","Bananas - loose", "Apples - loose"]);
         var returnedCorrectResults = correctProducts && correctNumberOfProducts;
       assert.equal(true, returnedCorrectResults);
+      done();
 });
 });
 });
 
 describe('Category', function() {
+  var newId;
   var categoryDS = new CategoryDataService(connection);
 
-      it("getCategory should return a specific ", function() {
-            categoryDS.getCategory(1, function(err,category){
+      it("getCategory should return a specific ", function(done) {
+            categoryDS.getCategory([1], function(err,category){
+              if (err) throw err;
+
             assert.equal("Milk", category[0].description);
+            done();
       });
 });
-      it("getAllCategories should return all categories", function() {
+      it("getAllCategories should return all categories", function(done) {
             categoryDS.getAllCategories(function(err,categories){
+              if (err) throw err;
+
             assert.equal(10, categories.length);
+            done();
       });
 });
-      it("addcategory should insert a category into the database", function() {
-        categoryDS.addCategory("Juice", function(err,result){
+      it("addcategory should insert a category into the database", function(done) {
+        categoryDS.addCategory({description: "Juice"}, function(err,result){
+          if (err) throw err;
+
             var rowInserted = result.affectedRows === 1;
-            var newId = +result.insertId === 11;
-            var rowAdded = rowInserted && newId;
-            assert.equal(true, rowAdded);
+            newId = +result.insertId;
+            categoryDS.getAllCategories(function(err, result){
+              if (err) throw err;
+              var correctNumberOfCategories = result.length === 11;
+              var rowAdded = rowInserted && newId && correctNumberOfCategories;
+              assert.equal(true, rowAdded);
+              done();
+            })
+
       });
 });
 
-it("updateCategory should update changes to a category name", function() {
-  var juice = ["Fruit Juice", 11]
+it("updateCategory should update changes to a category name", function(done) {
+  var juice = ["Fruit Juice", newId]
       categoryDS.updateCategory(juice, function(err,result){
+        if (err) throw err;
+
       var rowChanged = result.changedRows === 1;
-      categoryDS.getCategory(11, function(err, result){
+      categoryDS.getCategory([newId], function(err, result){
+        if (err) throw err;
+
 
       var categoryChanged = result[0].description === "Fruit Juice" && rowChanged;
 
       assert.equal(true, categoryChanged);
+      done();
     });
 });
 });
 
-it("deleteCategory should delete a specific category from the database", function() {
-      categoryDS.deleteCategory(11, function(err,result){
-      var rowDeleted = result.affectedRows === 1;
+it("deleteCategory should delete a specific category from the database", function(done) {
+      categoryDS.deleteCategory([newId], function(err,result){
+        if (err) throw err;
+
+      var rowAffected = result.affectedRows === 1;
       categoryDS.getAllCategories(function(err, result){
+        if (err) throw err;
+
         var categoriesEqualPrevious = result.length === 10;
-        var rowDeleted = rowDeleted && categoriesEqualPrevious;
+        var rowDeleted = rowAffected && categoriesEqualPrevious;
         assert.equal(true, rowDeleted);
+        done();
       });
 });
 });
-it("searchCategories should return a list of categories that matches the search parameter given by name or category", function() {
-      categoryDS.searchCategories("%f%", function(err,result){
-        var correctNumberOfcategories = result.length === 1;
-        var categories = categories.map(function(p){return p.category;});
-        var correctcategories = categories === ["Fruit"];
-        var returnedCorrectResults = correctcategories && correctNumberOfcategories;
+it("searchCategories should return a list of categories that matches the search parameter given by name or category", function(done) {
+      categoryDS.searchCategories(["%f%"], function(err,result){
+        if (err) throw err;
+        console.log('THIS IS RESULT', result);
+        var correctNumberOfCategories = result.length === 2;
+        var categories = result.map(function(p){return p.description;});
+        console.log("THIS IS CATEGORIES", categories);
+        var correctCategories = _.isEqual(categories, ["Canned Food","Fruit"]);
+        var returnedCorrectResults = correctCategories && correctNumberOfCategories;
       assert.equal(true, returnedCorrectResults);
+      done();
 });
 });
 });
 
 describe('Sales', function() {
   var salesDS = new SalesDataService(connection);
-  var date = new Date("01/02/2016");
+  var date = new Date("02/01/2016");
   var day = date.getDay() === 0 ? 6 : date.getDay() - 1,
       week = date.getDate() % 7 != 0 ? Math.floor(date.getDate() / 7) + 1 : Math.floor(date.getDate() / 7);
 
@@ -194,11 +248,11 @@ describe('Sales', function() {
           };
   var saleId;
 
-  it("getSale should return a specific sale including the number of unique items for that sale", function() {
+  it("getSale should return a specific sale including the number of unique items for that sale", function(done) {
 
     salesDS.addSale(insertSale, function (err, result) {
         if (err) throw err;
-        console.log("ADDED SALE");
+        console.log("ADDED SALE with id", result.insertId);
         saleId = result.insertId;
         saleDetailsToAdd = saleDetailsToAdd.map(function (item) {
             item.push(saleId);
@@ -209,26 +263,35 @@ describe('Sales', function() {
             console.log("ADDED SALE DETAILS");
             salesDS.getSale(saleId, function(err,sale){
               if (err) throw err;
+              var saleItem = sale;
+              var test = [{id: saleId, date: 'Mon 01 Feb 2016', itemsSold: 3, uniqueProducts: 3, revenue: 47, cost: 25, profit: 22}];
 
-              var test = [{id: 1, date: 'Mon 01 Feb 2016', itemsSold: 3, uniqueProducts: 3, revenue: 47, cost: 25, profit: 22}];
-            assert.deepEqual(test, sale);
-      });
+                  assert.deepEqual(test, saleItem);
+                  done();
+
+        });
+
       });
       });
       });
 
       it("getSalesDetail should return details of all items sold for a specific sale", function(done) {
-            salesDS.getSaleDetails(saleId, function(err,saleDetails){
+            salesDS.getSaleDetailsBySaleId([saleId], function(err,saleDetails){
               if (err) throw err;
+              var sales = saleDetails.map(function(i){delete i.id; return i;});
+              var test = [{sale_id: saleId, date: 'Feb Mon 01 2016 12:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 7, revenue: 10, profit: 3},
+              {sale_id: saleId, date: 'Feb Mon 01 2016 12:00 AM', product: "Imasi", category: "Milk", quantity: 1, cost: 10, revenue: 25, profit: 15},
+            {sale_id: saleId, date: 'Feb Mon 01 2016 12:00 AM', product: "Bread", category: "Bread", quantity: 1, cost: 8, revenue: 12, profit: 4}];
+              console.log("THIS IS SALE DETAILS", sales);
+            salesDS.deleteSale([saleId], function(err, result){
+              if (err) throw err;
+              salesDS.deleteSaleDetails([saleId], function(err, result){
+                if (err) throw err;
+                assert.deepEqual(test, sales);
+                done();
+});
+        });
 
-              var test = [{id: 449, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 7, revenue: 10, profit: 3},
-            {category: "Milk", quantity: 1, cost: 10, revenue: 25, profit: 15},
-            {id: 451, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 8, revenue: 12, profit: 4}];
-            //   var test = [{id: 449, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 7, revenue: 10, profit: 3},
-            //   {id: 450, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Imasi", category: "Milk", quantity: 1, cost: 10, revenue: 25, profit: 15},
-            // {id: 451, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 8, revenue: 12, profit: 4}];
-            assert.deepEqual(test, saleDetails);
-            done();
       });
 });
 });

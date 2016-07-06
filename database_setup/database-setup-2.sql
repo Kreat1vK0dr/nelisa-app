@@ -10,8 +10,8 @@ CREATE TABLE sales_details LIKE sales;
 INSERT INTO sales_details SELECT * FROM sales;
 
 ALTER TABLE sales_details
-ADD sale_id INT AFTER id,
-ADD CONSTRAINT details_sale_id FOREIGN KEY (sale_id) REFERENCES sales(id);
+ADD sale_id INT AFTER id;
+# ADD CONSTRAINT details_sale_id FOREIGN KEY (sale_id) REFERENCES sales(id);
 
 UPDATE sales_details
 SET sale_id = id;

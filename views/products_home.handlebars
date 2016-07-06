@@ -22,9 +22,6 @@
 </form>
 </center>
 
-{{#if admin}}
-<a href="/products/add"><div class="add-link">Add</div></a>
-{{/if}}
 <table class="table table-bordered table-hover table-sm center-table" id="products-table">
   <thead class="thead-inverse">
   <tr>
@@ -34,12 +31,13 @@
     <th>Category</th>
     <th>Price</th>
     <th>Inventory</th>
+    <th><a href="/products/add"><div class="add-link">Add</div></a></th>
     {{else}}
     <th>Product ID</th>
     <th>Description</th>
     <th>Category</th>
     <th>Price</th>
-    <th>Stock Available</th>
+    <th>Available</th>
     {{/if}}
   </tr>
   </thead>

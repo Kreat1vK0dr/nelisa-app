@@ -172,7 +172,7 @@ app.get('/categories/filter/:searchBy/:search', categories.search);
 app.post('/categories/search', categories.search);
 app.get('/categories/search/filter/:searchBy/:search', categories.search);
 app.get('/categories/add', categories.showAddPage);
-app.post('/categories', categories.add);
+app.post('/categories/add', categories.add);
 app.get('/categories/edit/:id', categories.get);
 app.post('/categories/update', categories.update);
 app.get('/categories/delete/:id', categories.delete);

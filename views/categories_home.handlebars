@@ -10,9 +10,10 @@
     <tr>
       <th>Category ID</th>
       <th>Category</th>
+      <th colspan="2"><a href="/categories/add"><div class="add-link">Add</div></a></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="searchResults">
 
     {{#no_categories}}
     <tr>
@@ -24,8 +25,10 @@
     <tr>
       <td class="crud-table">{{id}}</td>
       <td class="crud-table">{{description}}</td>
+      {{#if ../admin}}
       <td class="crud-table"><a href="/categories/edit/{{id}}"><div>Edit</div></a></td>
       <td class="crud-table"><a href="/categories/delete/{{id}}"><div>Delete</div></a></td>
+      {{/if}}
     </tr>
     {{/categories}}
 

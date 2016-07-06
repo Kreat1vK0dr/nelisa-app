@@ -13,13 +13,16 @@ module.exports = function(connection) {
     };
 
   this.getSaleDetails = function(data, cb) {
-    getData("SELECT s.id, s.sale_id, DATE_FORMAT(s.date, '%b %a %d %Y %h:%i %p') as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id WHERE s.id = ? ORDER BY id",data, cb);
+    getData("SELECT s.id, s.sale_id, DATE_FORMAT(s.date, '%b %a %d %Y %h:%i %p') as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND s.id = ? ORDER BY s.product_id",data, cb);
+};
+  this.getSaleDetailsBySaleId = function(data, cb) {
+    getData("SELECT s.id, s.sale_id, DATE_FORMAT(s.date, '%b %a %d %Y %h:%i %p') as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND s.sale_id = ? ORDER BY s.product_id",data, cb);
 };
   this.getSale = function(data, cb) {
-    getData("SELECT s.id, DATE_FORMAT(s.date, '%a %d %b %Y') as date, s.total_quantity itemsSold, s.unique_product uniqueProducts, s.sum_total revenue, s.total_cost cost, s.revenue-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id WHERE s.id = ? ORDER BY id",data, cb);
+    getData("SELECT s.id, DATE_FORMAT(s.date, '%a %d %b %Y') as date, s.total_quantity itemsSold, s.unique_products uniqueProducts, s.sum_total revenue, s.total_cost cost, s.sum_total-s.total_cost profit  FROM sales s WHERE s.id = ?",data, cb);
 };
   this.getAllSales = function(data, cb) {
-    getData("SELECT s.id, DATE_FORMAT(s.date, '%m/%d/%Y') as date, s.total_quantity itemsSold, s.unique_product uniqueProducts, s.sum_total revenue, s.total_cost cost, s.revenue-s.cost profit  FROM sales s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id ORDER BY date",data, cb);
+    getData("SELECT s.id, DATE_FORMAT(s.date, '%m/%d/%Y') as date, s.total_quantity itemsSold, s.unique_products uniqueProducts, s.sum_total revenue, s.total_cost cost, s.sum_total-s.total_cost profit  FROM sales s ORDER BY s.date",data, cb);
 };
   this.getAllSaleDates = function(data, cb) {
     getData("SELECT DATE_FORMAT(date, '%m-%d-%Y') as date FROM sales ORDER BY date",data, cb);
@@ -32,7 +35,7 @@ module.exports = function(connection) {
   this.deleteSale = function(data, cb) {
     changeData("DELETE FROM sales WHERE id = ?", data, cb);
   };
-  this.deleteSalesDetail = function(data, cb) {
+  this.deleteSaleDetails = function(data, cb) {
     changeData("DELETE FROM sales_details WHERE id = ?", data, cb);
   };
 
