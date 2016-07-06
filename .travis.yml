@@ -5,10 +5,8 @@ language: node_js
 node_js:
   - "4.4.4"
 
-before_script:
-  - npm install
-
 script:
+    - npm install
     - mysql --local-infile -u root < ./database_setup/database-setup.sql
     - node ./database_setup/database-setup.js
     - mysql --local-infile -u root < ./database_setup/database-setup-2.sql
