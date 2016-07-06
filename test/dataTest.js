@@ -1,10 +1,11 @@
 var assert = require('assert'),
     ProductDataService = require('../data-services/productDataService'),
     CategoryDataService = require('../data-services/categoryDataService'),
+    SalesDataService = require('../data-services/salesDataService'),
     mysql = require('mysql');
 
-const password = process.env.MYSQL_PWD !== null ? process.env.MYSQL_PWD : "1amdan13l",
-      user = process.env.MYSQL_USER !== null ? process.env.MYSQL_USER : "root";
+const password = process.env.MYSQL_PWD !== (null || undefined) ? process.env.MYSQL_PWD : "1amdan13l",
+      user = process.env.MYSQL_USER !== (null || undefined) ? process.env.MYSQL_USER : "root";
 
       // var connection = mysql.createConnection({
       //     host: 'localhost',
@@ -12,6 +13,7 @@ const password = process.env.MYSQL_PWD !== null ? process.env.MYSQL_PWD : "1amda
       //     password: "1amdan13l",
       //     database: 'nelisa_another_copy'
       // });
+
 const connection = mysql.createConnection({
     host: '127.0.0.1',
     user: user,
@@ -157,13 +159,76 @@ it("searchCategories should return a list of categories that matches the search 
       assert.equal(true, returnedCorrectResults);
 });
 });
-
 });
-describe('Cat', function() {
-  var productDS = new ProductDataService(connection);
 
-      it("getProduct should return a specific product", function() {
-            productDS.getProduct(1, function(err,product){
-            assert.equal("Milk 1l", product[0].description);
+describe('Sales', function() {
+  var salesDS = new SalesDataService(connection);
+  var date = new Date("01/02/2016");
+  var day = date.getDay() === 0 ? 6 : date.getDay() - 1,
+      week = date.getDate() % 7 != 0 ? Math.floor(date.getDate() / 7) + 1 : Math.floor(date.getDate() / 7);
+
+  var saleDetailsToAdd = [[date, day, week, 1, 1, 10, 1, 7],[date, day, week, 2, 1, 25, 1, 10],[date, day, week, 3, 2, 12, 1, 8]];
+  var totQ = saleDetailsToAdd.reduce(function (sum, item) {
+          return sum += item[6];
+      }, 0),
+      sumTotal = saleDetailsToAdd.reduce(function (sum, item) {
+          return sum += item[6] * item[5]
+      }, 0),
+      totalCost = saleDetailsToAdd.reduce(function (sum, item) {
+          return sum += item[7]
+      }, 0);
+
+  var listOfProductIds = saleDetailsToAdd.map(function (item) {
+      return item[3];
+  });
+  var numberOfUniqueProducts = Array.from(new Set(listOfProductIds)).length;
+
+  var insertSale = {
+              date: date,
+              day: day,
+              week: week,
+              total_quantity: totQ,
+              unique_products: numberOfUniqueProducts,
+              sum_total: sumTotal,
+              total_cost: totalCost
+          };
+  var saleId;
+
+  it("getSale should return a specific sale including the number of unique items for that sale", function() {
+
+    salesDS.addSale(insertSale, function (err, result) {
+        if (err) throw err;
+        console.log("ADDED SALE");
+        saleId = result.insertId;
+        saleDetailsToAdd = saleDetailsToAdd.map(function (item) {
+            item.push(saleId);
+            return item;
+        });
+        salesDS.addSaleDetails([saleDetailsToAdd], function (err, rows) {
+            if (err) throw err;
+            console.log("ADDED SALE DETAILS");
+            salesDS.getSale(saleId, function(err,sale){
+              if (err) throw err;
+
+              var test = [{id: 1, date: 'Mon 01 Feb 2016', itemsSold: 3, uniqueProducts: 3, revenue: 47, cost: 25, profit: 22}];
+            assert.deepEqual(test, sale);
       });
+      });
+      });
+      });
+
+      it("getSalesDetail should return details of all items sold for a specific sale", function(done) {
+            salesDS.getSaleDetails(saleId, function(err,saleDetails){
+              if (err) throw err;
+
+              var test = [{id: 449, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 7, revenue: 10, profit: 3},
+            {category: "Milk", quantity: 1, cost: 10, revenue: 25, profit: 15},
+            {id: 451, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 8, revenue: 12, profit: 4}];
+            //   var test = [{id: 449, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 7, revenue: 10, profit: 3},
+            //   {id: 450, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Imasi", category: "Milk", quantity: 1, cost: 10, revenue: 25, profit: 15},
+            // {id: 451, sale_id: saleId, date: 'Mon 01 Feb 2016 00:00 AM', product: "Milk 1l", category: "Milk", quantity: 1, cost: 8, revenue: 12, profit: 4}];
+            assert.deepEqual(test, saleDetails);
+            done();
+      });
+});
 });

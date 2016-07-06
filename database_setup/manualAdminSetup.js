@@ -4,18 +4,18 @@ var mysql = require('mysql'),
     const password = process.env.MYSQL_PWD !== null ? process.env.MYSQL_PWD : "1amdan13l",
           user = process.env.MYSQL_USER !== null ? process.env.MYSQL_USER : "root";
 
-    // var connection = mysql.createConnection({
-    //     host: 'localhost',
-    //     user: "root",
-    //     password: "1amdan13l",
-    //     database: 'nelisa_another_copy'
-    // });
     var connection = mysql.createConnection({
-        host: '127.0.0.1',
-        user: user,
-        password: password,
+        host: 'localhost',
+        user: "root",
+        password: "1amdan13l",
         database: 'nelisa_another_copy'
     });
+    // var connection = mysql.createConnection({
+    //     host: '127.0.0.1',
+    //     user: user,
+    //     password: password,
+    //     database: 'nelisa_another_copy'
+    // });
 
 // create hash
 const saltRounds = 12;
@@ -59,7 +59,7 @@ var initialUsers = [{username: myUsername, firstName: myFirstName, lastName: myL
                    {username: xolaniUsername, firstName: xolaniFirstName, lastName: xolaniLastName, email: xolaniEmail , password: xolaniPassword, role: xolaniRole, admin_role: xolaniAdminRole, date_added: dateAdded},
                    {username: nthabisengUsername, firstName: nthabisengFirstName, lastName: nthabisengLastName, email: nthabisengEmail, password: nthabisengPassword, role: nthabisengRole, admin_role: nthabisengAdminRole, date_added: dateAdded}
                   ];
-
+var track = initialUsers.length;
 initialUsers.forEach(function(user){
   bcrypt.genSalt(saltRounds, function(err, salt) {
       bcrypt.hash(user.password, salt, function(err, hash) {
@@ -69,29 +69,32 @@ initialUsers.forEach(function(user){
             if (err) throw err;
             console.log("INSERTED HASHED PASSWORD IN DATABASE");
             console.log("INSERTED HASHED PASSWORD: ", hash);
+            track--;
+            if (track===0) {
+              bcrypt.genSalt(saltRounds, function(err, salt) {
+                  bcrypt.hash(adminPassword, salt, function(err, hash) {
+                      // Store hash in your password DB.
+                      var data = {password: hash};
+                      connection.query("SELECT * FROM adminPass", function(err,result){
+                        if (err) throw err;
+                        if (result[0]) {
+
+                          connection.query("UPDATE adminPass SET ?", data, function(err,result){
+                            if (err) throw err;
+                          });
+                        } else {
+                      connection.query("INSERT INTO adminPass SET ?", data, function(err,result){
+                        if (err) throw err;
+                        console.log("INSERTED HASHED PASSWORD IN DATABASE");
+                        console.log("INSERTED HASHED PASSWORD: ", hash);
+                        connection.end();
+                      });
+                    }
+                  });
+              });
+              });
+            }
           });
       });
   });
-});
-
-bcrypt.genSalt(saltRounds, function(err, salt) {
-    bcrypt.hash(adminPassword, salt, function(err, hash) {
-        // Store hash in your password DB.
-        var data = {password: hash};
-        connection.query("SELECT * FROM adminPass", function(err,result){
-          if (err) throw err;
-          if (result[0]) {
-
-            connection.query("UPDATE adminPass SET ?", data, function(err,result){
-              if (err) throw err;
-            });
-          } else {
-        connection.query("INSERT INTO adminPass SET ?", data, function(err,result){
-          if (err) throw err;
-          console.log("INSERTED HASHED PASSWORD IN DATABASE");
-          console.log("INSERTED HASHED PASSWORD: ", hash);
-        });
-      }
-    });
-});
 });
