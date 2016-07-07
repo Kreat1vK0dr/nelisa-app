@@ -269,35 +269,38 @@ var saleId,
     beforeAddSaleDetails;
 
 it("getAllSales should return a list of all sales. Sales should equal 448.", function (done) {
-    salesDS.getAllSales(function (err, result) {
-        if (err) throw err;
+    salesDS.getAllSales()
+           .then(function(result){
         beforeAddSale = result.length;
         console.log('THIS IS RESULT LENGTH', result.length);
         assert.equal(beforeAddSale, 385);
         done();
-    });
+            })
+            .catch(done);
 });
 
 it("addSale should add a sale and increase sales by one row.", function (done) {
-    salesDS.addSale(insertSale, function (err, result) {
-        if (err) throw err;
-        console.log("ADDED SALE with id", result.insertId);
-        saleId = result.insertId;
-        var addedOneRow = result.affectedRows === 1;
-        salesDS.getAllSales(function (err, result) {
-            if (err) throw err;
-            var afterAdd = result.length;
-            var addedOneSale = addedOneRow && beforeAddSale + 1 === afterAdd;
-            assert.equal(addedOneSale, true);
-            done();
-        });
-    });
+  var addedOneRow, afterAdd, addedOneSale;
+    salesDS.addSale(insertSale)
+           .then(function(result){
+                  console.log("ADDED SALE with id", result.insertId);
+                  saleId = result.insertId;
+                  addedOneRow = result.affectedRows === 1;
+                  return salesDS.getAllSales();
+           })
+            .then(function(result) {
+                 afterAdd = result.length;
+                 addedOneSale = addedOneRow && beforeAddSale + 1 === afterAdd;
+                 assert.equal(addedOneSale, true);
+                 done();
+                })
+            .catch(done);
 });
 
 it("getSale should return a specific sale including the number of unique number of products sold,quantity, total sum of sale (revenue), total cost, and profit.", function (done) {
 
-    salesDS.getSale(saleId, function (err, sale) {
-        if (err) throw err;
+    salesDS.getSale(saleId)
+           .then(function(sale){
         var test = sale;
 
         var saleItem = [{
@@ -313,106 +316,114 @@ it("getSale should return a specific sale including the number of unique number 
         assert.deepEqual(test, saleItem);
         done();
 
-    });
+        })
+        .catch(done);
 
 });
 
 it("getAllSalesDetails should return 448 sale details.", function (done) {
-    salesDS.getAllSalesDetails(function (err, result) {
-        if (err) throw err;
-        beforeAddSaleDetails = result.length;
-        console.log('THIS IS RESULT LENGTH', result.length);
+    salesDS.getAllSalesDetails()
+           .then(function(result){
+            beforeAddSaleDetails = result.length;
+            console.log('THIS IS RESULT LENGTH', result.length);
 
-        assert.equal(beforeAddSaleDetails, 385);
-        done();
-    });
+            assert.equal(beforeAddSaleDetails, 385);
+            done();
+            })
+            .catch(done);
 });
 
 it("addSaleDetails should add details of sale added in getSale. Should add three rows.", function (done) {
+    var addedThreeRows, afterAdd, test;
     saleDetailsToAdd = saleDetailsToAdd.map(function (item) {
         item.push(saleId);
         return item;
     });
-    salesDS.addSaleDetails([saleDetailsToAdd], function (err, rows) {
-        if (err) throw err;
-        var addedThreeRows = rows.affectedRows === 3;
-        salesDS.getAllSalesDetails(function (err, rows) {
-            if (err) throw err;
-            var afterAdd = rows.length;
-            var test = addedThreeRows && beforeAddSaleDetails + 3 === afterAdd;
+    salesDS.addSaleDetails([saleDetailsToAdd])
+           .then(function(rows){
+              addedThreeRows = rows.affectedRows === 3;
+              return salesDS.getAllSalesDetails();
+           })
+           .then(function(rows){
+             afterAdd = rows.length;
+             test = addedThreeRows && beforeAddSaleDetails + 3 === afterAdd;
             assert.equal(true, test);
             done();
-        });
+            })
+           .catch(done);
     });
-});
 
 it("getSalesDetail should return details of all items sold for a specific sale. This also tests whether addSaleDetails worked.", function (done) {
-salesDS.getSaleDetailsBySaleId([saleId], function (err, saleDetails) {
-    if (err) throw err;
-    var test = saleDetails.map(function (i) {
-        delete i.id;
-        return i;
-    });
-    var sales = [{
-        sale_id: saleId,
-        date: 'Feb Mon 01 2016 12:00 AM',
-        product: "Milk 1l",
-        category: "Milk",
-        quantity: 1,
-        cost: 7,
-        revenue: 10,
-        profit: 3
-    }, {
-        sale_id: saleId,
-        date: 'Feb Mon 01 2016 12:00 AM',
-        product: "Imasi",
-        category: "Milk",
-        quantity: 1,
-        cost: 10,
-        revenue: 25,
-        profit: 15
-    }, {
-        sale_id: saleId,
-        date: 'Feb Mon 01 2016 12:00 AM',
-        product: "Bread",
-        category: "Bread",
-        quantity: 1,
-        cost: 8,
-        revenue: 12,
-        profit: 4
-    }];
-    console.log("THIS IS SALE DETAILS", sales);
-        assert.deepEqual(test, sales);
-        done();
-  });
+salesDS.getSaleDetailsBySaleId([saleId])
+       .then(function(saleDetails){
+            var test = saleDetails.map(function (i) {
+                  delete i.id;
+                  return i;
+              });
+              var sales = [{
+                  sale_id: saleId,
+                  date: 'Feb Mon 01 2016 12:00 AM',
+                  product: "Milk 1l",
+                  category: "Milk",
+                  quantity: 1,
+                  cost: 7,
+                  revenue: 10,
+                  profit: 3
+              }, {
+                  sale_id: saleId,
+                  date: 'Feb Mon 01 2016 12:00 AM',
+                  product: "Imasi",
+                  category: "Milk",
+                  quantity: 1,
+                  cost: 10,
+                  revenue: 25,
+                  profit: 15
+              }, {
+                  sale_id: saleId,
+                  date: 'Feb Mon 01 2016 12:00 AM',
+                  product: "Bread",
+                  category: "Bread",
+                  quantity: 1,
+                  cost: 8,
+                  revenue: 12,
+                  profit: 4
+              }];
+              console.log("THIS IS SALE DETAILS", sales);
+                  assert.deepEqual(test, sales);
+                  done();
+            })
+            .catch(done);
 });
 
 it("deleteSale should delete one row from sales.", function (done) {
-salesDS.deleteSale([saleId], function (err, result) {
-    if (err) throw err;
-    var deletedOneRow = result.affectedRows === 1;
-    salesDS.getAllSales(function (err, rows) {
-        if (err) throw err;
-        var afterDeleted = rows.length;
-        var test = deletedOneRow && beforeAddSale === afterDeleted;
+  var deletedOneRow, afterDeleted, test;
+salesDS.deleteSale([saleId])
+       .then(function(result){
+         deletedOneRow = result.affectedRows === 1;
+        return salesDS.getAllSales();
+      })
+      .then(function(rows){
+         afterDeleted = rows.length;
+         test = deletedOneRow && beforeAddSale === afterDeleted;
         assert.equal(test, true);
         done();
-    });
-});
+        })
+        .catch(done);
 });
 
 it("deleteSaleDetails should delete three rows from sales_details.", function (done) {
-salesDS.deleteSaleDetailsBySaleId([saleId], function (err, result) {
-    if (err) throw err;
-    var deletedThreeRows = result.affectedRows === 3;
-    salesDS.getAllSalesDetails(function (err, rows) {
-        if (err) throw err;
-        var afterDeleted = rows.length;
-        var test = deletedThreeRows && beforeAddSaleDetails === afterDeleted;
-        assert.equal(test, true);
-        done();
-
-    });
-});
+  var deletedThreeRows, afterDeleted, test;
+salesDS.deleteSaleDetailsBySaleId([saleId])
+       .then(function(result){
+           deletedThreeRows = result.affectedRows === 3;
+        return salesDS.getAllSalesDetails();
+        })
+        .then(function(rows){
+         afterDeleted = rows.length;
+         test = deletedThreeRows && beforeAddSaleDetails === afterDeleted;
+          assert.equal(test, true);
+          done();
+          })
+        .catch(done);
 });
 });
