@@ -5,18 +5,26 @@ var costOfSales = require('../lib/cost-of-sales.js');
 const password = process.env.MYSQL_PWD !== null ? process.env.MYSQL_PWD : "1amdan13l",
       user = process.env.MYSQL_USER !== null ? process.env.MYSQL_USER : "root";
 
-      // var connection = mysql.createConnection({
-      //     host: 'localhost',
-      //     user: "root",
-      //     password: "1amdan13l",
-      //     database: 'nelisa_another_copy'
-      // });
-var connection = mysql.createConnection({
-    host: '127.0.0.1',
-    user: user,
-    password: password,
-    database: 'nelisa_another_copy'
-});
+      var usingLocalMachine = process.env.USER==='coder';
+
+      if (usingLocalMachine) {
+      var connection = mysql.createConnection({
+          host: 'localhost',
+          user: "root",
+          password: "1amdan13l",
+          database: 'nelisa_another_copy'
+      });
+      } else {
+      var connection = mysql.createConnection({
+          host: '127.0.0.1',
+          user: user,
+          password: password,
+          port: 3306,
+          database: 'nelisa_another_copy'
+      });
+      }
+
+
 connection.connect();
 connection.query('SELECT id, product_id, date, quantity, remaining, unitcost FROM purchases ORDER BY date', function (err, purchasesFromDB, fields) {
     if (err) throw err;

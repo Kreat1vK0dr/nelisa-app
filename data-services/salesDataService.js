@@ -38,6 +38,9 @@ module.exports = function(connection) {
   this.deleteSaleDetails = function(data, cb) {
     changeData("DELETE FROM sales_details WHERE id = ?", data, cb);
   };
+  this.deleteSaleDetailsBySaleId = function(data, cb) {
+    changeData("DELETE FROM sales_details WHERE sale_id = ?", data, cb);
+  };
 
   this.addSale = function(data, cb) {
     changeData("INSERT INTO sales SET ?", data,cb);

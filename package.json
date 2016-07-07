@@ -33,6 +33,9 @@
     "postcss-middleware": "^1.0.0"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-shell": "^0.5.2",
     "mocha": "^2.5.3",
     "node-sass": "^3.6.0",
     "underscore": "^1.8.3"
