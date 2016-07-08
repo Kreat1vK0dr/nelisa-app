@@ -1,7 +1,7 @@
-<!-- <h1 style='padding-bottom:1em;'>Hi {{name}}, here is your {{graph}} graph</h1> -->
 <h1></h1>
 <link rel="stylesheet" href="/css/jquery-ui.css">
-<script src="/js/jquery-ui.min.js"></script>
+<!-- <script src="/js/jquery-ui.min.js"></script> -->
+<script src="/js/jquery-ui.js"></script>
 <link rel="stylesheet" href="/css/jqueryStyle.css">
 <script src="/js/datepicker.js"></script>
 
@@ -17,19 +17,7 @@
         <input type="text" class="date-input form-control from" name="from" placeholder="From">
         <input type="text" class="date-input form-control to" name="to" placeholder="To">
         </div>
-        <!-- <button type="button" class="btn btn-warning period-compare-btn">Select Comparison Period</button> -->
-        <!-- <div id="period-compare">
-          <div  class="input-group">
-            <div class="input-group-addon">Comparison Period</div>
-            <input type="text" class="date-input form-control from-compare" name="from" placeholder="From">
-            <input type="text" class="date-input form-control to-compare" name="to" placeholder="To">
-            <span class="input-group-btn">
-            <button type="button cancel-period-compare" class="btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
-          </span>
-        </div>
-        </div> -->
-          </div>
-  <!-- <p class="help-block">By selecting a comparison period, two graphs will be displayed for each chosen date range.</p> -->
+      </div>
 </div>
 <br class="hide-element break-line"/>
 
@@ -46,7 +34,6 @@
 
     <div class="data-select-option hide-element product-select">
 
-        <!-- <label for="product">Product</label> -->
         <div class="input-group">
         <select class="form-control type-select-graph product" data-dropup-auto=false name="product ">
             <option value="all">All Products</option>
@@ -59,8 +46,8 @@
       </span>
       </div>
 </div>
+
 <div id="" class="data-select-option hide-element category-select">
-        <!-- <label for="category">Category</label> -->
               <div class="input-group">
         <select class="form-control type-select-graph category" data-dropup-auto=false name="category ">
             <option value="all">All Categories</option>
@@ -138,8 +125,10 @@
   <!-- <label><input type="radio" name="mode" value="grouped"> Grouped</label>
   <label><input type="radio" name="mode" value="stacked" checked> Stacked</label>
 </form> -->
-<center>
-</center>
+<div id="container">
+
+</div>
+
 <div class="chart-edit hide-element" id="edit" style="width:70%;background-color:white;text-align:center;">
   <form action="/" method="post">
 <div class="form-inline form-group chart-adder-element period-select">

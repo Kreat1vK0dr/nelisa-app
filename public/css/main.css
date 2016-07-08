@@ -383,14 +383,22 @@
   display: inline-block;
 }
 
+#container {
+  margin: 0 auto;
+}
+
+.chart-container {
+  display: inline-block;
+}
+
 svg {
   border: 1px solid #cccccc;
-  display: block;
+  background-color: white;
 }
 
 .svg-remove {
   position: relative;
-  width: 50%;
+  width: 100%;
 }
 
 .svg-edit {
@@ -478,9 +486,9 @@ rect.bar:hover {
   max-width: 180px;
 }
 
-.group-stack {
-  top: -35em;
-  left: 30em;
+.groupstack {
+  top: -32em;
+  left: 20em;
   position: relative;
 }
 
@@ -610,6 +618,10 @@ html, body {
   padding-bottom: 8em;
   margin: 0 auto;
 }*/
+body {
+  background-color: #333 !important;
+}
+
 #body-home {
   margin: 0 auto;
   background-color: #E86551;
