@@ -80,6 +80,9 @@ var hbs = exphbs.create({
               },
               bracketNegative: function(string) {
                 return string.match(/-/) ? '('+string.replace('-','')+')' : string;
+              },
+              negValRowHL: function(string) {
+                return string.match(/-/) ? "rgba(185,46,16,0.5)" : 'rgba(64,64,64,0.5)';
               }
   }
 });

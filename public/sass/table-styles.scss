@@ -1,4 +1,41 @@
-
+th a, td a {
+  cursor: pointer;
+}
+.link-header {
+  padding: none;
+}
+th a:hover, td a:hover {
+  text-decoration: none;
+}
+th.link-header:hover, td.link-cell:hover, button.table-links:hover {
+  background-color: rgba(142,16,10,0.5);
+}
+table {
+  margin-top: 2em !important;
+}
+.title h2 span {
+  color: #B92E10;
+}
+.stats-description {
+  color: white;
+  font-family: abel;
+  font-size: 3em;
+}
+.title {
+  font-family: calendas;
+  font-size: 3em;
+  color: white;
+  text-align: center;
+}
+.search {
+  display: inline-block;
+}
+.add-form-text, .add-form-message-text, .table-links, table {
+  color: white !important;
+}
+.table-links {
+  text-align: center;
+}
 .body-tpage {
   background-color: white;
 }

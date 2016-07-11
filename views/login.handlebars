@@ -3,19 +3,49 @@
 <div id="user-login" class="alert-box">
   {{#if signup}}
     <h3>SIGN UP</h3>
-  <form action="/signup" method="post">
-    <label for="firstName">First Name</label>
-    <input autofocus type="text" name="firstName" id="firstName"  placeholder="Enter first name" value="{{firstName}}"> <br>
-    <label for="lastName">Last Name</label>
-    <input type="text" name="lastName" id="lastName"  placeholder="Enter last name" value="{{lastName}}"> <br>
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username-signup"  placeholder="Enter username" value="{{username}}"> <br>
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email"  placeholder="Enter email" value="{{email}}"> <br>
-    <label for="pass1">Password</label>
-    <input type="password" name="pass1" id="pass1" placeholder="Enter password">
-    <input type="password" name="pass2" id="pass2" placeholder="Repeat password"> <br>
-    <button type="submit">make me a member!</button>
+  <form class="form-horizontal form-signup" action="/signup" method="post">
+    <div class="form-group">
+    <label for="firstName" class="col-sm-3 control-label">First Name</label>
+    <div class="col-sm-6">
+    <input class="form-control" autofocus type="text" name="firstName" id="firstName"  placeholder="Enter first name" value="{{firstName}}"> <br>
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="lastName" class="col-sm-3 control-label">Last Name</label>
+  <div class="col-sm-6">
+    <input class="form-control" type="text" name="lastName" id="lastName"  placeholder="Enter last name" value="{{lastName}}"> <br>
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="username" class="col-sm-3 control-label">Username</label>
+  <div class="col-sm-6">
+    <input class="form-control" type="text" name="username" id="username-signup"  placeholder="Enter username" value="{{username}}"> <br>
+  </div>
+  </div>
+  <div class="form-group">
+    <label for="email" class="col-sm-3 control-label">Email</label>
+  <div class="col-sm-6">
+    <input class="form-control" type="email" name="email" id="email"  placeholder="Enter email" value="{{email}}"> <br>
+</div>
+</div>
+<div class="form-group">
+    <label for="pass1" class="col-sm-3 control-label">Password</label>
+<div class="col-sm-6">
+    <input class="form-control" type="password" name="pass1" id="pass1" placeholder="Enter password">
+</div>
+</div>
+<div class="form-group">
+  <label for="pass2" class="col-sm-3 control-label">Repeat Password</label>
+
+<div class="col-sm-6">
+    <input class="form-control" type="password" name="pass2" id="pass2" placeholder="Repeat password"> <br>
+</div>
+</div>
+<div class="form-group">
+<div class="col-sm-offset-3 col-sm-6">
+    <button type="submit" class="btn btn-success">make me a member!</button>
+</div>
+</div>
   </form>
   {{else}}
   <h3>LOGIN</h3>
@@ -23,8 +53,8 @@
     <form action="/login/check" method="post">
     <input required type="text" autofocus name="username" id="username" class="login-input" placeholder="Enter username"><br/>
     <input required type="password" name="password" id="password" class="login-input" placeholder="Enter password"><br/>
-    <button class="myButton" type="submit">LOGIN</button>
-  <a href="/signup" class="myButton">SIGN UP</a>
+    <button class="btn btn-primary" type="submit">LOGIN</button>
+  <a href="/signup" class="btn btn-success">SIGN UP</a>
     </form>
 {{/if}}
 </div>

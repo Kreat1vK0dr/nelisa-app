@@ -25,6 +25,7 @@
 </div>
 </center>
 
+
 <h1>add sale</h1>
 <button id="add-item">add item</button>
 
@@ -33,26 +34,26 @@
 <center>
 <fieldset>
 
-  <label for="products">Product</label>
+  <label class="add-form-text" for="products">Product</label>
   <select id="products" name="product">
-    <option value="" selected>Please select a product</option>
+    <option class="add-form-text" value="" selected>Please select a product</option>
     {{#products}}
-    <option value="{{p_id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{product}}" data-category="{{c_id}}">{{product}}</option>
+    <option class="add-form-text" value="{{p_id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{product}}" data-category="{{c_id}}">{{product}}</option>
     {{/products}}
   </select>
 
-  <label for="categories">Category</label>
+  <label class="add-form-text" for="categories">Category</label>
   <select id="categories" name="category">
-    <option value="" selected>Category</option>
+    <option class="add-form-text" value="" selected>Category</option>
     {{#categories}}
-    <option value="{{id}}" data-description="{{description}}">{{description}}</option>
+    <option class="add-form-text" value="{{id}}" data-description="{{description}}">{{description}}</option>
     {{/categories}}
   </select>
 
-<label for="price">Price</label>
+<label class="add-form-text" for="price">Price</label>
 <input type="number" step="any" name='price' id="price">
 
-<label for="quantity">Quantity</label>
+<label class="add-form-text" for="quantity">Quantity</label>
 <input type="number" name="quantity" id="quantity">
 
 </fieldset>
@@ -60,7 +61,6 @@
 <center>
 <table id="added-items-table" class="table table-bordered table-hover table-sm center-table">
   <thead class="thead-inverse" style="display:none">
-    <thead >
     <tr>
       <th>Product</th>
       <th>Category</th>
@@ -71,7 +71,7 @@
   </thead>
   <tbody style="display:none">
   </tbody>
-  <p id="no-items-text">Please add some items before attempting to execute a sale.</p>
+  <p class="add-form-message-text" id="no-items-text">Please add some items before attempting to execute a sale.</p>
 </table>
 </center>
 

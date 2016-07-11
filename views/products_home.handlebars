@@ -1,17 +1,18 @@
 <center>
-<h1>Products</h1>
+<h3 class="title">Products</h3>
+<div class="center">
+
 <form class="form-inline" action="/products/search" method="post">
   <div class="row center-table">
-  <div class="col-md-6">
-    <div class="input-group">
+  <div class="col-md-12">
+    <div class="input-group search">
       <span class="input-group-btn">
         <button type="submit" class="btn btn-default button-search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
       </span>
 <input type="text" name="search" class="form-control" id="search" placeholder="Search for products by name or category">
 </div>
 
-
-<label for="searchBy">Search By</label>
+<div class="search-selection search">
 <select name="searchBy" id="searchBy" class="form-control">
   <option value="all">Name & Category</option>
   <option value="product">Product Name</option>
@@ -19,22 +20,24 @@
 </select>
 </div>
 </div>
+</div>
 </form>
+</div>
 </center>
 
 <table class="table table-bordered table-hover table-sm center-table" id="products-table">
   <thead class="thead-inverse">
   <tr>
     {{#if admin}}
-    <th>Product ID</th>
-    <th>Description</th>
+    <th>ID</th>
+    <th>Product</th>
     <th>Category</th>
     <th>Price</th>
     <th>Inventory</th>
-    <th colspan="2"><a href="/products/add"><div class="add-link">Add</div></a></th>
+    <th class="link-header" colspan="2"><a class="table-links" href="/products/add"><div class="add-link">Add</div></a></th>
     {{else}}
-    <th>Product ID</th>
-    <th>Description</th>
+    <th>ID</th>
+    <th>Product</th>
     <th>Category</th>
     <th>Price</th>
     <th>Available</th>
@@ -51,8 +54,8 @@
     <td class="crud-table highlight">{{price}}</td>
     <td class="crud-table highlight">{{inventory}}</td>
     {{#if ../admin}}
-    <td class="crud-table highlight"><a href="/products/edit/{{p_id}}"><div class="links edit">Edit</div></a></td>
-    <td class="crud-table highlight"><a href="/products/delete/{{p_id}}"><div class="links delete">Delete</div></a></td>
+    <td class="crud-table highlight link-cell"><a class="table-links" href="/products/edit/{{p_id}}"><div class="edit">Edit</div></a></td>
+    <td class="crud-table highlight link-cell"><a class="table-links" href="/products/delete/{{p_id}}"><div class="delete">Delete</div></a></td>
     {{/if}}
 
   </tr>

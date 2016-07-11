@@ -1,14 +1,25 @@
 <center>
-<h3>Purchases</h3>
-<form action="/purchases/search" method="post">
-<input type="text" name="search" id="search" placeholder="Search a purchase by product or category">
-<label for="searchBy">Search By</label>
-<select name="searchBy" id="searchBy">
+<h3 class="title">Purchases</h3>
+<form class="form-inline" action="/purchases/search" method="post">
+  <div class="row center-table">
+  <div class="col-md-12">
+    <div class="input-group search">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default button-search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+      </span>
+
+<input class="form-control" type="text" name="search" id="search" placeholder="Search a purchase by product or category">
+</div>
+
+<div class="search-selection search">
+<select class="form-control" name="searchBy" id="searchBy">
   <option value="all">Product & Category</option>
   <option value="product">Product</option>
   <option value="category">Category</option>
 </select>
-<button type="submit" id="search-submit">Search</button>
+</div>
+</div>
+</div>
 </form>
 </center>
 <table class="table table-bordered table-hover table-sm center-table" id="purchases-table">

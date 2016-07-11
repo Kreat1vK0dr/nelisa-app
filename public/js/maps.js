@@ -40,9 +40,9 @@
 //     });
 // }
 
-var directionsDisplay, directionsService, mapDiv, map, geocoder, start, end;
-
 function initMap() {
+  var directionsDisplay, directionsService, mapDiv, map, geocoder, start, end;
+
     directionsService = new google.maps.DirectionsService();
     directionsDisplay = new google.maps.DirectionsRenderer();
     var latlng = new google.maps.LatLng(-34.038141, 18.676916);

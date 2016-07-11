@@ -150,6 +150,55 @@
   margin-left: 80%;
 }
 
+th a, td a {
+  cursor: pointer;
+}
+
+.link-header {
+  padding: none;
+}
+
+th a:hover, td a:hover {
+  text-decoration: none;
+}
+
+th.link-header:hover, td.link-cell:hover, button.table-links:hover {
+  background-color: rgba(142, 16, 10, 0.5);
+}
+
+table {
+  margin-top: 2em !important;
+}
+
+.title h2 span {
+  color: #B92E10;
+}
+
+.stats-description {
+  color: white;
+  font-family: abel;
+  font-size: 3em;
+}
+
+.title {
+  font-family: calendas;
+  font-size: 3em;
+  color: white;
+  text-align: center;
+}
+
+.search {
+  display: inline-block;
+}
+
+.add-form-text, .add-form-message-text, .table-links, table {
+  color: white !important;
+}
+
+.table-links {
+  text-align: center;
+}
+
 .body-tpage {
   background-color: white;
 }
@@ -193,8 +242,16 @@
   margin-bottom: 5em;
 }
 
-.navbar {
-  height: 40px;
+@media (min-width: 866px) and (max-width: 1122px) {
+  .navbar {
+    height: 80px;
+  }
+}
+
+@media (min-width: 1123px) {
+  .navbar {
+    height: 40px;
+  }
 }
 
 .navbar-brand {
@@ -307,6 +364,11 @@
   color: black;
 }
 
+.form-signup {
+  margin-left: 4em;
+  margin-top: 2em;
+}
+
 .login-input {
   margin: 1em 0;
   width: 80%;
@@ -321,9 +383,8 @@
 }
 
 .user {
-  border-radius: 5px;
   background: #27332F;
-  padding: 2px;
+  padding: 2px 5px;
   border: 1px solid white;
   cursor: pointer;
   margin-top: 7px;
@@ -499,7 +560,9 @@ html, body {
 }
 
 #map {
-  height: 100%;
+  height: 80%;
+  width: 50%;
+  margin: 0 auto;
 }
 
 #floating-panel {
@@ -529,8 +592,9 @@ html, body {
 }
 
 #right-panel {
-  height: 100%;
+  height: 80%;
   float: right;
+  margin-right: 10em;
   width: 390px;
   overflow: auto;
   font-family: 'Roboto','sans-serif';
@@ -538,8 +602,8 @@ html, body {
   padding-left: 10px;
 }
 
-#map {
-  margin-right: 400px;
+#right-panel div {
+  background-color: white;
 }
 
 #floating-panel {
@@ -558,12 +622,14 @@ html, body {
     margin: 0;
   }
   #right-panel {
+    background-color: #333;
     float: none;
     width: auto;
   }
 }
 
 #nelisa-info-window {
+  color: black;
   font-family: peach;
 }
 
@@ -630,12 +696,6 @@ body {
   /*padding-bottom: 10em;*/
   width: 80%;
   color: white;
-}
-
-h1,
-h2 {
-  font-family: adam;
-  text-align: center;
 }
 
 .dropdown {
@@ -718,7 +778,7 @@ img {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   max-width: 90%;
-  margin: 0 auto;
+  margin: 1em auto;
   padding: 15px 45px;
 }
 

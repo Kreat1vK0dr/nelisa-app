@@ -60,6 +60,11 @@ $navbar-height: 40px;
 
 }
 
+.form-signup {
+  margin-left: 4em;
+  margin-top: 2em;
+}
+
 .login-input {
   margin: 1em 0;
   width: 80%;
@@ -74,9 +79,9 @@ $navbar-height: 40px;
 }
 
 .user {
-  border-radius: 5px;
+  // border-radius: 5px;
   background: #27332F;
-  padding: 2px;
+  padding: 2px 5px;
   border: 1px solid white;
   cursor: pointer;
   margin-top  : ($navbar-height - 26px)/2;

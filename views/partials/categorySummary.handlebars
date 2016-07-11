@@ -10,12 +10,12 @@
 <tbody>
   {{#data}}
     <tr>
-      <td class="inverse">{{category}}</td>
-      <td class="left-indent">{{quantity}}</td>
-      <td class="left-indent">{{revenue}}</td>
-      <td class="left-indent">{{cost}}</td>
-      <td class="left-indent">{{profit}}</td>
-      <td class="left-indent">{{profitMargin}}</td>
+      <td style="background-color:{{negValRowHL profit}}" class="inverse">{{category}}</td>
+      <td style="background-color:{{negValRowHL profit}}" class="left-indent">{{quantity}}</td>
+      <td style="background-color:{{negValRowHL profit}}" class="left-indent">{{revenue}}</td>
+      <td style="background-color:{{negValRowHL profit}}" class="left-indent">{{cost}}</td>
+      <td style="background-color:{{negValRowHL profit}}" class="left-indent">{{profit}}</td>
+      <td style="background-color:{{negValRowHL profit}}" class="left-indent">{{profitMargin}}</td>
     </tr>
     {{/data}}
 </tbody>

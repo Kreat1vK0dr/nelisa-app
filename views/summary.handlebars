@@ -1,27 +1,27 @@
 
-  <div id="title">
+  <div id="title" class="title">
       <h1>{{title}}</h1>
-      <h2>{{period}}</h2>
+    <h2>{{{period}}}</h2>
 </div>
 <div class="text-center periodbuttons">
 
   <div class="text-center periodbuttons">
 
-    <form action="/summary/table" method="POST">
+    <form class="form-inline" action="/summary/table" method="POST">
 
-      <select class="" name="type">
+      <select class="form-control" name="type">
         {{#types}}
         <option value='{{type}}' {{selected}}>{{capFL type}}</option>
         {{/types}}
         </select>
 
-      <select class="" name="month">
+      <select class="form-control" name="month">
         {{#months}}
         <option value={{month}} {{selected}}>{{month}}</option>
         {{/months}}
       </select>
 
-      <select class="" name="week">
+      <select class="form-control" name="week">
         {{#weeks}}
         <option value={{week}} {{selected}}>{{week}}</option>
         {{/weeks}}
@@ -34,7 +34,7 @@
   </div>
 
 </div>
-<div class = "divider1"></div>
+
   <table class="table table-bordered table-hover table-sm center-table summary-table">
   <thead class="thead-inverse">
     {{#if product}}

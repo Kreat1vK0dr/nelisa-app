@@ -16,32 +16,32 @@
 <center>
 <fieldset>
 
-  <label for="suppliers">Supplier</label>
+  <label class="add-form-text" for="suppliers">Supplier</label>
   <select id="suppliers" name="product">
-    <option value="" selected>Please select a supplier</option>
+    <option class="add-form-text" value="" selected>Please select a supplier</option>
     {{#suppliers}}
-    <option value="{{id}}">{{name}}</option>
+    <option class="add-form-text" value="{{id}}">{{name}}</option>
     {{/suppliers}}
   </select>
 
-  <label for="products">Product</label>
+  <label class="add-form-text" for="products">Product</label>
   <select id="products" name="product">
-    <option id="no-supplier" value="" selected>Please select a product</option>
+    <option class="add-form-text" id="no-supplier" value="" selected>Please select a product</option>
     {{#products}}
-    <option value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
+    <option class="add-form-text" value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
     {{/products}}
   </select>
 
-<label for="cost">Unit Cost</label>
+<label class="add-form-text" for="cost">Unit Cost</label>
 <input type="number" step="any" name='cost' id="cost">
 
-<label for="quantity">Quantity</label>
+<label class="add-form-text" for="quantity">Quantity</label>
 <input type="number" name="quantity" id="quantity">
 
 </fieldset>
 </center>
 <center>
-<table id="added-items-purchases-table" class="myTables">
+<table id="added-items-purchases-table" class="myTables add-form-text">
   <thead style="display:none">
     <tr>
       <th>Supplier</th>

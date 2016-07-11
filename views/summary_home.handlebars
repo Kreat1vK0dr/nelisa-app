@@ -6,23 +6,23 @@
 </head>
 <body>
 
-  <div id="welcome"><span id="welcome-nelisa"> Nelisa's </span> <span id="welcome-other"><!--the -->weekly summary of sales data</span></div>
+  <div id="welcome"><span id="welcome-nelisa"> Nelisa's </span> <span class="stats-description"><!--the -->weekly summary of sales data</span></div>
   <div class="text-center periodbuttons">
 
-    <form action="/summary/table" method="POST">
+    <form class="form-inline" action="/summary/table" method="POST">
 
-      <select class="" name="type">
+      <select class="form-control" name="type">
         <option value='product'>Product</option>
         <option value='category'>Category</option>
         </select>
 
-      <select class="" name="month">
+      <select class="form-control" name="month">
         {{#months}}
         <option value={{month}}>{{month}}</option>
         {{/months}}
       </select>
 
-      <select class="" name="week">
+      <select class="form-control" name="week">
         {{#weeks}}
         <option value={{week}}>{{week}}</option>
         {{/weeks}}

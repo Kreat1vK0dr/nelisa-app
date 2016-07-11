@@ -1,10 +1,11 @@
-<h1>Suppliers</h1>
+<h1 class="title">Suppliers</h1>
 
-<table class="center-table myTables">
-  <thead>
+<table class="table table-bordered table-hover table-sm center-table">
+  <thead class="thead-inverse">
     <tr>
-      <th>Supplier ID</th>
+      <th>ID</th>
       <th>Supplier</th>
+      <th class="link-header" colspan="2"><a class="table-links" href="/suppliers/add">Add</a></th>
     </tr>
   </thead>
   <tbody>
@@ -19,8 +20,8 @@
     <tr>
       <td class="crud-table">{{id}}</td>
       <td class="crud-table">{{name}}</td>
-      <td class="crud-table"><a href="/suppliers/edit/{{id}}"><div>Edit</div></a></td>
-      <td class="crud-table"><a href="/suppliers/delete/{{id}}"><div>Delete</div></a></td>
+      <td class="crud-table link-cell"><a class="table-links" href="/suppliers/edit/{{id}}">Edit</a></td>
+      <td class="crud-table link-cell"><a class="table-links" href="/suppliers/delete/{{id}}">Delete</a></td>
     </tr>
     {{/suppliers}}
 

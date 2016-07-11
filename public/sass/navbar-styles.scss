@@ -1,5 +1,12 @@
+@media (min-width:866px) and (max-width:1122px){
+ .navbar {
+   height: 80px;
+ }
+}
+@media (min-width:1123px) {
 .navbar {
     height: 40px;
+}
 }
 
 .navbar-brand {

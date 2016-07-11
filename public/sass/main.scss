@@ -21,8 +21,14 @@
 body {
   background-color: #333 !important;
 }
-
+// #allbody-home {
+//   height: 100%;
+//   background-image: url('/images/township1.jpg');
+//   background-size: cover;
+// }
 #body-home {
+  // background-image: url('/images/township1.jpg');
+  // background-size: cover;
     margin                    : 0 auto;
     background-color          : #E86551;
     border-bottom-left-radius : 10px;
@@ -32,11 +38,12 @@ body {
     color                     : white;
 }
 
-h1,
-h2 {
-    font-family: adam;
-    text-align : center;
-}
+// h1,
+// h2 {
+//     font-family: adam;
+//     text-align : center;
+//     color: white;
+// }
 
 .dropdown {
     display: none;
@@ -117,7 +124,7 @@ img {
     background-color: rgba(255,255,255, 0.3);
     border-radius   : 6px;
     max-width       : 90%;
-    margin          : 0 auto;
+    margin          : 1em auto;
     padding         : 15px 45px;
 }
 

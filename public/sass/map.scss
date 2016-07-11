@@ -3,8 +3,17 @@ html, body {
         margin: 0;
         padding: 0;
       }
+      // .map-container {
+      //   width: 60%;
+      //   height: 80%;
+      // }
       #map {
-        height: 100%;
+        // display:inline-block;
+        height: 80%;
+        width: 50%;
+        // float: left;
+          
+          margin: 0 auto;
       }
       #floating-panel {
         position: absolute;
@@ -32,18 +41,20 @@ html, body {
         font-size: 12px;
       }
       #right-panel {
-        height: 100%;
+        height: 80%;
         float: right;
         // display:inline-block;
+        margin-right: 10em;
         width: 390px;
         overflow: auto;
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
         padding-left: 10px;
       }
-      #map {
-        margin-right: 400px;
+      #right-panel div {
+        background-color: white;
       }
+
       #floating-panel {
         background: #fff;
         padding: 5px;
@@ -59,10 +70,12 @@ html, body {
           margin: 0;
         }
         #right-panel {
+          background-color: #333;
           float: none;
           width: auto;
         }
       }
   #nelisa-info-window {
+    color: black;
     font-family: peach;
   }
