@@ -6,8 +6,18 @@
     <button id="address">Get Directions To Nelisa's</button>
 </div>
     <div id="map"></div>
-    <div id="right-panel"></div>
+    <div id="right-panel" style="color:black;"></div>
 
 <div style="height:50px"></div>
     <script src="/js/maps.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAonCzmvSVYadxu8aHKz8rKwURPGfsXhPA&callback=initMap" async defer></script>
+  <script>
+  $(document).ready(function(){
+    $("#address").click(function(){
+      var map = document.getElementById("map");
+          map.style.margin = 0;
+          map.style.marginLeft = "5.5em"
+          map.style.cssFloat = "left";
+    });
+  });
+  </script>

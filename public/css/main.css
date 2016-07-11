@@ -593,17 +593,13 @@ html, body {
 
 #right-panel {
   height: 80%;
-  float: right;
   margin-right: 10em;
   width: 390px;
   overflow: auto;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
   padding-left: 10px;
-}
-
-#right-panel div {
-  background-color: white;
+  color: black !important;
 }
 
 #floating-panel {
