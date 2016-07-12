@@ -191,7 +191,7 @@ table {
   display: inline-block;
 }
 
-.add-form-text, .add-form-message-text, .table-links, .table {
+.add-form-text, .add-form-message-text, .table-links, .db-table {
   color: white !important;
 }
 
