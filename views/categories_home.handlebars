@@ -1,3 +1,23 @@
+<div class="overlay"></div>
+<center>
+<div id="execute-alert" class="add-box">
+  <h3>Add A Category</h3>
+
+  <form action="/categories/add" method="post">
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description">
+
+    <input type="submit" value="Add Category">
+  </form>
+</div>
+
+<div id="execute-success" class="alert-box">
+<h3>SUCCESS</h3>
+<p>Category added successfully</p>
+<button id="execute-success-ok">OK</button>
+</div>
+</center>
+
 <center>
 <h3 class="title">Categories</h3>
 <div class="center">
@@ -20,7 +40,9 @@
     <tr>
       <th>ID</th>
       <th>Category</th>
+      {{#if superuser}}
       <th colspan="2" class="link-header"><a class="table-links" href="/categories/add"><div class="add-link">Add</div></a></th>
+      {{/if}}
     </tr>
   </thead>
   <tbody id="searchResults">
@@ -35,7 +57,7 @@
     <tr>
       <td class="crud-table">{{id}}</td>
       <td class="crud-table">{{description}}</td>
-      {{#if ../admin}}
+      {{#if ../superuser}}
       <td class="crud-table link-cell"><a class="table-links" href="/categories/edit/{{id}}"><div>Edit</div></a></td>
       <td class="crud-table link-cell"><a class="table-links" href="/categories/delete/{{id}}"><div>Delete</div></a></td>
       {{/if}}
@@ -44,3 +66,9 @@
 
   </tbody>
 </table>
+
+<script>
+
+
+
+</script>

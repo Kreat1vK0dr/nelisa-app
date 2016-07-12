@@ -90,9 +90,11 @@ function initMap() {
                 icon: "/images/spaza.png",
                 title: "Nelisa's Spaza"
             });
+            
             spazaMarker.addListener('click', function() {
                      infowindow.open(map, spazaMarker);
                    });
+                   
             var request = {
                 origin: start,
                 destination: end,

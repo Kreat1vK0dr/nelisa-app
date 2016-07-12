@@ -14,7 +14,9 @@
       <th>Admin Role</th>
       <th>Date Added</th>
       <th>Last Login</th>
+      {{#if superuser}}
       <th class="link-header" colspan="2"><a class="table-links" href="/users/add">Add user</a></th>
+      {{/if}}
     </tr>
   </thead>
   <tbody>
@@ -26,6 +28,7 @@
     <td>{{admin_role}}</td>
     <td>{{dateAdded}}</td>
     <td>{{lastLogin}}</td>
+    {{#if ../superuser}}
     <td class="crud-table highlight link-cell"><a class="table-links" href="/users/edit/{{id}}">Edit</a></td>
     <td class="crud-table highlight link-cell">
 <form action="/users/delete" method="post">
@@ -33,7 +36,8 @@
   <input type="hidden" name="username" value="{{username}}">
   <input type="hidden" name="role" value="{{role}}">
   <input type="hidden" name="adminRole" value="{{admin_role}}">
-  <button class="table-links" type="submit" style="background-color:#333;border:none">Delete</button>
+  <button class="table-links" type="submit" style="background-color:transparent;border:none">Delete</button>
+  {{/if}}
 </form>
   </td>
   </tr>

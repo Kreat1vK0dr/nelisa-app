@@ -6,14 +6,14 @@ var mysql = require('mysql'),
 
           var usingLocalMachine = process.env.USER==='coder';
 
-          if (usingLocalMachine) {
-          var connection = mysql.createConnection({
-              host: 'localhost',
-              user: "root",
-              password: "1amdan13l",
-              database: 'nelisa_another_copy'
-          });
-          } else {
+          // if (usingLocalMachine) {
+          // var connection = mysql.createConnection({
+          //     host: 'localhost',
+          //     user: "root",
+          //     password: "1amdan13l",
+          //     database: 'nelisa_another_copy'
+          // });
+          // } else {
           var connection = mysql.createConnection({
               host: '127.0.0.1',
               user: user,
@@ -21,7 +21,7 @@ var mysql = require('mysql'),
               port: 3306,
               database: 'nelisa_another_copy'
           });
-          }
+          // }
 
 
 // create hash

@@ -5,7 +5,9 @@
     <tr>
       <th>ID</th>
       <th>Supplier</th>
+      {{#if ../superuser}}
       <th class="link-header" colspan="2"><a class="table-links" href="/suppliers/add">Add</a></th>
+      {{/if}}
     </tr>
   </thead>
   <tbody>
@@ -20,8 +22,10 @@
     <tr>
       <td class="crud-table">{{id}}</td>
       <td class="crud-table">{{name}}</td>
+      {{#if ../superuser}}
       <td class="crud-table link-cell"><a class="table-links" href="/suppliers/edit/{{id}}">Edit</a></td>
       <td class="crud-table link-cell"><a class="table-links" href="/suppliers/delete/{{id}}">Delete</a></td>
+      {{/if}}
     </tr>
     {{/suppliers}}
 

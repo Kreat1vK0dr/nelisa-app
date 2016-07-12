@@ -1,3 +1,11 @@
+<link rel="stylesheet" href="/css/jquery-ui.css">
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->
+
+<script src="/js/jquery-ui.js"></script>
+<script src="/js/searchAndSelect.js"></script>
+
+
 <div class="overlay"></div>
 <center>
 <div id="execute-alert" class="alert-box">
@@ -26,38 +34,47 @@
 </center>
 
 
-<h1>add sale</h1>
-<button id="add-item">add item</button>
+<h3 class="title">Add Sale</h3>
 
-<form action="/" method="post">
+<div class="container add-select-container">
+  <div class="row db-table" id="labels">
+    <div class="col-md-6">
+      <label class="add-form-text" for="products">Product</label>
+    </div>
+    <div class="col-md-2">
+      <label class="add-form-text control-label" for="price">Price</label>
+    </div>
+    <div class="col-md-2">
+      <label class="add-form-text control-label" for="quantity">Quantity</label>
+    </div>
+    <div class="col-md-2">
 
-<center>
-<fieldset>
+    </div>
+  </div>
 
-  <label class="add-form-text" for="products">Product</label>
-  <select id="products" name="product">
-    <option class="add-form-text" value="" selected>Please select a product</option>
-    {{#products}}
-    <option class="add-form-text" value="{{p_id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{product}}" data-category="{{c_id}}">{{product}}</option>
-    {{/products}}
-  </select>
+  <div class="row" id="inputs">
+    <div class="col-md-6 ui-widget">
+      <select class="form-control" id="combobox" name="product">
+        <option class="add-form-text" value="" selected>Please select a product</option>
+        {{#products}}
+        <option class="add-form-text" value="{{p_id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{product}}" data-categoryId="{{c_id}}" data-category="{{category}}">{{product}}</option>
+        {{/products}}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <input class="form-control" type="number" step="any" name='price' id="price">
+    </div>
+    <div class="col-md-2">
+      <input class="form-control" type="number" name="quantity" id="quantity">
+    </div>
+    <div class="col-md-2">
+      <div class="btn btn-success" role="button" id="add-item">add item</div>
+    </div>
+  </div>
+</div>
 
-  <label class="add-form-text" for="categories">Category</label>
-  <select id="categories" name="category">
-    <option class="add-form-text" value="" selected>Category</option>
-    {{#categories}}
-    <option class="add-form-text" value="{{id}}" data-description="{{description}}">{{description}}</option>
-    {{/categories}}
-  </select>
+  <button class="btn btn-danger" type="submit" id="execute-sale">Add sale</button>
 
-<label class="add-form-text" for="price">Price</label>
-<input type="number" step="any" name='price' id="price">
-
-<label class="add-form-text" for="quantity">Quantity</label>
-<input type="number" name="quantity" id="quantity">
-
-</fieldset>
-</center>
 <center>
 <table id="added-items-table" class="table table-bordered table-hover table-sm center-table">
   <thead class="thead-inverse" style="display:none">
@@ -74,7 +91,3 @@
   <p class="add-form-message-text" id="no-items-text">Please add some items before attempting to execute a sale.</p>
 </table>
 </center>
-
-<button type="submit" id="execute-sale">Add sale</button>
-
-</form>

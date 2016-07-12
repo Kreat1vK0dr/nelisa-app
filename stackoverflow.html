@@ -1,0 +1,46 @@
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<form name="form" novalidate="" ng-submit="processForm()" class="form-inline">
+
+    <div class="container" style="width: 50%">
+
+        <div class="row" id="labels">
+            <div class="col-md-2">
+                <label class="control-label" for="location"><i class="glyphicon glyphicon-map-marker"></i> Location</label>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label" for="startDate"><i class="glyphicon glyphicon-calendar"></i> Pickup date</label>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label" for="startTime"><i class="glyphicon glyphicon-time"></i> Pickup</label>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label" for="endDate"><i class="glyphicon glyphicon-calendar"></i> Dropoff date</label>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label" for="endTime"><i class="glyphicon glyphicon-time"></i> Dropoff</label>
+            </div>
+        </div>
+
+        <div class="row" id="inputs">
+            <div class="col-md-4">
+                <input class="form-control" id="location" name="location" type="text" ng-model="location" ng-required="true" ng-autocomplete details="details" options="options" placeholder="Location" />
+            </div>
+            <div class="col-md-2">
+                <input class="form-control" id="startDate" name="startDate" type="text" datepicker-popup="{{format}}" ng-model="startDate" is-open="openedStart" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="openStart($event)" />
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" id="startTime" ng-model="selectedStartTime" ng-options="time.label for time in times" ng-required="true">
+                </select>
+            </div>
+            <div class=" col-md-2">
+                <input class="form-control" id="endDate" name="endDate" type="text" datepicker-popup="{{format}}" ng-model="endDate" is-open="openedEnd" min-date="startDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="openEnd($event)"
+                />
+            </div>
+            <div class=" col-md-2">
+                <select class="form-control" id="endTime" ng-model="selectedEndTime" ng-options="time.label for time in times" ng-required="true">
+                </select>
+            </div>
+            <div class="row align-center">
+                <input type="submit" value="Search" ng-disabled="form.$invalid" class="btn btn-primary" disabled="disabled" />
+            </div>
+</form>

@@ -30,7 +30,6 @@ var addData = function(query1,query2, data1, data2){
   });
 }
 
-
   this.getSaleDetails = function(data) {
   return  getOrChangeData("SELECT s.id, s.sale_id, DATE_FORMAT(s.date, '%b %a %d %Y %h:%i %p') as date, p.description product, c.description category, s.quantity , s.cost, s.quantity*s.price revenue, (s.quantity*s.price)-s.cost profit  FROM sales_details s, products p, categories c WHERE s.product_id = p.id AND s.category_id = c.id AND s.id = ? ORDER BY s.product_id",data);
 };

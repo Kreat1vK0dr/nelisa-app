@@ -11,7 +11,7 @@ function checkIfCanExecuteSale(dataToPost) {
         var enough = inventory - quantity >= 0;
         if (!enough) {
             var details = {
-                description: $("#products option[value='" + item.data[0] + "']").text(),
+                description: $("select[name='products'] option[value='" + item.data[0] + "']").text(),
                 inventory: item.data[4],
                 quantity: item.data[3],
                 cantSell: Math.abs(inventory - quantity)
@@ -42,9 +42,22 @@ $(document).ready(function () {
   // ADD SALE
 
     if (window.location.pathname === '/sales/add') {
-        $('#products').change(function () {
-            $('#price').val($('#products option:selected').attr('data-price'));
-            $('#categories').val($('#products option:selected').attr('data-category'));
+      console.log()
+        $('input.product').on('keyup',function () {
+          var fieldVal = $('input.product').val();
+          console.log(fieldVal);
+          var options = $("#combobox option");
+          var products = $("#combobox option").map(function(){return $(this).text(); });
+          var validEntry = $.inArray(fieldVal, products)!==-1;
+          console.log("Valid Entry: ", validEntry);
+          console.log("PRODUCTS: ",products);
+          if (validEntry) {
+            console.log("Should change price now");
+            price = $('select[name="product"] option[data-description="'+ fieldVal +'"]').attr('data-price');
+            console.log("This is field val: ", fieldVal);
+            console.log("This is price: ", price);
+            $('#price').val(price);
+            }
         });
 
         if (window.localStorage.getItem('sale')) {
@@ -65,15 +78,17 @@ $(document).ready(function () {
         }
         //NOTE: here it is ok to use .click(function...) because we only have one element to which the handler is assigned.
         $('#add-item').click(function () {
-            var price = Number($('#price').val()),
+            var product = $('input.product').val(),
+                details = $('select[name="products"] option[data-description="' + product + '"]'),
+                price = Number($('#price').val()),
                 quantity = Number($('#quantity').val()),
-                inventory = Number($('#products option:selected').attr('data-inventory')),
-                product_id = Number($('#products').val()),
-                category_id = Number($('#categories').val()),
-                product = $('#products option:selected').attr('data-description'),
-                category = $('#categories option:selected').attr('data-description'),
+                inventory = Number(details.attr('data-inventory')),
+                product_id = Number(details.val()),
+                category_id = Number(details.attr("data-categoryId")),
+                category = details.attr('data-category'),
                 storage = JSON.parse(window.localStorage.getItem('sale')),
                 previousState = JSON.parse(window.localStorage.getItem('table'));
+
             var allFieldsFilledIn = price != 0 && quantity != 0 && product_id != null && category_id != null;
 
             console.log(price, quantity, inventory, product_id, category_id, product, category);
@@ -88,13 +103,13 @@ $(document).ready(function () {
                     },
                     item = [product, category, price, quantity, sub_total];
 
-                var newRowContent = "<tr data-row-id='" + rowId + "'>";
+                var newRowContent = "<tr style='background-color:#777' data-row-id='" + rowId + "'>";
 
                 item.forEach(function (content) {
                     newRowContent += "<td>" + content + "</td>";
                 });
 
-                newRowContent += "<td><button >Remove item(s)</button></td></tr>";
+                newRowContent += "<td style='background-color:rgba(185,46,16,0.8)'><button class='table-links' style='background-color:transparent;border:none'>Remove item(s)</button></td></tr>";
 
                 if (storage && previousState) {
                     var items = storage;
@@ -258,13 +273,13 @@ $(document).ready(function () {
             }
         }
 
-        $('#products').change(function () {
-            $('#categories').val($('#products option:selected').attr('data-category'));
-            //
-            // {{#products}}
-            // <option value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
-            // {{/products}}
-        });
+        // $('#products').change(function () {
+        //     $('#categories').val($('#products option:selected').attr('data-category'));
+        //     //
+        //     // {{#products}}
+        //     // <option value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
+        //     // {{/products}}
+        // });
 
         //NOTE: here it is ok to use .click(function...) because we only have one element to which the handler is assigned.
         $('#add-item').click(function () {

@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
     <link href="/css/bootstrap.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
     <script src="/js/jquery.1.12.4.min.js"></script>
+
 
     <title>Nelisa's Online Portal</title>
     <!-- <link href="/css/my.css" rel="stylesheet" type="text/css"/> -->
@@ -35,9 +35,13 @@
     <li class="navbutton admin-nav"><a href="/categories">categories |</a></li>
     <li class="navbutton admin-nav"><a href="/purchases">purchases |</a></li>
     <li class="navbutton admin-nav"><a href="/sales">sales |</a></li>
+    {{#if superuser}}
     <li class="navbutton admin-nav"><a href="/users">users |</a></li>
     <li class="navbutton admin-nav"><a href="/sales/add">add sale |</a></li>
     <li class="navbutton admin-nav"><a href="/purchases/add">Add purchase</a></li>
+    {{else}}
+    <li class="navbutton admin-nav"><a href="/users">users</a></li>
+    {{/if}}
     <!-- <li class="navbutton"><a href="/">categories</a></li> -->
 
   </ul>
