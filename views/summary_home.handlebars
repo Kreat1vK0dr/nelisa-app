@@ -16,13 +16,13 @@
         <option value='category'>Category</option>
         </select>
 
-      <select class="form-control" name="month">
+      <select id="month-stat" class="form-control" name="month">
         {{#months}}
         <option value={{month}}>{{month}}</option>
         {{/months}}
       </select>
 
-      <select class="form-control" name="week">
+      <select id="week-stat" class="form-control" name="week">
         {{#weeks}}
         <option value={{week}}>{{week}}</option>
         {{/weeks}}
@@ -37,5 +37,17 @@
   <div class = "divider2"></div>
 
   <!-- <img src="/images/nelisa.jpg"></img> -->
+  <script>
+    $(document).ready(function(){
+      $('#month-stat').on("change", function(){
+        var month = $(this).val();
+        console.log("THIS IS MONTH: ",month);
+        $.get("/stats/weeks/"+month,function(compiledData){
+          $("#week-stat").html(compiledData);
+        });
+      });
+    });
+
+  </script>
 </body>
 </html>

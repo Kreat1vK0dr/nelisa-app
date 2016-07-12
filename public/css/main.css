@@ -191,7 +191,7 @@ table {
   display: inline-block;
 }
 
-.add-form-text, .add-form-message-text, .table-links, table {
+.add-form-text, .add-form-message-text, .table-links, .table {
   color: white !important;
 }
 
@@ -600,6 +600,10 @@ html, body {
   line-height: 30px;
   padding-left: 10px;
   color: black !important;
+}
+
+#right-panel div {
+  background-color: white;
 }
 
 #floating-panel {

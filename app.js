@@ -6,7 +6,7 @@ var express = require('express'),
     mysql = require('mysql'),
     myConnection = require('express-myconnection'),
     bodyParser = require('body-parser'),
-    // sassMiddleware = require('node-sass-middleware'),
+    sassMiddleware = require('node-sass-middleware'),
     // postcssMiddleware = require('postcss-middleware'),
     autoprefixer = require('autoprefixer'),
     session = require('express-session');
@@ -92,13 +92,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, "views"));
 
-// app.use('/css', sassMiddleware({
-//     src: path.join(__dirname, 'public', 'sass'),
-//     dest: path.join(__dirname, 'public', 'css'),
-//     debug: true,
-//     outputStyle: 'expanded',
-//     // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
-// }));
+app.use('/css', sassMiddleware({
+    src: path.join(__dirname, 'public', 'sass'),
+    dest: path.join(__dirname, 'public', 'css'),
+    debug: true,
+    outputStyle: 'expanded',
+    // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+}));
 
 // app.use(postcssMiddleware({
 //     src: function (req) {
@@ -150,11 +150,14 @@ app.get('/logout', loginMethod.signout);
 app.get('/stats', stats.home);
 app.post('/stats/:type', stats.redirect);
 app.get('/stats/:type/:month/:week',  stats.show);
+app.get('/stats/weeks/:month', stats.getWeeks);
 // app.get('/stats/:type', stats.show);
 
 app.get('/summary', summary.home);
 app.post('/summary/table', summary.redirect);
 app.get('/summary/table/:type/:month/:week', summary.show);
+app.get('/summary/weeks/:month', stats.getWeeks);
+
 // app.get('/summary/table', summary.show);
 
 

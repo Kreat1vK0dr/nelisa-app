@@ -12,7 +12,7 @@ html, body {
         height: 80%;
         width: 50%;
         // float: left;
-          
+
           margin: 0 auto;
       }
       #floating-panel {
@@ -42,7 +42,7 @@ html, body {
       }
       #right-panel {
         height: 80%;
-        float: right;
+        // float: right;
         // display:inline-block;
         margin-right: 10em;
         width: 390px;
@@ -50,6 +50,8 @@ html, body {
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
         padding-left: 10px;
+        color: black !important;
+
       }
       #right-panel div {
         background-color: white;
