@@ -6,7 +6,7 @@ var express = require('express'),
     mysql = require('mysql'),
     myConnection = require('express-myconnection'),
     bodyParser = require('body-parser'),
-    // sassMiddleware = require('node-sass-middleware'),
+    sassMiddleware = require('node-sass-middleware'),
     // postcssMiddleware = require('postcss-middleware'),
     autoprefixer = require('autoprefixer'),
     session = require('express-session');
@@ -92,13 +92,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, "views"));
 
-// app.use('/css', sassMiddleware({
-//     src: path.join(__dirname, 'public', 'sass'),
-//     dest: path.join(__dirname, 'public', 'css'),
-//     debug: true,
-//     outputStyle: 'expanded',
-//     // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
-// }));
+app.use('/css', sassMiddleware({
+    src: path.join(__dirname, 'public', 'sass'),
+    dest: path.join(__dirname, 'public', 'css'),
+    debug: true,
+    outputStyle: 'expanded',
+    // prefix:  '/css'  // Where prefix is at <link rel="stylesheets" href="prefix/style.css"/>
+}));
 
 // app.use(postcssMiddleware({
 //     src: function (req) {
@@ -121,7 +121,7 @@ app.use(bodyParser.urlencoded({
     // parse application/json
 app.use(bodyParser.json());
 
-app.use(session({secret: "pizzadough", cookie: {maxAge: 600000}, resave:true, saveUninitialized: false}));
+app.use(session({secret: "pizzadough", /*cookie: {maxAge: 600000},*/ resave:true, saveUninitialized: false}));
 
 app.use(authenticate);
 

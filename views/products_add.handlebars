@@ -1,17 +1,30 @@
-<h1>Add A Product</h1>
-
-<form action="/products" method="post">
-
-    <label for="category">Category</label>
-    <select name="category" id="category">
+<h3 class="title">Add A Product</h3>
+<center>
+<form class="form-horizontal" action="/products" method="post">
+  <!-- <div class="form-group">
+  <label for="firstName" class="col-sm-3 control-label">First Name</label>
+  <div class="col-sm-6">
+  <input class="form-control" autofocus type="text" name="firstName" id="firstName"  placeholder="Enter first name" value="{{firstName}}"> <br>
+</div>
+</div> -->
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="category">Category</label>
+    <div class="col-sm-6">
+    <select class="form-control col-sm-6" name="category" id="category">
       {{#categories}}
       <option value="{{id}}">{{description}}</option>
       {{/categories}}
     </select>
+    </div>
+    </div>
 
-    <label for="product">Product</label>
-    <input type="text" id="product" name="description" value="{{product.description}}">
-
-    <input type="submit" value="Add Product">
+    <div class="form-group">
+    <label class="col-sm-3 control-label" for="product">Description</label>
+    <div class="col-sm-6">
+    <input class="form-control" type="text" id="product" name="description" value="{{product.description}}">
+    </div>
+</div>
+    <input class="btn btn-primary" type="submit" value="Add Product">
 
 </form>
+</center>

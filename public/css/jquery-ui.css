@@ -882,7 +882,7 @@ body .ui-tooltip {
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	border: 1px solid #cccccc;
+	/*border: 1px solid #cccccc;*/
 	background: #ededed;
 	font-weight: normal;
 	color: #2b2b2b;
@@ -896,7 +896,7 @@ body .ui-tooltip {
 	text-align: center;
 	color: white;
 	/*border: 1px black solid;*/
-	transform: scale(1.5);
+	/*transform: scale(1.5);*/
 
 	/*border: 1px solid #cccccc;
 	background: #ededed;
@@ -917,7 +917,7 @@ body .ui-tooltip {
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #003eff;
+	/*border: 1px solid #003eff;*/
 	background: #007fff;
 	font-weight: normal;
 	color: #ffffff;

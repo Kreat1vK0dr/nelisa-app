@@ -35,7 +35,7 @@
     <th>Price</th>
     <th>Inventory</th>
     {{#if superuser}}
-    <th class="link-header" colspan="2"><a class="table-links" href="/products/add"><div class="add-link">Add</div></a></th>
+    <th class="link-header" colspan="2"><a class="table-links" href="/products/add"><div class="add-link">ADD</div></a></th>
     {{/if}}
     {{else}}
     <th>ID</th>
@@ -57,7 +57,7 @@
     <td class="crud-table highlight">{{inventory}}</td>
     {{#if ../superuser}}
     <td class="crud-table highlight link-cell"><a class="table-links" href="/products/edit/{{p_id}}"><div class="edit">Edit</div></a></td>
-    <td class="crud-table highlight link-cell"><a class="table-links" href="/products/delete/{{p_id}}"><div class="delete">Delete</div></a></td>
+    <td class="crud-table highlight link-cell"><a disable class="table-links" href="/products/delete/{{p_id}}"><div class="delete">Delete</div></a></td>
     {{/if}}
 
   </tr>

@@ -7,7 +7,9 @@ node_js:
 
 env:
   - CXX=g++-4.8
-  
+  - MYSQL_USR="root"
+  - MYSQL_PWD=""
+
 addons:
   apt:
     sources:

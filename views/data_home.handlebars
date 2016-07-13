@@ -121,143 +121,14 @@
 </form>
 </div>
 </center>
-<!-- <form> -->
-  <!-- <label><input type="radio" name="mode" value="grouped"> Grouped</label>
-  <label><input type="radio" name="mode" value="stacked" checked> Stacked</label>
-</form> -->
+
+
 <div id="container">
-
 </div>
 
-<div class="chart-edit hide-element" id="edit" style="width:70%;background-color:white;text-align:center;">
-  <form action="/" method="post">
-<div class="form-inline form-group chart-adder-element period-select">
-
-    <div class="period">
-        <div  class="input-group">
-        <div class="input-group-addon">Period</div>
-        <input type="text" class="date-input form-control from" name="from" placeholder="From">
-        <input type="text" class="date-input form-control to" name="to" placeholder="To">
-        </div>
-        <!-- <button type="button" class="btn btn-warning period-compare-btn">Select Comparison Period</button> -->
-        <!-- <div id="period-compare">
-          <div  class="input-group">
-            <div class="input-group-addon">Comparison Period</div>
-            <input type="text" class="date-input form-control from-compare" name="from" placeholder="From">
-            <input type="text" class="date-input form-control to-compare" name="to" placeholder="To">
-            <span class="input-group-btn">
-            <button type="button cancel-period-compare" class="btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
-          </span>
-        </div>
-        </div> -->
-          </div>
-  <!-- <p class="help-block">By selecting a comparison period, two graphs will be displayed for each chosen date range.</p> -->
-</div>
-<br class="hide-element break-line"/>
-
-<div class="form-inline form-group chart-adder-element type-select">
-  <div class="btn-group input-group data-select" data-toggle="buttons" role="group" aria-label="...">
-    <div class="input-group-addon">Data</div>
-    <label class="btn btn-default product-btn">
-      <input type="radio" name="data-type"  autocomplete="off" value="product"> Products
-    </label>
-    <label class="btn btn-default category-btn">
-      <input type="radio" name="data-type"  autocomplete="off" value="category"> Categories
-    </label>
-      </div>
-
-    <div class="data-select-option hide-element product-select">
-
-        <!-- <label for="product">Product</label> -->
-        <div class="input-group">
-        <select class="form-control type-select-graph product" data-dropup-auto=false name="product ">
-            <option value="all">All Products</option>
-            {{#products}}
-                <option value="{{p_id}}">{{product}}</option>
-            {{/products}}
-        </select>
-        <span class="input-group-btn">
-        <button type="button" class="cancel-data-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
-      </span>
-      </div>
-</div>
-<div id="" class="data-select-option hide-element category-select">
-        <!-- <label for="category">Category</label> -->
-              <div class="input-group">
-        <select class="form-control type-select-graph category" data-dropup-auto=false name="category ">
-            <option value="all">All Categories</option>
-            {{#categories}}
-                <option value="{{id}}">{{description}}</option>
-            {{/categories}}
-        </select>
-        <span class="input-group-btn">
-        <button type="button" class="cancel-data-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
-      </span>
-</div>
-    </div>
-    </div>
-
-<div class="form-group form-inline chart-adder-element data-filter">
-  <div class="btn-group input-group filter-select" data-toggle="buttons" role="group" aria-label="...">
-    <div class="input-group-addon">Filter</div>
-    <label class="btn btn-default quantity-btn">
-      <input type="radio" name="data-filter"  autocomplete="off" value="quantity"> Quantity
-    </label>
-    <label class="btn btn-default value-btn">
-      <input type="radio" name="data-filter"  autocomplete="off" value="value"> Value
-    </label>
-      </div>
-
-      <div class=" data-filter hide-element data-value-filter">
-        <div class="input-group btn-group"  data-toggle="buttons">
-        <div class="input-group-addon">Value</div>
-        <label class="btn btn-primary">
-          <input type="checkbox" name="data-value" autocomplete="off" value="revenue"> Revenue
-        </label>
-        <label class="btn btn-primary">
-          <input type="checkbox" name="data-value" autocomplete="off" value="profit"> Profit
-        </label>
-        <label class="btn btn-primary">
-          <input type="checkbox" name="data-value" autocomplete="off" value="cost"> Cost
-        </label>
-        <span class="input-group-btn">
-        <button type="button" class="cancel-filter-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
-      </span>
-      </div>
-      </div>
-
-
-      <div class="data-filter hide-element data-quantity-filter">
-        <div class="input-group btn-group input-group" data-toggle="buttons" role="group" aria-label="...">
-        <div class="input-group-addon">Quantity</div>
-        <label class="btn btn-primary">
-          <input type="checkbox" name="data-quantity" autocomplete="off" value="sold"> Sold
-        </label>
-        <label class="btn btn-primary">
-          <input type="checkbox" name="data-quantity" autocomplete="off" value="purchased"> Purchased
-        </label>
-        <label class="btn btn-primary">
-          <input type="checkbox" name="data-quantity" autocomplete="off" value="remaining"> Remaining
-        </label>
-        <span class="input-group-btn">
-        <button type="button" class="cancel-filter-select btn btn-danger btn-sml "><span class="glyphicon glyphicon-remove"></span></button>
-      </span>
-      </div>
-        </div>
-        <!-- <label class="btn btn-warning quantity-metrics-compare">
-          <input type="radio" name="options " autocomplete="off"> Compare
-        </label> -->
-      </div>
-<!-- <p class="help-block">You can choose one or more of the value or quantity types for comparison.</p> -->
-<div  class="chart-adder-element">
-<button style="width:100%" class="btn btn-success" type="button"  id="edit-chart-btn">Change</button>
-</div>
-
-</form>
-</div>
 
 <div style='height:5em;'></div>
-
+<script src="/js/raphael.min.js"></script>
 <script src="/js/d3.min.js" charset="utf-8"></script>
 <script src="/js/d3.tip.js" charset="utf-8"></script>
 <script src="/js/data.js"></script>

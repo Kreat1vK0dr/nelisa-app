@@ -129,8 +129,8 @@ $('#show-chart-btn').on('click', function (e) {
           var winW = window.innerWidth;
 
           var margin = {
-               top: 140,
-               right: 10,
+               top: multifilter ? 140 : 50,
+               right: multifilter ? 10 : 35,
                bottom: 100,
                left: multifilter || !showAllItems ? 60 : 225
            };
@@ -169,8 +169,11 @@ $('#show-chart-btn').on('click', function (e) {
 
           var firstChart = $(".chart").length===0,
           newChartId = createNewId(getLastId());
+
           console.log("THIS IS SVGWIDTH", svgWidth);
           var div = d3.select("#container")
+                       .append("div")
+                       .attr("class","centering-div")
                        .append("div")
                        .attr('class', 'chart-container')
                        .style("width", svgWidth)
@@ -192,13 +195,24 @@ $('#show-chart-btn').on('click', function (e) {
                       //     .attr("class", "glyphicon glyphicon-edit")
 
               var svg = div.append("svg")
+                        .attr("id","svg-"+newChartId)
                        .attr("width", svgWidth /*+ margin.left + margin.right*/)
-                       .attr("height", svgHeight /*+ margin.top + margin.bottom*/)
-                        .attr("z-index",1);
+                       .attr("height", svgHeight /*+ margin.top + margin.bottom*/);
+                        // .attr("z-index",1);
 
                        var chart = svg.append('g')
                             .attr('class', 'innerspace')
                             .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
+
+                            if (firstChart) {
+                              $(".centering-div").addClass("centering");
+                              $(".remove-btn-container").addClass("svg-remove-centering");
+                              $(".svg-remove-centering").css("width",svgWidth);
+                            } else {
+                              $(".remove-btn-container").removeClass("centering");
+                              $(".centering-div").removeClass("centering");
+                              $(".centering-div").addClass("no-centering");
+                            }
 
                        newChart.chart = chart;
                        newChart.chartId = newChartId;
@@ -206,12 +220,14 @@ $('#show-chart-btn').on('click', function (e) {
 
             if (multifilter) {
               var radio = ["grouped","stacked"]
-              var form = div.append("form")
+              var form = div.append("div")
+                            .attr("class","groupstack-container")
+                            .append("form")
                             .attr("class","groupstack");
 
               radio.forEach(function(i){
                 form.append("label")
-                    .attr("class","")
+                    .attr("class","groupstack-label")
                     .text(i)
                     .append("input")
                     .attr({
@@ -786,7 +802,7 @@ function addBarChart(newChart){
         dataset = newChart.dataset,
         axisLabel = newChart.axisLabel,
         chart = newChart.chart;
-
+console.log("THIS is axisLabel", axisLabel);
          x = d3.scale.linear()
                         .range([0, w])
                         .domain([0, max]);
@@ -807,13 +823,20 @@ function addBarChart(newChart){
 
         chart.append("g")
             .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + h + ')')
+            .attr('transform', 'translate(0,' + (h) + ')')
             .call(xAxis)
+            .append('text')
+            .attr("x", w)
+            .attr("dy", -5)
+            .style('text-anchor', 'end')
+            .style('font-style', 'italic')
+            .text(axisLabel);
 
         //create y axis (!showTimeLine)
         chart.append("g")
             .attr('class', 'y axis')
-            .call(yAxis);
+            .call(yAxis)
+
 
                 // add bars
   var bars = chart.selectAll("rect.sidebar")
@@ -858,26 +881,36 @@ barsEnter.transition()
       });
 
       // add numbers in bars
-      chart.selectAll("text.numbers")
-          .data(dataset[0])
-          .enter()
+      var numbers = chart.selectAll("text.numbers")
+          .data(dataset[0]);
+
+          var numbersEnter = numbers.enter()
           .append('text')
           .attr("class","numbers")
           .attr("y", function (d) {
               return y(d.name) + y.rangeBand() / 2 ;
           })
-          .attr("x", function (d) {
-              return x(Math.abs(d.value)) - 2;
-          })
+          .attr("x", 0)
           .attr("dy", "0.3em")
-          .text(function (d) {
-              return d.value;
-          })
           .attr('font-family', 'sans-serif')
           .attr('font-size', '11px')
-          .attr('text-anchor', 'end')
-          .attr('fill', 'white');
+          .attr('text-anchor', 'start')
+          .attr('fill', 'black');
 
+          numbers.transition()
+                      .duration(500)
+                      .ease("quad")
+                      .attr("x", function (d) {
+                          return x(Math.abs(d.value)) + 2;
+                      })
+                      .text(function (d) {
+                          return d.value;
+                      });
+
+          // numbers exit
+          numbers.exit()
+                 .transition()
+                 .remove();
 }
 
 

@@ -3,12 +3,16 @@ th a, td a {
 }
 .link-header {
   padding: none;
+  background-color: #F15D31;
 }
 th a:hover, td a:hover {
   text-decoration: none;
 }
 th.link-header:hover, td.link-cell:hover, button.table-links:hover {
   background-color: rgba(142,16,10,0.5);
+}
+td.link-cell {
+  background-color: #406681;
 }
 table {
   margin-top: 2em !important;

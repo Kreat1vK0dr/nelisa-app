@@ -160,6 +160,7 @@ th a, td a {
 
 .link-header {
   padding: none;
+  background-color: #F15D31;
 }
 
 th a:hover, td a:hover {
@@ -168,6 +169,10 @@ th a:hover, td a:hover {
 
 th.link-header:hover, td.link-cell:hover, button.table-links:hover {
   background-color: rgba(142, 16, 10, 0.5);
+}
+
+td.link-cell {
+  background-color: #406681;
 }
 
 table {
@@ -485,12 +490,29 @@ table {
   display: inline-block;
 }
 
-#container {
+#big-container {
+  position: absolute;
   margin: 0 auto;
 }
 
+#container {
+  width: 100%;
+}
+
 .chart-container {
+  padding-left: 10px;
+}
+
+.centering {
+  text-align: center;
+}
+
+.no-centering {
   display: inline-block;
+}
+
+.svg-remove-centering {
+  margin: 0 auto;
 }
 
 svg {
@@ -534,10 +556,6 @@ rect.bar {
 
 rect.bar:hover {
   fill: orangered;
-}
-
-.x.axis path {
-  display: none;
 }
 
 .d3-tip {
@@ -588,10 +606,21 @@ rect.bar:hover {
   max-width: 180px;
 }
 
+.groupstack-container {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
 .groupstack {
+  position: absolute;
+  width: 10em;
   top: -32em;
   left: 20em;
-  position: relative;
+}
+
+.groupstack-label {
+  color: black;
 }
 
 html, body {
@@ -715,6 +744,10 @@ html, body {
 .date-input {
   width: 8em !important;
   font-weight: bold;
+}
+
+label {
+  color: white;
 }
 
 /*#allbody-home {
