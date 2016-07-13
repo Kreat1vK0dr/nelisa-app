@@ -288,7 +288,8 @@ console.log("details category Id: ", details.attr('data-categoryId'));
     if (window.location.pathname === '/purchases/add') {
 
         //NOTE: here it is ok to use .click(function...) because we only have one element to which the handler is assigned.
-        $('#execute-purchase').click(function () {
+        $('#execute-purchase').click(function (e) {
+          e.preventDefault();
             var unitCost = Number($('#cost').val()),
                 quantity = Number($('#quantity').val()),
                 inventory = Number($('#products option:selected').attr('data-inventory')),
@@ -321,7 +322,7 @@ console.log("details category Id: ", details.attr('data-categoryId'));
                     };
 
                     $.post('http://localhost:5000/purchases/add/execute', {
-                        data: [purchase]
+                        data: JSON.stringify([purchase])
                     });
 
                     $('#execute-success').css('display', 'block');
@@ -333,24 +334,11 @@ console.log("details category Id: ", details.attr('data-categoryId'));
                     });
 
             } else {
-                alert("No items available to execute purchase.");
+              alert("Please make sure you have filled in all fields before adding an item.");
             }
         });
+      }
 
-                } else {
-
-                }
-                console.log(localStorage);
-                $('#suppliers').val('');
-                $('#products').val('');
-                $('#categories').val('');
-                $('#cost').val('');
-                $('#quantity').val('');
-
-            } else if (notAllFieldsFilledIn) {
-                alert("Please make sure you have filled in all fields before adding an item.");
-            }
-        });
         //NOTE: better to use .on('click',<selector>, function..) when having to assign a handler to many buttons or similar etc.
 
     if (window.location.pathname.split('/')[1] === 'users') {

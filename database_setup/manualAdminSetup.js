@@ -13,7 +13,7 @@ var mysql = require('mysql'),
           //     password: "1amdan13l",
           //     database: 'nelisa_another_copy'
           // });
-          // } else {
+        // } else {
           var connection = mysql.createConnection({
               host: '127.0.0.1',
               user: user,
