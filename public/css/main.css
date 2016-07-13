@@ -369,13 +369,42 @@ table {
   color: #FA87F8;
 }
 
+.alert-box-message span {
+  color: white;
+  font-weight: bolder;
+}
+
+.alert-box-message span.alert-box-product {
+  color: green;
+  font-weight: bold;
+}
+
+.alert-header-container {
+  width: 100%;
+  top: 0;
+  color: white;
+  font-weight: bold;
+  padding: 10px 0;
+}
+
 .overlay {
   position: fixed;
   width: 100%;
   z-index: 9;
-  opacity: .8;
-  background-color: white;
+  background-color: transparent;
   display: none;
+}
+
+.add-item-alert-box {
+  background-color: #E74C3C;
+  position: fixed;
+  width: 42.30769%;
+  z-index: 10;
+  border: 1px solid #641E16;
+  left: 50%;
+  margin-left: -21.15385%;
+  padding-bottom: 1%;
+  top: 10em;
 }
 
 .alert-box {
@@ -383,10 +412,11 @@ table {
   position: fixed;
   width: 42.30769%;
   z-index: 10;
-  border: 10px solid black;
+  border: 1px solid black;
   left: 50%;
   margin-left: -21.15385%;
   padding-bottom: 1%;
+  top: 10em;
 }
 
 #execute-alert {

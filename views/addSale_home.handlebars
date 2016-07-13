@@ -9,10 +9,13 @@
 
 <div class="overlay"></div>
 <center>
-<div id="execute-alert" class="alert-box">
-  <h3>ALERT</h3>
-    <p>You're attempting to sell some items for which there is no stock.</p>
-    <table id="alert-table" class="table table-bordered table-hover table-sm center-table summary-table">
+
+<div id="execute-alert" class="add-item-alert-box">
+<div class="alert-header-container">
+  INVALID REQUEST
+</div>
+    <p class='alert-box-message'></p>
+    <!-- <table id="alert-table" class="table table-bordered table-hover table-sm center-table summary-table">
     <thead class="thead-inverse">
         <tr>
           <th>Product</th>
@@ -23,8 +26,8 @@
       </thead>
       <tbody>
       </tbody>
-    </table>
-<button id="execute-alert-ok">OK</button>
+    </table> -->
+<button class="btn btn-success alert-ok">OK</button>
 </div>
 
 <div id="execute-success" class="alert-box">

@@ -21,6 +21,18 @@ function checkIfCanExecuteSale(dataToPost) {
     });
     return cannotExecute;
 }
+function checkIfCanAddItem(item) {
+
+      var inventory = item.data[4],
+            quantity = item.data[3];
+
+        var enough = inventory - quantity >= 0;
+        if (enough) {
+        return true;
+      } else {
+    return false;
+  }
+}
 
 function createAlertTableHTML(saleItemsArray) {
     var tableBody = "";
@@ -43,22 +55,7 @@ $(document).ready(function () {
 
     if (window.location.pathname === '/sales/add') {
       console.log()
-        $('input.product').on('keyup',function () {
-          var fieldVal = $('input.product').val();
-          console.log(fieldVal);
-          var options = $("#combobox option");
-          var products = $("#combobox option").map(function(){return $(this).text(); });
-          var validEntry = $.inArray(fieldVal, products)!==-1;
-          console.log("Valid Entry: ", validEntry);
-          console.log("PRODUCTS: ",products);
-          if (validEntry) {
-            console.log("Should change price now");
-            price = $('select[name="product"] option[data-description="'+ fieldVal +'"]').attr('data-price');
-            console.log("This is field val: ", fieldVal);
-            console.log("This is price: ", price);
-            $('#price').val(price);
-            }
-        });
+
 
         if (window.localStorage.getItem('sale')) {
             if (JSON.parse(window.localStorage.getItem('sale')).length !== 0) {
@@ -70,6 +67,8 @@ $(document).ready(function () {
                 $('#added-items-table thead').css('display', '');
                 $('#added-items-table tbody').css('display', '');
                 $('#added-items-table tbody').append(html);
+                $('#execute-sale').attr("disabled",false);
+
             } else {
                 $('#no-items-text').css('display', '');
                 $('#added-items-table thead').css('display', 'none');
@@ -78,8 +77,8 @@ $(document).ready(function () {
         }
         //NOTE: here it is ok to use .click(function...) because we only have one element to which the handler is assigned.
         $('#add-item').click(function () {
-            var product = $('input.product').val(),
-                details = $('select[name="products"] option[data-description="' + product + '"]'),
+            var details = $('#combobox option:selected'),
+                product = details.attr('data-description'),
                 price = Number($('#price').val()),
                 quantity = Number($('#quantity').val()),
                 inventory = Number(details.attr('data-inventory')),
@@ -88,7 +87,11 @@ $(document).ready(function () {
                 category = details.attr('data-category'),
                 storage = JSON.parse(window.localStorage.getItem('sale')),
                 previousState = JSON.parse(window.localStorage.getItem('table'));
-
+console.log([product_id, category_id, price, quantity, inventory]);
+console.log("product: ", product);
+console.log("details: ", details);
+console.log("details category: ", details.attr('data-category'));
+console.log("details category Id: ", details.attr('data-categoryId'));
             var allFieldsFilledIn = price != 0 && quantity != 0 && product_id != null && category_id != null;
 
             console.log(price, quantity, inventory, product_id, category_id, product, category);
@@ -102,11 +105,16 @@ $(document).ready(function () {
                         data: [product_id, category_id, price, quantity, inventory]
                     },
                     item = [product, category, price, quantity, sub_total];
-
+                var canAddItem = checkIfCanAddItem(sale);
+                if (canAddItem) {
                 var newRowContent = "<tr style='background-color:#777' data-row-id='" + rowId + "'>";
 
                 item.forEach(function (content) {
+                  if (typeof content === 'number') {
+                    newRowContent += "<td style='text-align:left'>" + content + "</td>";
+                  } else {
                     newRowContent += "<td>" + content + "</td>";
+                  }
                 });
 
                 newRowContent += "<td style='background-color:rgba(185,46,16,0.8)'><button class='table-links' style='background-color:transparent;border:none'>Remove item(s)</button></td></tr>";
@@ -138,14 +146,36 @@ $(document).ready(function () {
                     $('#added-items-table tbody').css('display', '');
                     $('#added-items-table tbody').append(newRowContent);
 
-                    $('#execute-sale').attr("disabled",false);
 
                 }
+                $('#execute-sale').attr("disabled",false);
+
                 console.log(localStorage);
                 $('#products').val('');
                 $('#categories').val('');
                 $('#price').val('');
                 $('#quantity').val('');
+              } else {
+                var overlay = document.getElementsByClassName('overlay')[0],
+                    alertBox = document.getElementById('execute-alert'),
+                    p = "You have <span>"+inventory+"</span> <span class='alert-box-product'>"+product+"</span> <span>in stock</span>.<br/>Trying to sell <span>"+quantity+"</span>.";
+
+                var winH = window.innerHeight,
+                    winW = window.innerWidth;
+
+                overlay.style.width = winW + "px";
+                overlay.style.height = winH + "px";
+
+                overlay.style.display = 'block';
+                alertBox.style.display = 'block';
+
+                $('.alert-box-message').html(p);
+
+                $('.alert-ok').click(function () {
+                    overlay.style.display = 'none';
+                    alertBox.style.display = 'none';
+                });
+              }
             } else {
                 alert("Please make sure you have filled in all fields before adding an item.");
             }
@@ -230,7 +260,7 @@ $(document).ready(function () {
                     $('#alert-table tbody').empty();
                     $('#alert-table tbody').append(tableBody);
 
-                    $('#execute-alert-ok').click(function () {
+                    $('.alert-ok').click(function () {
                       $('#alert-table tbody').empty();
                         overlay.style.display = 'none';
                         alertBox.style.display = 'none';
@@ -435,7 +465,7 @@ $(document).ready(function () {
                     $('#alert-table tbody').empty();
                     $('#alert-table tbody').append(tableBody);
 
-                    $('#execute-alert-ok').click(function () {
+                    $('.alert-ok').click(function () {
                         overlay.style.display = 'none';
                         alertBox.style.display = 'none';
                     });

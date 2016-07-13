@@ -23,7 +23,25 @@ $( function() {
          .autocomplete({
            delay: 0,
            minLength: 0,
-           source: $.proxy( this, "_source" )
+           source: $.proxy( this, "_source" ),
+           select: function(e, ui) {
+
+             var fieldVal = ui.item.value;
+             console.log(fieldVal);
+             var products = $("#combobox option").map(function(){return $(this).text(); });
+             var validEntry = $.inArray(fieldVal, products)!==-1;
+             console.log("Valid Entry: ", validEntry);
+             console.log("PRODUCTS: ",products);
+             if (validEntry) {
+               console.log("Should change price now");
+               price = $('select[name="product"] option[data-description="'+ fieldVal +'"]').attr('data-price');
+               console.log("This is field val: ", fieldVal);
+               console.log("This is price: ", price);
+               $('#price').val(price);
+               $('#quantity').val(1);
+               }
+            //  $("#combobox").val($("#combobox option[data-description='" + ui.item.value + "']").val());
+           }
          })
          .tooltip({
            classes: {
