@@ -146,14 +146,6 @@
   padding-top: 10px;
 }
 
-#execute-sale {
-  position: absolute;
-  margin-top: 1.75em;
-  margin-right: 10em;
-  right: 20em;
-  float: right;
-}
-
 th a, td a {
   cursor: pointer;
 }
@@ -204,6 +196,10 @@ table {
   color: white !important;
 }
 
+.add-form-message-text {
+  padding: 2em 0;
+}
+
 .table-links {
   text-align: center;
 }
@@ -251,6 +247,10 @@ table {
   margin-bottom: 5em;
 }
 
+#execute-sale {
+  margin-left: 1em;
+}
+
 .custom-combobox-toggle {
   position: absolute;
   top: 0;
@@ -262,7 +262,7 @@ table {
 .custom-combobox-input {
   margin: 0;
   padding: 6px 12px;
-  min-width: 30em;
+  min-width: inherit;
 }
 
 .show-all-button {
@@ -273,7 +273,40 @@ table {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
-@media (min-width: 10px) and (max-width: 991px) {
+@media (min-width: 1200px) and (max-width: 2000px) {
+  .custom-combobox {
+    min-width: 15.9em;
+  }
+}
+
+@media (max-width: 1199px) {
+  .form-element-add.col-xs-1, .form-element-add.col-sm-1, .form-element-add.col-md-1, .form-element-add.col-lg-1, .form-element-add.col-xs-2, .form-element-add.col-sm-2, .form-element-add.col-md-2, .form-element-add.col-lg-2, .form-element-add.col-xs-3, .form-element-add.col-sm-3, .form-element-add.col-md-3, .form-element-add.col-lg-3, .form-element-add.col-xs-4, .form-element-add.col-sm-4, .form-element-add.col-md-4, .form-element-add.col-lg-4, .form-element-add.col-xs-5, .form-element-add.col-sm-5, .form-element-add.col-md-5, .form-element-add.col-lg-5, .form-element-add.col-xs-6, .form-element-add.col-sm-6, .form-element-add.col-md-6, .form-element-add.col-lg-6, .form-element-add.col-xs-7, .form-element-add.col-sm-7, .form-element-add.col-md-7, .form-element-add.col-lg-7, .form-element-add.col-xs-8, .form-element-add.col-sm-8, .form-element-add.col-md-8, .form-element-add.col-lg-8, .form-element-add.col-xs-9, .form-element-add.col-sm-9, .form-element-add.col-md-9, .form-element-add.col-lg-9, .form-element-add.col-xs-10, .form-element-add.col-sm-10, .form-element-add.col-md-10, .form-element-add.col-lg-10, .form-element-add.col-xs-11, .form-element-add.col-sm-11, .form-element-add.col-md-11, .form-element-add.col-lg-11, .form-element-add.col-xs-12, .form-element-add.col-sm-12, .form-element-add.col-md-12, .form-element-add.col-lg-12 {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 993px) and (max-width: 1199px) {
+  .custom-combobox {
+    max-width: 10em;
+    min-width: 6em;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 10px) and (max-width: 992px) {
+  .custom-combobox {
+    max-width: 16em;
+    min-width: 10em;
+  }
+  .empty-column {
+    height: 40px;
+  }
+  #execute-sale {
+    margin-left: 0;
+    margin-top: 0.2em;
+  }
+  #price, #quantity {
+    width: 5em;
+  }
   #labels {
     float: left;
   }
@@ -285,6 +318,17 @@ table {
     max-width: 40%;
     min-width: 10%;
     margin: 3px 0;
+  }
+  #inputs.row {
+    margin-right: 0;
+    margin-left: 0;
+    left: 50px;
+  }
+}
+
+@media (max-width: 1199px) {
+  #labels label, #inputs input {
+    padding-right: 0;
   }
 }
 

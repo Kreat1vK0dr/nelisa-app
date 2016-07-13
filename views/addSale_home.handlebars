@@ -3,6 +3,7 @@
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->
 
 <script src="/js/jquery-ui.js"></script>
+
 <script src="/js/searchAndSelect.js"></script>
 
 
@@ -36,24 +37,31 @@
 
 <h3 class="title">Add Sale</h3>
 
-<div class="container add-select-container">
+
+<div class="container add-select-container center">
   <div class="row db-table" id="labels">
-    <div class="col-md-6">
+    <div class="form-element-add col-md-2"></div>
+    <div class="form-element-add col-md-3  widget-shift">
       <label class="add-form-text" for="products">Product</label>
     </div>
-    <div class="col-md-2">
+    <div class="form-element-add col-md-1">
       <label class="add-form-text control-label" for="price">Price</label>
     </div>
-    <div class="col-md-2">
+    <div class="form-element-add col-md-1">
       <label class="add-form-text control-label" for="quantity">Quantity</label>
     </div>
-    <div class="col-md-2">
-
+    <div class="form-element-add col-md-1 empty-column">
     </div>
+    <div class="form-element-add col-md-2 empty-column">
+    </div>
+    <div class="form-element-add col-md-2 empty-column"></div>
+
   </div>
 
   <div class="row" id="inputs">
-    <div class="col-md-6 ui-widget">
+    <div class="form-element-add col-md-2"></div>
+
+    <div class="form-element-add col-md-3 ui-widget widget-shift">
       <select class="form-control" id="combobox" name="product">
         <option class="add-form-text" value="" selected>Please select a product</option>
         {{#products}}
@@ -61,19 +69,22 @@
         {{/products}}
       </select>
     </div>
-    <div class="col-md-2">
+    <div class="form-element-add col-md-1">
       <input class="form-control" type="number" step="any" name='price' id="price">
     </div>
-    <div class="col-md-2">
+    <div class="form-element-add col-md-1">
       <input class="form-control" type="number" name="quantity" id="quantity">
     </div>
-    <div class="col-md-2">
+    <div class="form-element-add col-md-1">
       <div class="btn btn-success" role="button" id="add-item">add item</div>
     </div>
+    <div class="form-element-add col-md-2">
+      <button class="btn btn-danger" disabled type="submit" id="execute-sale">Add sale</button>
+    </div>
+    <div class="form-element-add col-md-2"></div>
+
   </div>
 </div>
-
-  <button class="btn btn-danger" type="submit" id="execute-sale">Add sale</button>
 
 <center>
 <table id="added-items-table" class="table table-bordered table-hover table-sm center-table">
@@ -91,3 +102,9 @@
   <p class="add-form-message-text" id="no-items-text">Please add some items before attempting to execute a sale.</p>
 </table>
 </center>
+<script>
+jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+  var ul = this.menu.element;
+  ul.outerWidth(this.element.outerWidth());
+}
+</script>

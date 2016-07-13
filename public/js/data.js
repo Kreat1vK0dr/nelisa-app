@@ -189,11 +189,6 @@ $('#show-chart-btn').on('click', function (e) {
                           .append("span")
                           .attr("class", "glyphicon glyphicon-remove")
 
-                      //  div.append("button")
-                      //     .attr("class","svg-edit btn btn-primary")
-                      //     .append("span")
-                      //     .attr("class", "glyphicon glyphicon-edit")
-
               var svg = div.append("svg")
                         .attr("id","svg-"+newChartId)
                        .attr("width", svgWidth /*+ margin.left + margin.right*/)
@@ -250,28 +245,6 @@ $('#show-chart-btn').on('click', function (e) {
             addTimeColumnChart(newChart);
 
           }
-      //   } else if (!firstChart){
-      //     addChartTitle(newChart);
-      //
-      //     newChart.chart = d3.select("#chart1")
-      //                       .attr("width", svgWidth /*+ margin.left + margin.right*/)
-      //                       .attr("height", svgHeight /*+ margin.top + margin.bottom*/)
-      //                     .select("g.innerspace")
-      //                     .attr('transform', 'translate(' + margin.left +","+ margin.top + ')');
-      //
-      //
-      //     if (multifilter) {
-      //     redrawGroupedColumnChart(newChart);
-      //
-      //     } else if (!multifilter && !showTimeLine) {
-      //
-      //     } else if (!multifilter && showTimeLine) {
-      //
-      //     }
-      //
-      //       redraw(newChart);
-      //       window.localStorage.setItem("prevMulti", newChart.multifilter);
-      //     }
       });
 });
 

@@ -137,6 +137,9 @@ $(document).ready(function () {
                     $('#added-items-table thead').css('display', '');
                     $('#added-items-table tbody').css('display', '');
                     $('#added-items-table tbody').append(newRowContent);
+
+                    $('#execute-sale').attr("disabled",false);
+
                 }
                 console.log(localStorage);
                 $('#products').val('');
@@ -148,6 +151,8 @@ $(document).ready(function () {
             }
         });
         //NOTE: better to use .on('click',<selector>, function..) when having to assign a handler to many buttons or similar etc.
+
+        // Remove items
         $('#added-items-table').on('click', ':button', function () {
             var itemId = Number($(this).closest('tr').attr('data-row-id'));
             console.log(itemId);
@@ -167,6 +172,7 @@ $(document).ready(function () {
                 $('#no-items-text').css('display', '');
                 $('#added-items-table thead').css('display', 'none');
                 $('#added-items-table tbody').css('display', 'none');
+                $('#execute-sale').attr('disabled',true);
             }
             console.log("UpdatedItems", updatedItems);
             console.log("currentState", currentState);
