@@ -4,58 +4,42 @@
 <div id="execute-success" class="alert-box">
 <h3>SUCCESS</h3>
 <p>purchase successfully executed</p>
-<button id="execute-success-ok">OK</button>
+<button class="btn btn-success" id="execute-success-ok">OK</button>
 </div>
 </center>
 
-<h1>add purchase</h1>
-<button id="add-item">add item</button>
-
-<form action="/" method="post">
+<h3 class="title">Add Purchase</h3>
+<form class="form-inline" action="/" method="post">
 
 <center>
 <fieldset>
 
-  <label class="add-form-text" for="suppliers">Supplier</label>
-  <select id="suppliers" name="product">
+  <label class="add-form-text control-label" for="suppliers">Supplier</label>
+  <select class="form-control" id="suppliers" name="product">
     <option class="add-form-text" value="" selected>Please select a supplier</option>
     {{#suppliers}}
     <option class="add-form-text" value="{{id}}">{{name}}</option>
     {{/suppliers}}
   </select>
-
-  <label class="add-form-text" for="products">Product</label>
-  <select id="products" name="product">
+<div class="form-group">
+  <label class="add-form-text control-label" for="products">Product</label>
+  <select class="form-control" id="products" name="product">
     <option class="add-form-text" id="no-supplier" value="" selected>Please select a product</option>
     {{#products}}
     <option class="add-form-text" value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
     {{/products}}
   </select>
-
-<label class="add-form-text" for="cost">Unit Cost</label>
-<input type="number" step="any" name='cost' id="cost">
-
-<label class="add-form-text" for="quantity">Quantity</label>
-<input type="number" name="quantity" id="quantity">
-
+</div>
+<div class="form-group">
+<label class="add-form-text control-label" for="cost">Unit Cost</label>
+<input class="form-control" type="number" step="any" name='cost' id="cost">
+</div>
+<div class="form-group">
+<label class="add-form-text control-label" for="quantity">Quantity</label>
+<input class="form-control" type="number" name="quantity" id="quantity">
+</div>
 </fieldset>
-</center>
-<center>
-<table id="added-items-purchases-table" class="myTables add-form-text">
-  <thead style="display:none">
-    <tr>
-      <th>Supplier</th>
-      <th>Product</th>
-      <th>Unit Cost</th>
-      <th>Quantity</th>
-    </tr>
-  </thead>
-  <tbody style="display:none">
-  </tbody>
-  <p id="no-items-text">You'll need to add some items before attempting to execute a purchase.</p>
-</table>
-</center>
 
-<button type="submit" id="execute-purchase">Add purchase</button>
-
+<button class="btn btn-danger" type="submit" id="execute-purchase">Add purchase</button>
+</center>
 </form>

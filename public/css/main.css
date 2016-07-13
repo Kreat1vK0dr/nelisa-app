@@ -427,6 +427,11 @@ table {
   display: none;
 }
 
+#execute-purchase {
+  margin: 1em;
+  width: 50%;
+}
+
 #logUp {
   position: relative;
   right: 0;

@@ -287,38 +287,8 @@ console.log("details category Id: ", details.attr('data-categoryId'));
 
     if (window.location.pathname === '/purchases/add') {
 
-        if (window.localStorage.getItem('purchase')) {
-
-            if (JSON.parse(window.localStorage.getItem('purchase')).length !== 0) {
-
-                var previousState = JSON.parse(window.localStorage.getItem('table'));
-
-                var html = previousState.map(function (i) {
-                    return i.html;
-                }).join("");
-
-                $('#no-items-text').css('display', 'none');
-                $('#added-items-purchases-table thead').css('display', '');
-                $('#added-items-purchases-table tbody').css('display', '');
-                $('#added-items-purchases-table tbody').append(html);
-
-            } else {
-                $('#no-items-text').css('display', '');
-                $('#added-items-purchases-table thead').css('display', 'none');
-                $('#added-items-purchases-table tbody').css('display', 'none');
-            }
-        }
-
-        // $('#products').change(function () {
-        //     $('#categories').val($('#products option:selected').attr('data-category'));
-        //     //
-        //     // {{#products}}
-        //     // <option value="{{id}}" data-price="{{price}}" data-inventory="{{inventory}}" data-description="{{description}}" data-category="{{category_id}}">{{description}}</option>
-        //     // {{/products}}
-        // });
-
         //NOTE: here it is ok to use .click(function...) because we only have one element to which the handler is assigned.
-        $('#add-item').click(function () {
+        $('#execute-purchase').click(function () {
             var unitCost = Number($('#cost').val()),
                 quantity = Number($('#quantity').val()),
                 inventory = Number($('#products option:selected').attr('data-inventory')),
@@ -348,45 +318,27 @@ console.log("details category Id: ", details.attr('data-categoryId'));
                 var purchase = {
                         itemId: id,
                         data: [supplier_id, product_id, category_id, unitCost, quantity, inventory]
-                    },
-                    item = [supplier, product, unitCost, quantity];
+                    };
 
-
-                var newRowContent = "<tr data-row-id='" + id + "'>";
-
-                item.forEach(function (content) {
-                    newRowContent += "<td>" + content + "</td>";
-                });
-
-                newRowContent += "<td><button >Remove item(s)</button></td></tr>";
-
-                if (storage && previousState) {
-                    var items = storage;
-                    items.push(purchase);
-                    window.localStorage.setItem('purchase', JSON.stringify(items));
-                    previousState.push({
-                        rowId: id,
-                        html: newRowContent
+                    $.post('http://localhost:5000/purchases/add/execute', {
+                        data: [purchase]
                     });
-                    var newState = previousState;
-                    window.localStorage.setItem('table', JSON.stringify(newState));
 
-                    $('#no-items-text').css('display', 'none');
+                    $('#execute-success').css('display', 'block');
 
-                    $('#added-items-purchases-table thead').css('display', '');
-                    $('#added-items-purchases-table tbody').css('display', '');
-                    $('#added-items-purchases-table tbody').append(newRowContent);
+                    $('#execute-success-ok').click(function () {
+                        $('.overlay').css('display', 'none');
+                        $('#execute-success').css('display', 'none');
+                        window.location.replace("/purchases/add");
+                    });
+
+            } else {
+                alert("No items available to execute purchase.");
+            }
+        });
+
                 } else {
-                    window.localStorage.setItem('purchase', JSON.stringify([purchase]));
-                    window.localStorage.setItem('table', JSON.stringify([{
-                        rowId: id,
-                        html: newRowContent
-                    }]));
-                    console.log(newRowContent);
-                    $('#no-items-text').css('display', 'none');
-                    $('#added-items-purchases-table thead').css('display', '');
-                    $('#added-items-purchases-table tbody').css('display', '');
-                    $('#added-items-purchases-table tbody').append(newRowContent);
+
                 }
                 console.log(localStorage);
                 $('#suppliers').val('');
@@ -400,81 +352,7 @@ console.log("details category Id: ", details.attr('data-categoryId'));
             }
         });
         //NOTE: better to use .on('click',<selector>, function..) when having to assign a handler to many buttons or similar etc.
-        $('#added-items-purchases-table').on('click', ':button', function () {
-            var itemId = Number($(this).closest('tr').attr('data-row-id'));
-            console.log(itemId);
-            var storage = JSON.parse(window.localStorage.getItem('purchase'));
-            var previousState = JSON.parse(window.localStorage.getItem('table'));
-            console.log(storage);
-            var updatedItems = storage.filter(function (i) {
-                return i.itemId !== itemId;
-            });
-            var currentState = previousState.filter(function (i) {
-                return i.rowId !== itemId;
-            });
-            window.localStorage.setItem('purchase', JSON.stringify(updatedItems));
-            window.localStorage.setItem('table', JSON.stringify(currentState));
-            $(this).closest('tr').remove();
-            if (updatedItems.length === 0) {
-                $('#no-items-text').css('display', '');
-                $('#added-items-purchases-table thead').css('display', 'none');
-                $('#added-items-purchases-table tbody').css('display', 'none');
-            }
-            console.log(updatedItems);
-            console.log(currentState);
-        });
 
-        $('#execute-purchase').click(function (event) {
-            event.preventDefault();
-            console.log("executing purchase button clicked");
-            var dataToPost = window.localStorage.getItem('purchase');
-            var dataHasBeenAdded = window.localStorage.getItem('table');
-            console.log(dataHasBeenAdded);
-            // console.log("Data to post: ", JSON.parse(dataToPost));
-            if (dataHasBeenAdded) {
-
-                if (JSON.parse(dataToPost).length != 0) {
-                    $.post('http://localhost:5000/purchases/add/execute', {
-                        data: dataToPost
-                    });
-
-                    window.localStorage.clear();
-
-                    $('#execute-success').css('display', 'block');
-
-                    $('#execute-success-ok').click(function () {
-                        $('.overlay').css('display', 'none');
-                        $('#execute-success').css('display', 'none');
-                        window.location.replace("/purchases/add");
-                    });
-
-                } else {
-                    var overlay = document.getElementsByClassName('overlay')[0],
-                        alertBox = document.getElementById('execute-alert'),
-                        tableBody = createAlertTableHTML(canExecutePurchase);
-
-                    var winH = window.innerHeight,
-                        winW = window.innerWidth;
-
-                    overlay.style.width = winW + "px";
-                    overlay.style.height = winH + "px";
-
-                    overlay.style.display = 'block';
-                    alertBox.style.display = 'block';
-
-                    $('#alert-table tbody').empty();
-                    $('#alert-table tbody').append(tableBody);
-
-                    $('.alert-ok').click(function () {
-                        overlay.style.display = 'none';
-                        alertBox.style.display = 'none';
-                    });
-                }
-            } else {
-                alert("No items available to execute purchase.");
-            }
-        });
-    }
     if (window.location.pathname.split('/')[1] === 'users') {
       console.log($('#role option:selected').val());
     if ($('#role option:selected').val() === "user") {
