@@ -7,8 +7,7 @@ node_js:
 
 env:
   - CXX=g++-4.8
-  - MYSQL_USR="root"
-  - MYSQL_PWD=""
+  - MYSQL_URL='mysql://root:@127.0.0.1/nelisa_another_copy'
 
 addons:
   apt:
