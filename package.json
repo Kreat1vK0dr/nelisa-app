@@ -21,9 +21,9 @@
   "homepage": "https://github.com/Kreat1vK0dr/Spaza-Kata#readme",
   "dependencies": {
     "autoprefixer": "^6.3.6",
-    "bcrypt": "^0.8.6",
     "bluebird": "^3.4.0",
     "body-parser": "^1.15.0",
+    "co": "^4.6.0",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "express-myconnection": "^1.0.4",
@@ -48,6 +48,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.1",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3",
+    "gulp-uglify": "^1.5.3"
   }
 }

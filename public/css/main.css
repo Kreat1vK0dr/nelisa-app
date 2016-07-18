@@ -691,6 +691,13 @@ rect.bar:hover {
   height: 0;
 }
 
+.groupstack-first {
+  position: absolute;
+  width: 10em;
+  top: -32em;
+  left: 45em;
+}
+
 .groupstack {
   position: absolute;
   width: 10em;

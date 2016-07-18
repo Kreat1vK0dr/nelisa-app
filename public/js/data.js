@@ -212,13 +212,23 @@ $('#show-chart-btn').on('click', function (e) {
                        newChart.chart = chart;
                        newChart.chartId = newChartId;
                        addChartTitle(newChart);
-
+                       var firstChartIsMultifilter = false;
             if (multifilter) {
               var radio = ["grouped","stacked"]
               var form = div.append("div")
                             .attr("class","groupstack-container")
                             .append("form")
-                            .attr("class","groupstack");
+              if (firstChart) {
+              form.attr("class","groupstack-first");
+
+            } else {
+              if (firstChartIsMultifilter) {
+              $("#chart1 .groupstack-container form").removeClass('groupstack-first')
+              $("#chart1 .groupstack-container form").addClass('groupstack')  
+              }
+
+              form.attr('class','groupstack')
+            }
 
               radio.forEach(function(i){
                 form.append("label")

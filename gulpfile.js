@@ -92,20 +92,21 @@ cb();
   // });
 
   gulp.task('minify-js', function () {
-      gulp.src('./public/js/main.js')
+      gulp.src('./public/js/*.js')
           .pipe(sourcemaps.init())
           .pipe(uglify())
-          .pipe(rename('main.min.js'))
-          .pipe(sourcemaps.write('./maps'))
-          .pipe(gulp.dest('./public/js'));
+          .pipe(rename({suffix:'.min'}))
+          .pipe(sourcemaps.write('./min/maps'))
+          .pipe(gulp.dest('./public/js/min'));
   });
 
   gulp.task('compress-js', function () {
-      gulp.src('./public/js/main.min.js')
+      gulp.src('./public/js/min/*.min.js')
           .pipe(sourcemaps.init())
           .pipe(gzip())
-          .pipe(sourcemaps.write('./maps'))
-          .pipe(gulp.dest('./public/js'));
+          .pipe(rename({suffix: '.gzip'}))
+          .pipe(sourcemaps.write('../gzip/maps'))
+          .pipe(gulp.dest('./public/js/gzip'));
   });
 
   gulp.task('watch', function () {
