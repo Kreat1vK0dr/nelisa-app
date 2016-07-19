@@ -51,7 +51,7 @@ var initialUsers = [{username: myUsername, firstName: myFirstName, lastName: myL
 var track = initialUsers.length;
 initialUsers.forEach(function(user){
   bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(user.password, salt, function(err, hash) {
+      bcrypt.hash(user.password, salt, null, function(err, hash) {
           // Store hash in your password DB.
           user.password = hash;
           connection.query("INSERT INTO users SET ?", user, function(err,result){
@@ -61,7 +61,7 @@ initialUsers.forEach(function(user){
             track--;
             if (track===0) {
               bcrypt.genSalt(saltRounds, function(err, salt) {
-                  bcrypt.hash(adminPassword, salt, function(err, hash) {
+                  bcrypt.hash(adminPassword, salt, null, function(err, hash) {
                       // Store hash in your password DB.
                       var data = {password: hash};
                       connection.query("SELECT * FROM adminPass", function(err,result){
