@@ -1,5 +1,5 @@
 var mysql = require('mysql'),
-    bcrypt = require('bcrypt');
+    bcrypt = require('bcrypt-nodejs');
 
     const url = process.env.MYSQL_URL!==undefined ? process.env.MYSQL_URL : 'mysql://root:1amdan13l@localhost/nelisa_another_copy';
 

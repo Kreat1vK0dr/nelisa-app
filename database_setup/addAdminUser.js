@@ -1,5 +1,5 @@
 var mysql = require('mysql'),
-    bcrypt = require('bcrypt');
+    bcrypt = require('bcrypt-nodejs');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
