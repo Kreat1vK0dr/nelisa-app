@@ -9,7 +9,7 @@
         imagemin = require('gulp-imagemin'),
         rename = require('gulp-rename'),
         nodemon = require('gulp-nodemon'),
-        watch = require('gulp-watch'),
+        // watch = require('gulp-watch'),
         mocha = require("gulp-mocha"),
         shell = require("gulp-shell");
 
