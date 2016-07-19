@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Kreat1vK0dr/Spaza-Kata#readme",
   "dependencies": {
     "autoprefixer": "^6.3.6",
+    "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.0",
     "body-parser": "^1.15.0",
     "co": "^4.6.0",
